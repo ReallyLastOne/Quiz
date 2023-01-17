@@ -1,9 +1,15 @@
-package com.reallylastone.quiz.exercise.model;
+package com.reallylastone.quiz.exercise.question.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
 
+@Entity
 @Data
-public class ExerciseView {
+public class QuestionExercise {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
+
     private String question;
 
     private String correctAnswer;
@@ -15,5 +21,4 @@ public class ExerciseView {
     private String wrongAnswer3;
 
     private String wrongAnswer4;
-
 }
