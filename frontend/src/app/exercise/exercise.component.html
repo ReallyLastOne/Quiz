@@ -1,1 +1,9 @@
-<p>exercise works!</p>
+<div class="container">
+  <div>
+    <div>{{question}}</div>
+
+    <div *ngFor="let answer of answers">
+      <button>{{answer}}</button>
+    </div>
+  </div>
+</div>
