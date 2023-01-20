@@ -11,19 +11,34 @@ export class ExerciseComponent implements OnInit {
 
   private newData: any;
   private newParsedData: Exercise;
-  answers: string[] = ["first","second very long answer","third not that long but still average","forth"];
+  answers: string[] = [];
+  correctAnswer: string;
   question: string;
+  buttonStyle: string ="";
+  clicked = false;
   constructor(private _appService:AppService) { }
 
   ngOnInit(): void {
     this._appService.getAnswer().subscribe(res=>{
          this.newParsedData = JSON.parse(JSON.stringify(res));
-         this.initializeQuestion(this.newParsedData.question);
+         this.initializeExercise(this.newParsedData);
        });
   }
 
-  private initializeQuestion(question: string): void {
-  this.question = question;
+  private initializeExercise(exercise: Exercise): void {
+  this.question = exercise.question;
+  this.correctAnswer = exercise.correctAnswer;
+  this.answers.push(...exercise.wrongAnswers);
+  this.answers.push(exercise.correctAnswer);
+  this.answers.sort((a, b) => 0.5 - Math.random());
+  }
+
+  getAnswer(event:any, answer: string) {
+  if(answer == this.correctAnswer)
+    event.target.classList.add('button-correct');
+    else
+    event.target.classList.add('button-wrong');
+    this.clicked = true;
   }
 
 }
