@@ -11,7 +11,7 @@ export class ExerciseComponent implements OnInit {
 
   private newData: any;
   private newParsedData: Exercise;
-  answers: string[] = ["first","second","third","forth"];
+  answers: string[] = ["first","second very long answer","third not that long but still average","forth"];
   question: string;
   constructor(private _appService:AppService) { }
 

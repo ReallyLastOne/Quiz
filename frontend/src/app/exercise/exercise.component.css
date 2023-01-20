@@ -1,7 +1,77 @@
 .container{
 height: 100vh;
- display: flex;
+display: flex;
 justify-content: center;
 margin: 10vh;
 
+}
+.question-holder{
+ width: 45vw;
+}
+
+.question{
+font-size: 32px;
+}
+
+.place-answers{
+ /* display: inline-block;*/
+  width: 20vw;
+  padding: 0 10vh;
+}
+
+.button-answers {
+  margin: 0px auto;
+  appearance: none;
+  width: 25vw;
+  margin: 1vw 0px;
+  /*background-color: #2ea44f;*/
+  background-color: #3390FF;
+  border: 1px solid rgba(27, 31, 35, .15);
+  border-radius: 6px;
+  box-shadow: rgba(27, 31, 35, .1) 0 1px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+ /* display: inline-block;*/
+  font-family: -apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  padding: 6px 16px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  /*white-space: nowrap;*/
+}
+
+.button-answers:focus:not(:focus-visible):not(.focus-visible) {
+  box-shadow: none;
+  outline: none;
+}
+
+.button-answers:hover {
+  /*background-color: #2c974b;*/
+  background-color: #2C7EDF;
+}
+
+.button-answers:focus {
+  box-shadow: rgba(46, 164, 79, .4) 0 0 0 3px;
+  outline: none;
+}
+
+.button-answers:disabled {
+  background-color: #94d3a2;
+  border-color: rgba(27, 31, 35, .1);
+  color: rgba(255, 255, 255, .8);
+  cursor: default;
+}
+
+.button-answers:active {
+  /*background-color: #298e46;*/
+  background-color: #296DBD;
+  box-shadow: rgba(20, 70, 32, .2) 0 1px 0 inset;
 }

@@ -1,9 +1,9 @@
 <div class="container">
-  <div>
-    <div>{{question}}</div>
+  <div class="question-holder">
+    <div class="question">{{question}}</div>
 
-    <div *ngFor="let answer of answers">
-      <button>{{answer}}</button>
+    <div class="place-answers" *ngFor="let answer of answers">
+      <button class="button-answers">{{answer}}</button>
     </div>
   </div>
 </div>
