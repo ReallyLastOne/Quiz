@@ -9,7 +9,7 @@ export class AppService {
 
   rootUrl = '/api';
 
-  getAnswer() {
-    return this.http.get(this.rootUrl + '/v1/exercise/question/1');
+  getAnswer(nextQuestion: string) {
+    return this.http.get(this.rootUrl + `/v1/exercise/question/${nextQuestion}`);
   }
 }
