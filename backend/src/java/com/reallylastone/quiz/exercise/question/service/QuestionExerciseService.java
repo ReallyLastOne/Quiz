@@ -9,4 +9,6 @@ public interface QuestionExerciseService {
     Optional<QuestionExercise> findById(Long id);
 
     List<QuestionExercise> findAll(Integer page, Integer pageSize);
+
+    Optional<QuestionExercise> findRandomQuestion();
 }

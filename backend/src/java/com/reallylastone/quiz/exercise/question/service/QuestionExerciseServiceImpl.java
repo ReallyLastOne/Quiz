@@ -30,4 +30,17 @@ public class QuestionExerciseServiceImpl implements QuestionExerciseService {
 
         return pagedResult.getContent();
     }
+
+    @Override
+    public Optional<QuestionExercise> findRandomQuestion() {
+        long count = questionExerciseRepository.count();
+        int toPick = (int) (Math.random() * count);
+        Page<QuestionExercise> questionPage = questionExerciseRepository.findAll(PageRequest.of(toPick, 1));
+        QuestionExercise question = null;
+        if (questionPage.hasContent()) {
+            question = questionPage.getContent().get(0);
+        }
+
+        return Optional.ofNullable(question);
+    }
 }

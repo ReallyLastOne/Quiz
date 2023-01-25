@@ -9,4 +9,6 @@ public interface QuestionExerciseViewService {
     ResponseEntity<QuestionExerciseView> findById(Long id);
 
     ResponseEntity<List<QuestionExerciseView>> findAll(Integer page, Integer pageSize);
+
+    ResponseEntity<QuestionExerciseView> findRandomQuestion();
 }

@@ -20,7 +20,9 @@ public class QuestionExerciseViewServiceImpl implements QuestionExerciseViewServ
     @Override
     public ResponseEntity<QuestionExerciseView> findById(Long id) {
         Optional<QuestionExercise> exerciseOptional = questionExerciseService.findById(id);
-        return exerciseOptional.map(exercise -> ResponseEntity.ok(questionExerciseMapper.mapToView(exercise))).orElseGet(() -> ResponseEntity.notFound().build());
+
+        return exerciseOptional.map(exercise -> ResponseEntity.ok(questionExerciseMapper.mapToView(exercise))).
+                orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Override
@@ -28,5 +30,13 @@ public class QuestionExerciseViewServiceImpl implements QuestionExerciseViewServ
         List<QuestionExercise> all = questionExerciseService.findAll(page, pageSize);
 
         return ResponseEntity.ok(all.stream().map(questionExerciseMapper::mapToView).collect(Collectors.toList()));
+    }
+
+    @Override
+    public ResponseEntity<QuestionExerciseView> findRandomQuestion() {
+        Optional<QuestionExercise> exerciseOptional = questionExerciseService.findRandomQuestion();
+
+        return exerciseOptional.map(exercise -> ResponseEntity.ok(questionExerciseMapper.mapToView(exercise))).
+                orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
