@@ -1,1 +1,14 @@
-<p>exercise works!</p>
+<div class="container">
+  <div class="question-holder">
+    <div class="question">{{question}}</div>
+
+    <div class="place-answers" *ngFor="let answer of answers">
+      <button class="button-answers" (click)="getAnswer($event,answer)" [disabled]="clicked">{{answer}}</button>
+    </div>
+
+    <div *ngIf="clicked">
+      <button class="next-question-button" (click)="nextQuestion()">Next</button>
+    </div>
+  </div>
+
+</div>

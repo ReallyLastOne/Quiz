@@ -7,9 +7,9 @@ import { HttpClient } from '@angular/common/http';
 export class AppService {
   constructor(private http: HttpClient) {}
 
-  rootUrl = '';
+  rootUrl = '/api';
 
-  getAnswer() {
-    return this.http.get(this.rootUrl + '/v1/exercise/1');
+  getAnswer(nextQuestion: string) {
+    return this.http.get(this.rootUrl + `/v1/exercise/question/${nextQuestion}`);
   }
 }
