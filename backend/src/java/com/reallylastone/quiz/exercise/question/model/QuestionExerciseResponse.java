@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class QuestionExerciseView {
+public class QuestionExerciseResponse {
     private String question;
 
     private String correctAnswer;

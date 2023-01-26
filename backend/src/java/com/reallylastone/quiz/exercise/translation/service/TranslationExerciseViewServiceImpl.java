@@ -2,7 +2,7 @@ package com.reallylastone.quiz.exercise.translation.service;
 
 import com.reallylastone.quiz.exercise.translation.mapper.TranslationExerciseMapper;
 import com.reallylastone.quiz.exercise.translation.model.TranslationExercise;
-import com.reallylastone.quiz.exercise.translation.model.TranslationExerciseView;
+import com.reallylastone.quiz.exercise.translation.model.TranslationExerciseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class TranslationExerciseViewServiceImpl implements TranslationExerciseVi
     private final TranslationExerciseMapper translationExerciseMapper;
 
     @Override
-    public ResponseEntity<TranslationExerciseView> findById(Long id) {
+    public ResponseEntity<TranslationExerciseResponse> findById(Long id) {
         Optional<TranslationExercise> exerciseOptional = translationExerciseService.findById(id);
         return exerciseOptional.map(exercise -> ResponseEntity.ok(translationExerciseMapper.mapToView(exercise))).orElseGet(() -> ResponseEntity.notFound().build());
     }
