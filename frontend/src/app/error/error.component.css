@@ -1,0 +1,17 @@
+.container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+p {
+  font-size: 50px;
+}
+
+img {
+  height: 100vh;
+}
+/* .text-error {
+  font: 900 35vmin/50px cookie, cursive;
+} */
