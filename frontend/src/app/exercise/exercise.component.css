@@ -135,3 +135,12 @@ button.next-question-button {
   background-color: #bfbfbf;
   box-shadow: rgba(20, 70, 32, 0.2) 0 1px 0 inset;
 }
+
+.marked {
+  background-color: #296dbd;
+  box-shadow: rgba(20, 70, 32, 0.2) 0 1px 0 inset;
+}
+.marked:hover {
+  background-color: #296dbd;
+  box-shadow: rgba(20, 70, 32, 0.2) 0 1px 0 inset;
+}
