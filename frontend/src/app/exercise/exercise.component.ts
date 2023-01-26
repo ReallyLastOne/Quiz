@@ -14,10 +14,13 @@ export class ExerciseComponent implements OnDestroy, OnInit {
   private subscriptions = new Subscription();
   private newParsedData: Exercise;
   private nextExercise: number = 1;
+  private points: number = 0;
   answers: string[] = [];
+  marked: boolean[] = [false, false, false, false];
   correctAnswer: string;
   question: string;
   clicked = false;
+  exerciseEnd = false;
   constructor(private _appService: AppService, private router: Router) {}
 
   ngOnInit(): void {
@@ -32,10 +35,17 @@ export class ExerciseComponent implements OnDestroy, OnInit {
     this.answers.sort((a, b) => 0.5 - Math.random());
   }
 
-  getAnswer(event: any, answer: string) {
-    if (answer == this.correctAnswer)
+  getAnswer(event: any) {
+    if (event.target.innerText.innerText == this.correctAnswer)
       event.target.classList.add('button-correct');
     else event.target.classList.add('button-wrong');
+    this.clicked = true;
+  }
+
+  markAnswer(button: number) {
+    for (let i = 0; i < this.marked.length; i++) {
+      this.marked[i] = i + 1 == button ? true : false;
+    }
     this.clicked = true;
   }
 
@@ -47,6 +57,7 @@ export class ExerciseComponent implements OnDestroy, OnInit {
           tap((data) => {
             this.newParsedData = JSON.parse(JSON.stringify(data));
             this.initializeExercise(this.newParsedData);
+            this.exerciseEnd = false;
           }),
           catchError((error) => {
             this.router.navigate([`/error`]);
@@ -58,12 +69,16 @@ export class ExerciseComponent implements OnDestroy, OnInit {
   }
 
   nextQuestion() {
+    this.marked = [false, false, false, false];
+    this.exerciseEnd = true;
     this.nextExercise++;
     this.clicked = false;
     this.answers.length = 0;
     this.question = '';
     if (this.nextExercise < 6) {
       this.nextApi();
+    } else {
+      this.exerciseEnd = true;
     }
   }
 
