@@ -2,14 +2,13 @@ package com.reallylastone.quiz.exercise.question.service;
 
 import com.reallylastone.quiz.exercise.question.mapper.QuestionExerciseMapper;
 import com.reallylastone.quiz.exercise.question.model.QuestionExercise;
-import com.reallylastone.quiz.exercise.question.model.QuestionExerciseView;
+import com.reallylastone.quiz.exercise.question.model.QuestionExerciseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +17,7 @@ public class QuestionExerciseViewServiceImpl implements QuestionExerciseViewServ
     private final QuestionExerciseMapper questionExerciseMapper;
 
     @Override
-    public ResponseEntity<QuestionExerciseView> findById(Long id) {
+    public ResponseEntity<QuestionExerciseResponse> findById(Long id) {
         Optional<QuestionExercise> exerciseOptional = questionExerciseService.findById(id);
 
         return exerciseOptional.map(exercise -> ResponseEntity.ok(questionExerciseMapper.mapToView(exercise))).
@@ -26,14 +25,14 @@ public class QuestionExerciseViewServiceImpl implements QuestionExerciseViewServ
     }
 
     @Override
-    public ResponseEntity<List<QuestionExerciseView>> findAll(Integer page, Integer pageSize) {
+    public ResponseEntity<List<QuestionExerciseResponse>> findAll(Integer page, Integer pageSize) {
         List<QuestionExercise> all = questionExerciseService.findAll(page, pageSize);
 
-        return ResponseEntity.ok(all.stream().map(questionExerciseMapper::mapToView).collect(Collectors.toList()));
+        return ResponseEntity.ok(all.stream().map(questionExerciseMapper::mapToView).toList());
     }
 
     @Override
-    public ResponseEntity<QuestionExerciseView> findRandomQuestion() {
+    public ResponseEntity<QuestionExerciseResponse> findRandomQuestion() {
         Optional<QuestionExercise> exerciseOptional = questionExerciseService.findRandomQuestion();
 
         return exerciseOptional.map(exercise -> ResponseEntity.ok(questionExerciseMapper.mapToView(exercise))).

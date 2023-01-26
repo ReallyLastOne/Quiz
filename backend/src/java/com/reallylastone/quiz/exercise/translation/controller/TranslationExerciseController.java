@@ -1,6 +1,6 @@
 package com.reallylastone.quiz.exercise.translation.controller;
 
-import com.reallylastone.quiz.exercise.translation.model.TranslationExerciseView;
+import com.reallylastone.quiz.exercise.translation.model.TranslationExerciseResponse;
 import com.reallylastone.quiz.exercise.translation.service.TranslationExerciseViewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +16,7 @@ public class TranslationExerciseController {
     private final TranslationExerciseViewService translationViewService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<TranslationExerciseView> findById(@PathVariable Long id) {
+    public ResponseEntity<TranslationExerciseResponse> findById(@PathVariable Long id) {
         return translationViewService.findById(id);
-    }
-
-    @GetMapping("favicon.ico")
-    void returnNoFavicon() {
     }
 }
