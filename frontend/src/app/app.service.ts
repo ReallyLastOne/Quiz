@@ -10,6 +10,6 @@ export class AppService {
   rootUrl = '/api';
 
   getAnswer(nextQuestion: string) {
-    return this.http.get(this.rootUrl + `/v1/exercise/question/${nextQuestion}`);
+    return this.http.get(this.rootUrl + `/v1/exercises/questions/random`);
   }
 }

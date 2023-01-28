@@ -75,10 +75,11 @@ export class ExerciseComponent implements OnDestroy, OnInit {
     this.clicked = false;
     this.answers.length = 0;
     this.question = '';
-    if (this.nextExercise < 6) {
+    if (this.nextExercise < 8) {
       this.nextApi();
     } else {
       this.exerciseEnd = true;
+      this.router.navigate([`/score`], { skipLocationChange: true });
     }
   }
 

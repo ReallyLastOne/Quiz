@@ -3,6 +3,8 @@ import { Routes, RouterModule } from '@angular/router'; // CLI imports router
 import { HomeComponent } from './home/home/home.component';
 import { ExerciseComponent } from './exercise/exercise.component';
 import { ErrorComponent } from './error/error.component';
+import { ScoreComponent } from './score/score.component';
+
 const routes: Routes = [
   {
     path: 'home',
@@ -11,6 +13,10 @@ const routes: Routes = [
   {
     path: 'exercise',
     component: ExerciseComponent,
+  },
+  {
+    path: 'score',
+    component: ScoreComponent,
   },
   {
     path: 'error',
