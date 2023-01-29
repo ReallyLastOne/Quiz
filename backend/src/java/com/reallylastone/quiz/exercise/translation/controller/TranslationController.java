@@ -40,7 +40,7 @@ public class TranslationController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void createTranslation(@RequestBody TranslationCreateRequest createRequest) {
-        translationViewService.createTranslation(createRequest);
+    public ResponseEntity<TranslationView> createTranslation(@RequestBody TranslationCreateRequest createRequest) {
+        return translationViewService.createTranslation(createRequest);
     }
 }

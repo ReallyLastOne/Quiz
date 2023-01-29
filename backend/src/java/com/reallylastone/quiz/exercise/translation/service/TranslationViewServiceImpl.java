@@ -23,9 +23,9 @@ public class TranslationViewServiceImpl implements TranslationViewService {
     }
 
     @Override
-    public void createTranslation(TranslationCreateRequest createRequest) {
+    public ResponseEntity<TranslationView> createTranslation(TranslationCreateRequest createRequest) {
         Translation translationExercise = translationMapper.mapToEntity(createRequest);
 
-        translationService.createTranslation(translationExercise);
+        return ResponseEntity.ok(translationMapper.mapToView(translationService.createTranslation(translationExercise)));
     }
 }

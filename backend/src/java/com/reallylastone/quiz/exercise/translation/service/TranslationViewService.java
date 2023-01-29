@@ -7,5 +7,5 @@ import org.springframework.http.ResponseEntity;
 public interface TranslationViewService {
     ResponseEntity<TranslationView> findById(Long id);
 
-    void createTranslation(TranslationCreateRequest createRequest);
+    ResponseEntity<TranslationView> createTranslation(TranslationCreateRequest createRequest);
 }

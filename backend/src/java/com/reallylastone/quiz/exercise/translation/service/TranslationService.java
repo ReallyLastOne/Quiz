@@ -7,5 +7,5 @@ import java.util.Optional;
 public interface TranslationService {
     Optional<Translation> findById(Long id);
 
-    void createTranslation(Translation translation);
+    Translation createTranslation(Translation translation);
 }
