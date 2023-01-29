@@ -9,8 +9,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -50,9 +56,8 @@ public class QuestionExerciseController {
                     })
     })
     @GetMapping
-    public ResponseEntity<List<QuestionExerciseResponse>> findAll(@RequestParam(defaultValue = "0") Integer page,
-                                                                  @RequestParam(defaultValue = "100") Integer pageSize) {
-        return questionExerciseViewService.findAll(page, pageSize);
+    public ResponseEntity<List<QuestionExerciseResponse>> findAll(@PageableDefault(size = 100) @ParameterObject Pageable page) {
+        return questionExerciseViewService.findAll(page);
     }
 
     @Operation(

@@ -4,6 +4,8 @@ import com.reallylastone.quiz.exercise.question.mapper.QuestionExerciseMapper;
 import com.reallylastone.quiz.exercise.question.model.QuestionExercise;
 import com.reallylastone.quiz.exercise.question.model.QuestionExerciseResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +27,8 @@ public class QuestionExerciseViewServiceImpl implements QuestionExerciseViewServ
     }
 
     @Override
-    public ResponseEntity<List<QuestionExerciseResponse>> findAll(Integer page, Integer pageSize) {
-        List<QuestionExercise> all = questionExerciseService.findAll(page, pageSize);
+    public ResponseEntity<List<QuestionExerciseResponse>> findAll(Pageable page) {
+        Page<QuestionExercise> all = questionExerciseService.findAll(page);
 
         return ResponseEntity.ok(all.stream().map(questionExerciseMapper::mapToView).toList());
     }

@@ -8,8 +8,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -22,19 +22,16 @@ public class QuestionExerciseServiceImpl implements QuestionExerciseService {
     }
 
     @Override
-    public List<QuestionExercise> findAll(Integer page, Integer pageSize) {
-        page = (page > 100) ? 100 : Math.max(0, page);
-        Pageable paging = PageRequest.of(page, pageSize);
+    public Page<QuestionExercise> findAll(Pageable page) {
+        if (page.getPageSize() > 100) page = PageRequest.of(page.getPageNumber(), 100);
 
-        Page<QuestionExercise> pagedResult = questionExerciseRepository.findAll(paging);
-
-        return pagedResult.getContent();
+        return questionExerciseRepository.findAll(page);
     }
 
     @Override
     public Optional<QuestionExercise> findRandomQuestion() {
         long count = questionExerciseRepository.count();
-        int toPick = (int) (Math.random() * count);
+        int toPick = new Random().nextInt((int) count);
         Page<QuestionExercise> questionPage = questionExerciseRepository.findAll(PageRequest.of(toPick, 1));
         QuestionExercise question = null;
         if (questionPage.hasContent()) {
