@@ -1,4 +1,4 @@
-package com.reallylastone.quiz.exercise.translation.model;
+package com.reallylastone.quiz.exercise.phrase.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Entity
 @Data
-public class Translation {
+public class Phrase {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;

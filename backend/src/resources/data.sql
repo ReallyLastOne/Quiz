@@ -13,5 +13,5 @@ insert into question_wrong_answers (question_id, wrong_answer) values (currval('
 insert into question(id, correct_answer, content) values (nextval('question_seq'), 'Lionel Messi', 'Which players has most FIFA World Cup appearances?');
 insert into question_wrong_answers (question_id, wrong_answer) values (currval('question_seq'), 'Cristiano Ronaldo'), (currval('question_seq'), 'Lothar Matthaus'), (currval('question_seq'), 'Miroslav Klose');
 
-insert into translation(id, image_path) values (nextval('translation_seq') , '');
-insert into translation_map(translation_id, "translation", locale) values  (currval('translation_seq'), 'jabłko', 'pl'), (currval('translation_seq'), 'apple', 'en');
+insert into phrase(id, image_path) values (nextval('phrase_seq') , '');
+insert into translation_map(translation_id, "translation", locale) values  (currval('phrase_seq'), 'jabłko', 'pl'), (currval('phrase_seq'), 'apple', 'en');
