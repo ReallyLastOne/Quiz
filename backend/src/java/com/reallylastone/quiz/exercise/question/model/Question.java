@@ -7,16 +7,16 @@ import java.util.List;
 
 @Entity
 @Data
-public class QuestionExercise {
+public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    private String question;
+    private String content;
 
     private String correctAnswer;
 
     @ElementCollection
-    @Column(name = " wrong_answer")
+    @Column(name = "wrong_answer")
     private List<String> wrongAnswers;
 }
