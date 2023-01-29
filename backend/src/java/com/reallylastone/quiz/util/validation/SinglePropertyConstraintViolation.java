@@ -1,4 +1,4 @@
-package com.reallylastone.quiz.exercise.phrase.validation;
+package com.reallylastone.quiz.util.validation;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Path;

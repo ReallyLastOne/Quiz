@@ -1,6 +1,5 @@
-package com.reallylastone.quiz.util;
+package com.reallylastone.quiz.util.validation;
 
-import com.reallylastone.quiz.exercise.phrase.validation.SinglePropertyConstraintViolation;
 import jakarta.validation.ConstraintViolation;
 
 import java.util.Collections;
