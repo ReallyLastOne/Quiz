@@ -28,15 +28,13 @@ public class PhraseServiceImpl implements PhraseService {
 
         phraseValidator.validate(phrase, phrases);
 
-        if (phrases.isEmpty()) {
-            phraseRepository.save(phrase);
-        }
-
         if (phrases.size() == 1) {
             Phrase toMerge = phrases.get(0);
             toMerge.getTranslationMap().putAll(phrase.getTranslationMap());
+
+            return toMerge;
         }
 
-        return null;
+        return phraseRepository.save(phrase);
     }
 }
