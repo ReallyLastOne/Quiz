@@ -1,18 +1,27 @@
 package com.reallylastone.quiz.user.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Data
 @Entity
-public class User implements UserDetails {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public
+class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -23,7 +32,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(e -> new SimpleGrantedAuthority(e.name())).collect(Collectors.toList());
+        return roles.stream().map(e -> new SimpleGrantedAuthority(e.name())).toList();
     }
 
     @Override
