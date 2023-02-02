@@ -10,6 +10,14 @@
 
 .question {
   font-size: 32px;
+  display: flex;
+  align-items: center;
+}
+.question-count {
+  padding-left: 30px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
 }
 
 .place-answers {
@@ -121,7 +129,6 @@ button.next-question-button {
 }
 
 .next-question-button:focus {
-  box-shadow: rgba(46, 164, 79, 0.4) 0 0 0 3px;
   outline: none;
 }
 
