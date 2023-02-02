@@ -5,7 +5,7 @@
     <!--      <button class="button-answers" (click)="getAnswer($event)" [disabled]="clicked">{{answer}}</button>-->
     <!--    </div>-->
     <div class="place-answers" *ngFor="let answer of answers; let i=index">
-      <button class="button-answers" (click)="markAnswer(i+1)"
+      <button class="button-answers" (click)="markAnswer(i+1, $event)"
         [ngClass]="marked[i] ? 'marked' : 'button-answers'">{{answer}}</button>
     </div>
 

@@ -121,7 +121,6 @@ button.next-question-button {
 }
 
 .next-question-button:focus {
-  box-shadow: rgba(46, 164, 79, 0.4) 0 0 0 3px;
   outline: none;
 }
 
