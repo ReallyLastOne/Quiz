@@ -15,6 +15,7 @@ export class ExerciseComponent implements OnDestroy, OnInit {
   private subscriptions = new Subscription();
   private newParsedData: Exercise;
   private nextExercise: number = 1;
+  private exerciseCount: number;
   private points: number = 0;
   private allPoints: number = 0;
   answers: string[] = [];
@@ -23,6 +24,7 @@ export class ExerciseComponent implements OnDestroy, OnInit {
   question: string;
   clicked = false;
   exerciseEnd = false;
+  questionCount = '';
   constructor(
     private _appService: AppService,
     private router: Router,
@@ -30,11 +32,13 @@ export class ExerciseComponent implements OnDestroy, OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.exerciseCount = 3;
     this._scoreService.resetScore();
     this.nextApi();
   }
 
   private initializeExercise(exercise: Exercise): void {
+    this.questionCount = `${this.nextExercise}/${this.exerciseCount}`;
     this.question = exercise.question;
     this.correctAnswer = exercise.correctAnswer;
     this.answers.push(...exercise.wrongAnswers);

@@ -10,6 +10,13 @@
 
 .question {
   font-size: 32px;
+  display: flex;
+}
+.question-count {
+  padding-left: 30px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
 }
 
 .place-answers {
