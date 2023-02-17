@@ -1,5 +1,6 @@
 package com.reallylastone.quiz.exercise.question.model;
 
+import com.reallylastone.quiz.exercise.core.Exercise;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -7,11 +8,7 @@ import java.util.List;
 
 @Entity
 @Data
-public class Question {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
-
+public class Question extends Exercise {
     private String content;
 
     private String correctAnswer;
