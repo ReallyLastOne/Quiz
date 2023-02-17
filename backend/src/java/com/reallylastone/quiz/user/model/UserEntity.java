@@ -29,7 +29,7 @@ class UserEntity implements UserDetails {
     private String password;
     private Set<Role> roles;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private List<GameSession> gameSessions;
 

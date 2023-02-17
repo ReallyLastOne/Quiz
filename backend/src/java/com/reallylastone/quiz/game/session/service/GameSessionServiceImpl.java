@@ -19,7 +19,7 @@ public class GameSessionServiceImpl implements GameSessionService {
     @Override
     public Long createSession(GameSession session, UserEntity user) {
         boolean hasActiveSession = false;
-        if (!hasActiveSession) throw new GameSessionException(LocalDateTime.now(), "User has an active session");
+        if (hasActiveSession) throw new GameSessionException(LocalDateTime.now(), "User has an active session");
 
         session.setStartDate(LocalDateTime.now());
         return gameSessionRepository.save(session).getId();
