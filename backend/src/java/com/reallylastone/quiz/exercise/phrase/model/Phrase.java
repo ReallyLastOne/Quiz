@@ -1,7 +1,12 @@
 package com.reallylastone.quiz.exercise.phrase.model;
 
 import com.reallylastone.quiz.exercise.core.Exercise;
-import jakarta.persistence.*;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapKeyColumn;
 import lombok.Data;
 
 import java.util.Locale;

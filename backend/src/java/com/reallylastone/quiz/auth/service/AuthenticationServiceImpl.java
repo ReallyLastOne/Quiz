@@ -7,6 +7,8 @@ import com.reallylastone.quiz.configuration.security.JwtService;
 import com.reallylastone.quiz.user.model.Role;
 import com.reallylastone.quiz.user.model.UserEntity;
 import com.reallylastone.quiz.user.repository.UserRepository;
+import com.reallylastone.quiz.util.validation.ValidationUtils;
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,6 +27,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse register(RegisterRequest request) {
+        validate(request);
+
         UserEntity user = UserEntity.builder().
                 nickname(request.getNickname()).
                 email(request.getEmail()).
@@ -36,6 +40,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
 
         return AuthenticationResponse.builder().token(jwtToken).build();
+    }
+
+    private void validate(RegisterRequest request) {
+        if (userRepository.existsByEmail(request.getEmail()))
+            throw new ConstraintViolationException(ValidationUtils.createConstraintViolationSet("email", "email is already used"));
+        if (userRepository.existsByNickname(request.getNickname()))
+            throw new ConstraintViolationException(ValidationUtils.createConstraintViolationSet("nickname", "nickname is already used"));
     }
 
     @Override

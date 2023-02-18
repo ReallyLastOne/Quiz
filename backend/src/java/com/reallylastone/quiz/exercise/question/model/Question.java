@@ -1,7 +1,9 @@
 package com.reallylastone.quiz.exercise.question.model;
 
 import com.reallylastone.quiz.exercise.core.Exercise;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
 import lombok.Data;
 
 import java.util.List;
