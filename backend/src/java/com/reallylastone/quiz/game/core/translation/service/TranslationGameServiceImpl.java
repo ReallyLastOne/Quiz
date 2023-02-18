@@ -23,7 +23,7 @@ public class TranslationGameServiceImpl implements TranslationGameService {
 
         validate(gameSession);
 
-        return gameSessionService.createSession(gameSession, user);
+        return gameSessionService.createSession(gameSession, user.getId());
     }
 
     private void validate(TranslationGameSession gameSession) {

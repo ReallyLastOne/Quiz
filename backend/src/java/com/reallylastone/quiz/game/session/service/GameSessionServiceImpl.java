@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,11 +18,18 @@ public class GameSessionServiceImpl implements GameSessionService {
     private final UserRepository userRepository;
 
     @Override
-    public Long createSession(GameSession session, UserEntity user) {
-        boolean hasActiveSession = false;
-        if (hasActiveSession) throw new GameSessionException(LocalDateTime.now(), "User has an active session");
+    public Long createSession(GameSession session, Long userId) {
+        if (gameSessionRepository.hasActiveSession(userId))
+            throw new GameSessionException(LocalDateTime.now(), "User has an active session");
 
-        session.setStartDate(LocalDateTime.now());
-        return gameSessionRepository.save(session).getId();
+        Optional<UserEntity> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isPresent()) {
+            session.setUser(optionalUser.get());
+            session.setStartDate(LocalDateTime.now());
+
+            return gameSessionRepository.save(session).getId();
+        }
+
+        throw new GameSessionException(LocalDateTime.now(), "No User with provided ID, could not create a session");
     }
 }
