@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: 'jdbc:postgresql://localhost:5432/quiz'
+    driverClassName: org.postgresql.Driver
+    username: root
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  hibernate:
+    ddl-auto: validate
+server:
+  port: '8080'

@@ -1,0 +1,12 @@
+spring:
+  jackson:
+    serialization:
+      indent_output: true
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+springdoc:
+  swagger-ui:
+    path: /api/v1/docs
+  api-docs:
+    path: /api/v1/docs-json
