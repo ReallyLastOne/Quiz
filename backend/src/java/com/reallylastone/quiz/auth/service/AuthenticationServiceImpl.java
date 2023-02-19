@@ -39,7 +39,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
 
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return AuthenticationResponse.builder().accessToken(jwtToken).tokenType("bearer").build();
     }
 
     private void validate(RegisterRequest request) {
@@ -57,6 +57,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var user = userRepository.findByNickname(request.getNickname()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
 
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return AuthenticationResponse.builder().accessToken(jwtToken).tokenType("bearer").build();
     }
 }
