@@ -22,5 +22,6 @@ public class QuizGameSession extends GameSession {
     @MapKeyJoinColumn(name = "question_id", referencedColumnName = "id")
     private Map<Question, Boolean> questionsAndStatus;
 
+    @Column(nullable = false)
     private int questionSize;
 }

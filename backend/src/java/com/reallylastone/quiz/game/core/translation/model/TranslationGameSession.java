@@ -23,6 +23,9 @@ public class TranslationGameSession extends GameSession {
     @MapKeyJoinColumn(name = "phrase_id", referencedColumnName = "id")
     private Map<Phrase, Boolean> translationsAndStatus;
 
+    @Column(nullable = false)
     private Locale sourceLanguage;
+
+    @Column(nullable = false)
     private Locale destinationLanguage;
 }

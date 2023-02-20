@@ -1,6 +1,12 @@
 package com.reallylastone.quiz.exception;
 
-import java.time.LocalDateTime;
+import lombok.Builder;
+import org.springframework.http.HttpStatus;
 
-record ErrorMessage(LocalDateTime date, String message) {
+import java.net.URI;
+import java.util.Map;
+
+@Builder
+record ErrorMessage(URI type, String title, HttpStatus status, String detail, URI instance,
+                    Map<String, Object> parameters) {
 }

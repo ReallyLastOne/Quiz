@@ -1,16 +1,10 @@
 package com.reallylastone.quiz.auth.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class RegisterRequest {
-    private String nickname;
-    private String email;
-    private String password;
+public record RegisterRequest(@NotBlank(message = "nickname must not be blank") String nickname,
+                              @NotBlank(message = "email must not be blank")
+                              @Email(message = "email must be properly formatted") String email,
+                              @NotBlank(message = "password must not be blank") String password) {
 }

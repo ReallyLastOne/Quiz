@@ -16,6 +16,6 @@ public class QuizGameServiceImpl implements QuizGameService {
         QuizGameSession quizGameSession = new QuizGameSession();
         quizGameSession.setQuestionSize(questions);
 
-        return gameSessionService.createSession(quizGameSession, user.getId());
+        return gameSessionService.createSession(quizGameSession, user);
     }
 }

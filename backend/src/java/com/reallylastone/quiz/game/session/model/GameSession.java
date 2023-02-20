@@ -1,6 +1,7 @@
 package com.reallylastone.quiz.game.session.model;
 
 import com.reallylastone.quiz.user.model.UserEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -22,7 +23,8 @@ public abstract class GameSession {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    private LocalDateTime startDate;
+   @Column(nullable = false)
+   private LocalDateTime startDate;
 
     private LocalDateTime finishDate;
 

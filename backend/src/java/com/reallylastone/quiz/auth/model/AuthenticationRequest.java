@@ -1,15 +1,7 @@
 package com.reallylastone.quiz.auth.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class AuthenticationRequest {
-    private String nickname;
-    private String password;
+public record AuthenticationRequest(@NotBlank(message = "nickname must not be blank") String nickname,
+                                    @NotBlank(message = "password must not be blank") String password) {
 }
