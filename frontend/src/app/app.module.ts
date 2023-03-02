@@ -7,6 +7,7 @@ import { ExerciseComponent } from './exercise/exercise.component';
 import { ErrorComponent } from './error/error.component';
 import { ScoreComponent } from './score/score.component';
 import { ScoreService } from './score/score.service';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { ScoreService } from './score/score.service';
     ExerciseComponent,
     ErrorComponent,
     ScoreComponent,
+    LoginComponent,
   ],
   imports: [HttpClientModule, BrowserModule, AppRoutingModule],
   providers: [ScoreService],
