@@ -29,7 +29,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Optional<Question> findRandomQuestion() {
+    public Question findRandomQuestion() {
         long count = questionRepository.count();
         int toPick = new Random().nextInt((int) count);
         Page<Question> questionPage = questionRepository.findAll(PageRequest.of(toPick, 1));
@@ -38,6 +38,6 @@ public class QuestionServiceImpl implements QuestionService {
             question = questionPage.getContent().get(0);
         }
 
-        return Optional.ofNullable(question);
+        return question;
     }
 }

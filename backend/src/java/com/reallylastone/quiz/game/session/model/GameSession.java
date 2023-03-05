@@ -23,8 +23,8 @@ public abstract class GameSession {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-   @Column(nullable = false)
-   private LocalDateTime startDate;
+    @Column(nullable = false)
+    private LocalDateTime startDate;
 
     private LocalDateTime finishDate;
 

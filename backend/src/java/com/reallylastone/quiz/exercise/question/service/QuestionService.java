@@ -11,5 +11,5 @@ public interface QuestionService {
 
     Page<Question> findAll(Pageable pageable);
 
-    Optional<Question> findRandomQuestion();
+    Question findRandomQuestion();
 }

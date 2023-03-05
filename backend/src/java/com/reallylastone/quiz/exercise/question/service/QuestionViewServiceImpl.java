@@ -35,9 +35,8 @@ public class QuestionViewServiceImpl implements QuestionViewService {
 
     @Override
     public ResponseEntity<QuestionView> findRandomQuestion() {
-        Optional<Question> exerciseOptional = questionService.findRandomQuestion();
+        Question question = questionService.findRandomQuestion();
 
-        return exerciseOptional.map(exercise -> ResponseEntity.ok(questionMapper.mapToView(exercise))).
-                orElseGet(() -> ResponseEntity.notFound().build());
+        return ResponseEntity.ok(questionMapper.mapToView(question));
     }
 }

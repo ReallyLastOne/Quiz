@@ -1,5 +1,6 @@
 package com.reallylastone.quiz.exception;
 
+import com.reallylastone.quiz.util.validation.StateValidationErrorsException;
 import com.reallylastone.quiz.util.validation.ValidationErrorsException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
@@ -34,7 +35,12 @@ public class GlobalExceptionHandler {
         return createErrorMessage(request, errors);
     }
 
-    private ResponseEntity<ErrorMessage> createErrorMessage(HttpServletRequest request, List<InvalidInputDataErrors.FieldError> errors) {
+    @ExceptionHandler({StateValidationErrorsException.class})
+    public ResponseEntity<ErrorMessage> handle(final StateValidationErrorsException e, HttpServletRequest request) {
+        return createErrorMessage(request, e.getErrors());
+    }
+
+    private ResponseEntity<ErrorMessage> createErrorMessage(HttpServletRequest request, List<?> errors) {
         ErrorMessage message = ErrorMessage.builder().parameters(buildParams(errors)).
                 instance(URI.create(request.getRequestURI())).
                 status(HttpStatus.UNPROCESSABLE_ENTITY).title("Invalid input data").
@@ -43,7 +49,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(message);
     }
 
-    private Map<String, Object> buildParams(List<InvalidInputDataErrors.FieldError> errors) {
+    private Map<String, Object> buildParams(List<?> errors) {
         Map<String, Object> params = new HashMap<>();
         params.put("errors", errors);
 

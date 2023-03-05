@@ -1,6 +1,7 @@
 package com.reallylastone.quiz.game.core.translation.service;
 
 import com.reallylastone.quiz.game.core.translation.model.TranslationGameSession;
+import com.reallylastone.quiz.game.session.model.GameSessionCreateRequest;
 import com.reallylastone.quiz.game.session.service.GameSessionService;
 import com.reallylastone.quiz.user.model.UserEntity;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,6 @@ public class TranslationGameServiceImpl implements TranslationGameService {
         gameSession.setSourceLanguage(sourceLanguage);
         gameSession.setDestinationLanguage(destinationLanguage);
 
-        return gameSessionService.createSession(gameSession, user);
+        return gameSessionService.createSession(new GameSessionCreateRequest(gameSession));
     }
 }
