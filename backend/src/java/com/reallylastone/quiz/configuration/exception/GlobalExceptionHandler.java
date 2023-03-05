@@ -1,4 +1,4 @@
-package com.reallylastone.quiz.exception;
+package com.reallylastone.quiz.configuration.exception;
 
 import com.reallylastone.quiz.util.validation.StateValidationErrorsException;
 import com.reallylastone.quiz.util.validation.ValidationErrorsException;
@@ -38,6 +38,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({StateValidationErrorsException.class})
     public ResponseEntity<ErrorMessage> handle(final StateValidationErrorsException e, HttpServletRequest request) {
         return createErrorMessage(request, e.getErrors());
+    }
+
+    @ExceptionHandler({Exception.class})
+    public ResponseEntity<ErrorMessage> handle(final Exception e, HttpServletRequest request) {
+        return createErrorMessage(request, List.of(e.getMessage()));
     }
 
     private ResponseEntity<ErrorMessage> createErrorMessage(HttpServletRequest request, List<?> errors) {

@@ -2,6 +2,8 @@ package com.reallylastone.quiz.auth.controller;
 
 import com.reallylastone.quiz.auth.model.AuthenticationRequest;
 import com.reallylastone.quiz.auth.model.AuthenticationResponse;
+import com.reallylastone.quiz.auth.model.RefreshTokenRequest;
+import com.reallylastone.quiz.auth.model.RefreshTokenResponse;
 import com.reallylastone.quiz.auth.model.RegisterRequest;
 import com.reallylastone.quiz.auth.service.AuthenticationViewService;
 import lombok.RequiredArgsConstructor;
@@ -25,5 +27,10 @@ public class AuthenticationController {
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         return authenticationViewService.authenticate(request);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<RefreshTokenResponse> refresh(@RequestBody RefreshTokenRequest request) {
+        return authenticationViewService.refresh(request);
     }
 }

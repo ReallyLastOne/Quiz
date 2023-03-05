@@ -10,3 +10,11 @@ springdoc:
     path: /api/v1/docs
   api-docs:
     path: /api/v1/docs-json
+auth:
+  jwt:
+    token:
+      access:
+        expiration: 72_000_00
+        secret: 3272357538782F413F4428472B4B6250655368566B5970337336763979244226
+      refresh:
+        expiration: 864_000_00

@@ -2,6 +2,9 @@ package com.reallylastone.quiz.auth.service;
 
 import com.reallylastone.quiz.auth.model.AuthenticationRequest;
 import com.reallylastone.quiz.auth.model.AuthenticationResponse;
+import com.reallylastone.quiz.auth.model.RefreshToken;
+import com.reallylastone.quiz.auth.model.RefreshTokenRequest;
+import com.reallylastone.quiz.auth.model.RefreshTokenResponse;
 import com.reallylastone.quiz.auth.model.RegisterRequest;
 import com.reallylastone.quiz.auth.validation.RegisterValidator;
 import com.reallylastone.quiz.configuration.security.JwtService;
@@ -10,6 +13,7 @@ import com.reallylastone.quiz.user.model.UserEntity;
 import com.reallylastone.quiz.user.repository.UserRepository;
 import com.reallylastone.quiz.util.validation.ValidationErrorsException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +31,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final RegisterValidator registerValidator;
+    private final RefreshTokenService refreshTokenService;
 
     @Override
     public AuthenticationResponse register(RegisterRequest request) {
@@ -41,8 +46,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
+        var refreshToken = refreshTokenService.createToken(user.getId());
 
-        return new AuthenticationResponse(jwtToken, "bearer");
+        return new AuthenticationResponse(jwtToken, "bearer", refreshToken);
     }
 
     private void validate(RegisterRequest request) {
@@ -61,7 +67,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         var user = userRepository.findByNickname(request.nickname()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
+        var refreshToken = refreshTokenService.createToken(user.getId());
 
-        return new AuthenticationResponse(jwtToken, "bearer");
+        return new AuthenticationResponse(jwtToken, "bearer", refreshToken);
+    }
+
+    @Override
+    public RefreshTokenResponse refresh(RefreshTokenRequest request) {
+        return refreshTokenService.findByToken(request.refreshToken())
+                .map(refreshTokenService::verifyExpiration)
+                .map(RefreshToken::getUser)
+                .map(user -> {
+                    String token = jwtService.generateToken(user);
+                    return new RefreshTokenResponse(token);
+                })
+                .orElseThrow(() -> new AuthenticationCredentialsNotFoundException("refresh token not found in database"));
     }
 }

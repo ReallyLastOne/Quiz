@@ -2,6 +2,8 @@ package com.reallylastone.quiz.auth.service;
 
 import com.reallylastone.quiz.auth.model.AuthenticationRequest;
 import com.reallylastone.quiz.auth.model.AuthenticationResponse;
+import com.reallylastone.quiz.auth.model.RefreshTokenRequest;
+import com.reallylastone.quiz.auth.model.RefreshTokenResponse;
 import com.reallylastone.quiz.auth.model.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,5 +22,10 @@ public class AuthenticationViewServiceImpl implements AuthenticationViewService 
     @Override
     public ResponseEntity<AuthenticationResponse> authenticate(AuthenticationRequest request) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
+    }
+
+    @Override
+    public ResponseEntity<RefreshTokenResponse> refresh(RefreshTokenRequest request) {
+        return ResponseEntity.ok(authenticationService.refresh(request));
     }
 }

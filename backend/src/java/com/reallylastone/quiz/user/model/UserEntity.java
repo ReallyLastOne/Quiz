@@ -25,8 +25,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public
-class UserEntity implements UserDetails {
+public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
