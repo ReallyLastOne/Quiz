@@ -52,7 +52,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     private void validate(RegisterRequest request) {
-        Errors errors = new BeanPropertyBindingResult(request, "registerRequest");
+        Errors errors = new BeanPropertyBindingResult(request, "RegisterRequest");
         registerValidator.validate(request, errors);
 
         if (errors.hasErrors()) {

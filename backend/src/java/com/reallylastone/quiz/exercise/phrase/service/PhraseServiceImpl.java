@@ -1,11 +1,15 @@
 package com.reallylastone.quiz.exercise.phrase.service;
 
+import com.reallylastone.quiz.exercise.phrase.mapper.PhraseMapper;
 import com.reallylastone.quiz.exercise.phrase.model.Phrase;
+import com.reallylastone.quiz.exercise.phrase.model.PhraseCreateRequest;
 import com.reallylastone.quiz.exercise.phrase.repository.PhraseRepository;
 import com.reallylastone.quiz.exercise.phrase.validation.PhraseValidator;
+import com.reallylastone.quiz.util.validation.ValidationErrorsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.Errors;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +19,7 @@ import java.util.Optional;
 public class PhraseServiceImpl implements PhraseService {
     private final PhraseRepository phraseRepository;
     private final PhraseValidator phraseValidator;
+    private final PhraseMapper phraseMapper;
 
     @Override
     public Optional<Phrase> findById(Long id) {
@@ -22,19 +27,28 @@ public class PhraseServiceImpl implements PhraseService {
     }
 
     @Override
-    @Transactional
-    public Phrase createPhrase(Phrase phrase) {
-        List<Phrase> phrases = phraseRepository.getByTranslationValues(phrase.getTranslationMap().values());
+    public Phrase createPhrase(PhraseCreateRequest request) {
+        List<Phrase> phrases = phraseRepository.getByTranslationValues(request.translationMap().values());
 
-        phraseValidator.validate(phrase, phrases);
+        validate(request);
 
         if (phrases.size() == 1) {
             Phrase toMerge = phrases.get(0);
-            toMerge.getTranslationMap().putAll(phrase.getTranslationMap());
+            toMerge.getTranslationMap().putAll(request.translationMap());
 
             return toMerge;
         }
 
-        return phraseRepository.save(phrase);
+        return phraseRepository.save(phraseMapper.mapToEntity(request));
+
+    }
+
+    private void validate(PhraseCreateRequest request) {
+        Errors errors = new BeanPropertyBindingResult(request, "PhraseCreateRequest");
+        phraseValidator.validate(request, errors);
+
+        if (errors.hasErrors()) {
+            throw new ValidationErrorsException(errors);
+        }
     }
 }

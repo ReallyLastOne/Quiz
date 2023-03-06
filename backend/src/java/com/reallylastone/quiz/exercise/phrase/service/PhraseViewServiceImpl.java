@@ -24,8 +24,6 @@ public class PhraseViewServiceImpl implements PhraseViewService {
 
     @Override
     public ResponseEntity<PhraseView> createPhrase(PhraseCreateRequest createRequest) {
-        Phrase phraseExercise = phraseMapper.mapToEntity(createRequest);
-
-        return ResponseEntity.ok(phraseMapper.mapToView(phraseService.createPhrase(phraseExercise)));
+        return ResponseEntity.ok(phraseMapper.mapToView(phraseService.createPhrase(createRequest)));
     }
 }
