@@ -2,7 +2,6 @@ package com.reallylastone.quiz.exercise.phrase.service;
 
 import com.reallylastone.quiz.exercise.phrase.model.Phrase;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseCreateRequest;
-import com.reallylastone.quiz.exercise.phrase.model.PhraseView;
 
 import java.util.Optional;
 
