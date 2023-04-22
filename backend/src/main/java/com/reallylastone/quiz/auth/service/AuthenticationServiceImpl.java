@@ -48,7 +48,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = refreshTokenService.createToken(user.getId());
 
-        return new AuthenticationResponse(jwtToken, "bearer", refreshToken);
+        return new AuthenticationResponse(jwtToken, refreshToken, "bearer");
     }
 
     private void validate(RegisterRequest request) {
@@ -69,7 +69,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = refreshTokenService.createToken(user.getId());
 
-        return new AuthenticationResponse(jwtToken, "bearer", refreshToken);
+        return new AuthenticationResponse(jwtToken, refreshToken, "bearer");
     }
 
     @Override

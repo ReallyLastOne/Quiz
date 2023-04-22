@@ -28,6 +28,8 @@ public abstract class GameSession {
 
     private LocalDateTime finishDate;
 
+    private GameState state = GameState.NEW;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private UserEntity user;

@@ -41,4 +41,18 @@ public class GameSessionStateValidator {
             errors.add(StateValidationError.USER_UNANSWERED_QUESTIONS);
         }
     }
+
+    /**
+     * Method validates if given user has correct properties to answer the question
+     *
+     * @param user   user to be checked
+     * @param errors errors to be optionally filled
+     */
+    public void validateQuestionAnswerRequest(UserEntity user, List<StateValidationError> errors) {
+        if (!gameSessionRepository.hasActiveQuizSession(user.getId())) {
+            errors.add(StateValidationError.USER_INACTIVE_SESSION);
+        } else if (!gameSessionRepository.hasUnansweredQuestion(user.getId())) {
+            errors.add(StateValidationError.USER_NO_QUESTION_TO_ANSWER);
+        }
+    }
 }

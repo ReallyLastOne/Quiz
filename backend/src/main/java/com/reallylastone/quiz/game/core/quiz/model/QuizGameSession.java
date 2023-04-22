@@ -11,6 +11,7 @@ import jakarta.persistence.MapKeyJoinColumn;
 import lombok.Data;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Data
 @Entity
@@ -24,4 +25,13 @@ public class QuizGameSession extends GameSession {
 
     @Column(nullable = false)
     private int questionSize;
+
+    public Question findCurrent() {
+        Optional<Map.Entry<Question, Boolean>> first = questionsAndStatus.entrySet().stream().
+                filter(e -> e.getValue() == null).findFirst();
+
+        if (first.isEmpty()) throw new IllegalStateException("no question with no answer in given quiz game session");
+
+        return first.get().getKey();
+    }
 }

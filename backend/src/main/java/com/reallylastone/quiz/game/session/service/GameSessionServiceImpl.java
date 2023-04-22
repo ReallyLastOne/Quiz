@@ -6,6 +6,7 @@ import com.reallylastone.quiz.exercise.question.model.QuestionAnswerRequest;
 import com.reallylastone.quiz.exercise.question.service.QuestionService;
 import com.reallylastone.quiz.game.core.quiz.model.QuizGameSession;
 import com.reallylastone.quiz.game.session.model.GameSessionCreateRequest;
+import com.reallylastone.quiz.game.session.model.GameState;
 import com.reallylastone.quiz.game.session.model.NextPhraseRequest;
 import com.reallylastone.quiz.game.session.repository.GameSessionRepository;
 import com.reallylastone.quiz.game.session.validation.GameSessionCreateRequestValidator;
@@ -37,7 +38,7 @@ public class GameSessionServiceImpl implements GameSessionService {
     public Long createSession(GameSessionCreateRequest request) {
         List<StateValidationError> errors = new ArrayList<>();
 
-       gameSessionStateValidator.validateCreateSessionRequest(userService.getCurrentUser(), errors);
+        gameSessionStateValidator.validateCreateSessionRequest(userService.getCurrentUser(), errors);
         if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
 
         validate(request);
@@ -58,6 +59,7 @@ public class GameSessionServiceImpl implements GameSessionService {
         QuizGameSession activeSession = gameSessionRepository.findActive(currentUser.getId());
         Question randomQuestion = questionService.findRandomQuestion();
         activeSession.getQuestionsAndStatus().put(randomQuestion, null);
+        activeSession.setState(GameState.IN_PROGRESS);
 
         return randomQuestion;
     }
@@ -69,7 +71,21 @@ public class GameSessionServiceImpl implements GameSessionService {
 
     @Override
     public boolean processAnswer(QuestionAnswerRequest questionAnswer) {
-        return false;
+        List<StateValidationError> errors = new ArrayList<>();
+        UserEntity currentUser = userService.getCurrentUser();
+
+        gameSessionStateValidator.validateQuestionAnswerRequest(currentUser, errors);
+        if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
+
+        QuizGameSession activeSession = gameSessionRepository.findActive(currentUser.getId());
+        Question current = activeSession.findCurrent();
+        boolean isCorrectAnswer = current.getCorrectAnswer().equals(questionAnswer.answer());
+        activeSession.getQuestionsAndStatus().put(current, isCorrectAnswer);
+
+        if (activeSession.getQuestionSize() == activeSession.getQuestionsAndStatus().size())
+            activeSession.setState(GameState.COMPLETED);
+
+        return isCorrectAnswer;
     }
 
     private void validate(GameSessionCreateRequest request) {

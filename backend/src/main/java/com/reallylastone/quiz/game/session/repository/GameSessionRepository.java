@@ -8,13 +8,13 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GameSessionRepository extends JpaRepository<GameSession, Long> {
-    @Query("select count(*) >= 1 from GameSession gs where gs.user.id = :userId and gs.finishDate is null")
+    @Query("SELECT COUNT(*) >= 1 FROM GameSession gs WHERE gs.user.id = :userId AND gs.state <> 2")
     boolean hasActiveSession(Long userId);
 
-    @Query("select count(*) >= 1 from GameSession gs where gs.user.id = :userId and gs.finishDate is null and type(gs) = QuizGameSession")
+    @Query("SELECT COUNT(*) >= 1 FROM GameSession gs WHERE gs.user.id = :userId AND gs.state <> 2 AND TYPE(gs) = QuizGameSession")
     boolean hasActiveQuizSession(Long userId);
 
-    @Query("select count(*) >= 1 from GameSession gs where gs.user.id = :userId and gs.finishDate is null and type(gs) = TranslationGameSession")
+    @Query("SELECT COUNT(*) >= 1 FROM GameSession gs WHERE gs.user.id = :userId AND gs.state <> 2 and TYPE(gs) = TranslationGameSession")
     boolean hasActiveTranslationSession(Long userId);
 
     @Query(value =
@@ -25,6 +25,6 @@ public interface GameSessionRepository extends JpaRepository<GameSession, Long> 
             nativeQuery = true)
     boolean hasUnansweredQuestion(Long userId);
 
-    @Query("select gs from GameSession gs where gs.user.id = :userId and gs.finishDate is null and type(gs) = QuizGameSession")
+    @Query("SELECT gs FROM GameSession gs WHERE gs.user.id = :userId AND gs.finishDate IS NULL AND TYPE(gs) = QuizGameSession")
     QuizGameSession findActive(Long userId);
 }
