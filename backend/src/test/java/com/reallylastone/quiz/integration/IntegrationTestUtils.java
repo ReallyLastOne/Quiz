@@ -13,7 +13,7 @@ public class IntegrationTestUtils {
      *
      * @param mvcResult response
      * @param field     field to get value of
-     * @return value
+     * @return extracted value
      * @throws UnsupportedEncodingException if the character encoding is not supported
      */
     public String extract(MvcResult mvcResult, String field) throws UnsupportedEncodingException {

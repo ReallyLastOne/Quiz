@@ -51,7 +51,7 @@ public class GameSessionStateValidator {
     public void validateQuestionAnswerRequest(UserEntity user, List<StateValidationError> errors) {
         if (!gameSessionRepository.hasActiveQuizSession(user.getId())) {
             errors.add(StateValidationError.USER_INACTIVE_SESSION);
-        } else if (!gameSessionRepository.hasUnansweredQuestion(user.getId())) {
+        } else if (gameSessionRepository.findActive(user.getId()).findCurrent().isEmpty()) {
             errors.add(StateValidationError.USER_NO_QUESTION_TO_ANSWER);
         }
     }

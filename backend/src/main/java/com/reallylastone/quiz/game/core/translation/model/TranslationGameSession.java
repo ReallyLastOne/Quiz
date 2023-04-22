@@ -9,12 +9,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapKeyJoinColumn;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.Locale;
 import java.util.Map;
 
 @Entity
 @Data
+@ToString(callSuper = true)
 public class TranslationGameSession extends GameSession {
     @ElementCollection
     @CollectionTable(name = "translation_game_session_phrases",

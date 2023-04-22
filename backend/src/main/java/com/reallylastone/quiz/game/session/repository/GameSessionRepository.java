@@ -18,7 +18,7 @@ public interface GameSessionRepository extends JpaRepository<GameSession, Long> 
     boolean hasActiveTranslationSession(Long userId);
 
     @Query(value =
-            "SELECT COUNT(*) >= 1 FROM QUIZ_GAME_SESSIONS_QUESTIONS q " +
+            "SELECT COUNT(*) >= 1 FROM QUIZ_GAME_SESSION_QUESTIONS q " +
             "INNER JOIN QUIZ_GAME_SESSION qgs ON qgs.ID = q.GAME_SESSION " +
             "INNER JOIN USER_ENTITY u ON U.ID = qgs.USER_ID " +
             "WHERE q.STATUS IS NULL",

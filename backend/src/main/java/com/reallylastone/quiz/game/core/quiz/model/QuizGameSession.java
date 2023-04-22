@@ -9,11 +9,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapKeyJoinColumn;
 import lombok.Data;
+import lombok.ToString;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 @Data
+@ToString(callSuper = true)
 @Entity
 public class QuizGameSession extends GameSession {
     @ElementCollection
@@ -21,17 +24,13 @@ public class QuizGameSession extends GameSession {
             joinColumns = @JoinColumn(name = "game_session"))
     @Column(name = "status")
     @MapKeyJoinColumn(name = "question_id", referencedColumnName = "id")
-    private Map<Question, Boolean> questionsAndStatus;
+    private Map<Question, Boolean> questionsAndStatus = new HashMap<>();
 
     @Column(nullable = false)
     private int questionSize;
 
-    public Question findCurrent() {
-        Optional<Map.Entry<Question, Boolean>> first = questionsAndStatus.entrySet().stream().
+    public Optional<Map.Entry<Question, Boolean>> findCurrent() {
+        return questionsAndStatus.entrySet().stream().
                 filter(e -> e.getValue() == null).findFirst();
-
-        if (first.isEmpty()) throw new IllegalStateException("no question with no answer in given quiz game session");
-
-        return first.get().getKey();
     }
 }

@@ -17,6 +17,7 @@ import com.reallylastone.quiz.util.validation.StateValidationError;
 import com.reallylastone.quiz.util.validation.StateValidationErrorsException;
 import com.reallylastone.quiz.util.validation.ValidationErrorsException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
@@ -44,6 +45,7 @@ public class GameSessionServiceImpl implements GameSessionService {
         validate(request);
 
         request.session().setStartDate(LocalDateTime.now());
+        request.session().setUser((UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         return gameSessionRepository.save(request.session()).getId();
     }
@@ -78,7 +80,7 @@ public class GameSessionServiceImpl implements GameSessionService {
         if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
 
         QuizGameSession activeSession = gameSessionRepository.findActive(currentUser.getId());
-        Question current = activeSession.findCurrent();
+        Question current = activeSession.findCurrent().get().getKey();
         boolean isCorrectAnswer = current.getCorrectAnswer().equals(questionAnswer.answer());
         activeSession.getQuestionsAndStatus().put(current, isCorrectAnswer);
 

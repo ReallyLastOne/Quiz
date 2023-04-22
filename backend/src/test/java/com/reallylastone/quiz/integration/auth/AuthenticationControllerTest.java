@@ -13,6 +13,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -22,7 +23,7 @@ import java.util.stream.Stream;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(print = MockMvcPrint.NONE)
 @SpringBootTest
 class AuthenticationControllerTest extends AbstractIntegrationTest {
     @Autowired
@@ -68,7 +69,7 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
     @ParameterizedTest
     @MethodSource("wrongRegisterRequests")
     void shouldNotRegisterUser(RegisterRequest request) throws Exception {
-        controllerUtils.register(request).andExpect(status().is4xxClientError());
+        controllerUtils.register(request).andExpect(status().isUnprocessableEntity());
 
         Assertions.assertEquals(0, userRepository.findAll().size());
         Assertions.assertEquals(0, refreshTokenRepository.findAll().size());
@@ -77,7 +78,7 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
     @Test
     void shouldNotAuthenticateUser() throws Exception {
         AuthenticationRequest request = new AuthenticationRequest("notExistingUser", "password");
-        controllerUtils.authenticate(request).andExpect(status().is4xxClientError());
+        controllerUtils.authenticate(request).andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -110,6 +111,6 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
 
         String refreshToken = generalUtils.extract(mvcResult, "refreshToken");
         RefreshTokenRequest refreshRequest = new RefreshTokenRequest(refreshToken);
-        controllerUtils.refresh(refreshRequest).andExpect(status().is4xxClientError());
+        controllerUtils.refresh(refreshRequest).andExpect(status().isUnprocessableEntity());
     }
 }

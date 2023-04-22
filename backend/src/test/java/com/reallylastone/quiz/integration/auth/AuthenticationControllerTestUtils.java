@@ -10,15 +10,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.reallylastone.quiz.integration.EndpointPaths.Authentication.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @Component
 @RequiredArgsConstructor
 public class AuthenticationControllerTestUtils {
-    public static final String BASE = "/api/v1/auth";
-    public static final String REGISTER_PATH = "/register";
-    public static final String AUTH_PATH = "/authenticate";
-    public static final String REFRESH_PATH = "/refresh";
     private final MockMvc mockMvc;
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -30,7 +27,7 @@ public class AuthenticationControllerTestUtils {
      * @throws Exception if a problem occurred in performing request or parsing sending object
      */
     public ResultActions register(RegisterRequest request) throws Exception {
-        return mockMvc.perform(post(BASE + REGISTER_PATH)
+        return mockMvc.perform(post(REGISTER_PATH)
                 .content(mapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON));
     }
@@ -43,7 +40,7 @@ public class AuthenticationControllerTestUtils {
      * @throws Exception if a problem occurred in performing request or parsing sending object
      */
     public ResultActions authenticate(AuthenticationRequest request) throws Exception {
-        return mockMvc.perform(post(BASE + AUTH_PATH)
+        return mockMvc.perform(post(AUTH_PATH)
                 .content(mapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON));
     }
@@ -56,7 +53,7 @@ public class AuthenticationControllerTestUtils {
      * @throws Exception if a problem occurred in performing request or parsing sending object
      */
     public ResultActions refresh(RefreshTokenRequest request) throws Exception {
-        return mockMvc.perform(post(BASE + REFRESH_PATH)
+        return mockMvc.perform(post(REFRESH_PATH)
                 .content(mapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON));
     }
