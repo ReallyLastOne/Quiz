@@ -19,7 +19,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 import static com.reallylastone.quiz.integration.EndpointPaths.QuizGame.*;
@@ -133,7 +132,6 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
         quizUtils.start(5, accessToken);
         quizUtils.next(accessToken).andExpect(status().is2xxSuccessful());
 
-        System.out.println(gameSessionRepository.findAll());
         QuestionAnswerRequest request = new QuestionAnswerRequest("answer");
         quizUtils.answer(request, accessToken).andExpect(status().is2xxSuccessful());
     }
@@ -149,4 +147,67 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
         quizUtils.answer(request, accessToken).andExpect(status().is4xxClientError());
     }
 
+    @Test
+    void shouldHaveWronglyAnsweredQuestion() throws Exception {
+        quizUtils.populateQuestions();
+
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        String accessToken = utils.extract(mvcResult, "accessToken");
+
+        quizUtils.start(5, accessToken);
+        quizUtils.next(accessToken);
+
+        QuestionAnswerRequest request = new QuestionAnswerRequest("answer");
+        quizUtils.answer(request, accessToken);
+
+        ((QuizGameSession) gameSessionRepository.findAll().get(0)).getQuestionsAndStatus().values().forEach(e -> Assertions.assertEquals(Boolean.FALSE, e));
+    }
+
+    @Test
+    void shouldHaveCorrectlyAnsweredQuestion() throws Exception {
+        quizUtils.populateQuestions();
+
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        String accessToken = utils.extract(mvcResult, "accessToken");
+
+        quizUtils.start(5, accessToken);
+        quizUtils.next(accessToken);
+
+        QuestionAnswerRequest request = new QuestionAnswerRequest("correct");
+        quizUtils.answer(request, accessToken);
+
+        ((QuizGameSession) gameSessionRepository.findAll().get(0)).getQuestionsAndStatus().values().forEach(e -> Assertions.assertEquals(Boolean.TRUE, e));
+    }
+
+    @Test
+    void shouldCompleteGame() throws Exception {
+        quizUtils.populateQuestions();
+
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        String accessToken = utils.extract(mvcResult, "accessToken");
+
+        quizUtils.start(1, accessToken);
+        quizUtils.next(accessToken);
+
+        QuestionAnswerRequest request = new QuestionAnswerRequest("correct");
+        quizUtils.answer(request, accessToken);
+
+        Assertions.assertEquals(GameState.COMPLETED, gameSessionRepository.findAll().get(0).getState());
+    }
+
+    @Test
+    void shouldBeAbleToStartGameAfterCompletion() throws Exception {
+        quizUtils.populateQuestions();
+
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        String accessToken = utils.extract(mvcResult, "accessToken");
+
+        quizUtils.start(1, accessToken);
+        quizUtils.next(accessToken);
+
+        QuestionAnswerRequest request = new QuestionAnswerRequest("correct");
+        quizUtils.answer(request, accessToken);
+
+        quizUtils.start(1, accessToken).andExpect(status().is2xxSuccessful());
+    }
 }
