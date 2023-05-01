@@ -18,3 +18,11 @@ auth:
         secret: 3272357538782F413F4428472B4B6250655368566B5970337336763979244226
       refresh:
         expiration: 864_000_00
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          INFO
+      hibernate:
+        INFO
