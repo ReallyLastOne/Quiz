@@ -1,17 +1,14 @@
 spring:
   datasource:
-    url: 'jdbc:postgresql://localhost:5432/quiz'
+    url: 'jdbc:postgresql://localhost:5433/quiz'
     driverClassName: org.postgresql.Driver
     username: postgres
     password: admin
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         format_sql: true
-server:
-  port: '8085'
-

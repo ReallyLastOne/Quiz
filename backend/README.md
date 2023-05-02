@@ -1,7 +1,10 @@
-W celu uruchomienia:
+# Backend
+1) Starting only database: (then starting application from some favourite IDE)  
+   `docker compose -f docker-compose-dev.yml up -d database`
+2) Starting only application: (assuming you have PostgreSQL server on your local machine, but then you have to change port in `application-dev.yaml` as default port for PostgreSQL is 5432)   
+   `docker compose -f docker-compose-dev.yml up -d app`
+3) Starting database and application  
+   `docker compose -f docker-compose-dev.yml build` &   
+   `docker compose -f docker-compose-dev.yml up`
 
-1. JDK17,
-2. W IntelliJ, w opcjach konfiguracji zaznaczyć `Add dependencies with "provided" scope to classpath`,
-3. Przy pierwszym uruchomieniu z nową strukturą bazy danych, wywołaj skrypt `data.sql`, a następnie w pliku `application.properties` zmień `spring.jpa.hibernate.ddl-auto`
-   na `validate`,
-4. Dodaj flagę `-Dspring.profiles.active=dev` do `VM options` w opcjach konfiguracji
+If starting database as Docker container, you have to connect to server exposed on port 5433 using credentials provided in `docker-compose-dev.yml`

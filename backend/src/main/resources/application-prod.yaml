@@ -8,5 +8,3 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   hibernate:
     ddl-auto: validate
-server:
-  port: '8080'
