@@ -11,8 +11,8 @@ services:
       POSTGRES_PASSWORD: admin
     volumes:
       - pg-data:/var/lib/postgresql/data/
-  app:
-    build: .
+  backend:
+    build: ./backend
     ports:
       - "8080:8080"
     environment:
@@ -20,5 +20,9 @@ services:
       SPRING.PROFILES.ACTIVE: dev
     depends_on:
       - database
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
 volumes:
   pg-data:
