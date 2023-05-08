@@ -29,6 +29,10 @@ public class QuizGameSession extends GameSession {
     @Column(nullable = false)
     private int questionSize;
 
+    public void answer(Question question, Boolean answer) {
+        questionsAndStatus.put(question, answer);
+    }
+
     public Optional<Map.Entry<Question, Boolean>> findCurrent() {
         return questionsAndStatus.entrySet().stream().
                 filter(e -> e.getValue() == null).findFirst();
