@@ -6,7 +6,7 @@
 3) Starting database and application  
    `docker compose up -d backend database`
 
-If starting database as Docker container, you have to connect to server exposed on port 5433 using credentials provided in `docker-compose-dev.yml`
+If starting database as Docker container, you have to connect to server exposed on port 5433 using credentials provided in `docker-compose.yml`
 
 # Frontend
 To start the frontend of the application  
