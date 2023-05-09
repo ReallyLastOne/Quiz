@@ -13,11 +13,11 @@
       </div>
       <div>
         <button class="submit-button" type="submit">Zaloguj się</button>
-        <p>Nie masz konta? <a class="register-text" (click)="registerMeClick()">Zarejestruj się!</a>
+        <p>Nie masz konta? <a class="register-text" (click)="registerMeClick(false)">Zarejestruj się!</a>
       </div>
     </div>
   </form>
 </div>
 <ng-template #register>
-  <app-register></app-register>
+  <app-register (backToLogin)="registerMeClick(true)"></app-register>
 </ng-template>

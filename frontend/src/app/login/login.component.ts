@@ -12,7 +12,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  registerMeClick() {
-    this.login = false;
+  registerMeClick(register: boolean) {
+    this.login = register;
   }
 }

@@ -14,7 +14,8 @@
       <label>Hasło</label>
       <input class="register-input" type="password" matInput formControlName="password" placeholder="Hasło">
     </div>
-
-    <button class="submit-button" type="submit">Zarejestruj się</button>
+    <div class="back-button">
+      <button class="submit-button" type="submit">Zarejestruj się</button>
+      <button class="submit-button" type="button" (click)="backToLoginClick()">Wróc</button></div>
   </div>
 </form>
