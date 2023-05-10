@@ -33,6 +33,7 @@
   margin: 0px auto;
   appearance: none;
   width: 25vw;
+  min-width: 70px;
   margin: 1vw 0px;
   background-color: #3390ff;
   border: 1px solid rgba(27, 31, 35, 0.15);

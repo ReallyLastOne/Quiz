@@ -1,0 +1,21 @@
+<form class="container" autocomplete="off" novalidate>
+  <div>
+    <div class="form-element-container">
+      <label>Nazwa użytkownika</label>
+      <input class="register-input" matInput formControlName="register" placeholder="Nazwa użytkownika">
+    </div>
+
+    <div class="form-element-container">
+      <label>E-Mail</label>
+      <input class="register-input" type="email" matInput formControlName="email" placeholder="E-Mail">
+    </div>
+
+    <div class="form-element-container">
+      <label>Hasło</label>
+      <input class="register-input" type="password" matInput formControlName="password" placeholder="Hasło">
+    </div>
+    <div class="back-button">
+      <button class="submit-button" type="submit">Zarejestruj się</button>
+      <button class="submit-button" type="button" (click)="backToLoginClick()">Wróc</button></div>
+  </div>
+</form>
