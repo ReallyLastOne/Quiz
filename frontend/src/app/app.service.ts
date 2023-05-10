@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from './../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -7,9 +8,7 @@ import { HttpClient } from '@angular/common/http';
 export class AppService {
   constructor(private http: HttpClient) {}
 
-  rootUrl = '/api';
-
   getAnswer() {
-    return this.http.get(this.rootUrl + `/v1/exercises/questions/random`);
+    return this.http.get(environment.apiUrl + `/exercises/questions/random`);
   }
 }
