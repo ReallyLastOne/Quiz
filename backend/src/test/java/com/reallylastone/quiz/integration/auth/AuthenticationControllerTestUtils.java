@@ -33,6 +33,16 @@ public class AuthenticationControllerTestUtils {
     }
 
     /**
+     * Provides the result of a default user registration request. Default user is
+     *
+     * @return result of registration user request
+     * @throws Exception if a problem occurred in performing request or parsing sending object
+     */
+    public ResultActions register() throws Exception {
+        return register(new RegisterRequest("nickname", "mail@mail.com", "password"));
+    }
+
+    /**
      * Provides the result of a user authentication request
      *
      * @param request authentication user request

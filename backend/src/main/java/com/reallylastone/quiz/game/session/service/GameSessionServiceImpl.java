@@ -33,13 +33,12 @@ public class GameSessionServiceImpl implements GameSessionService {
     private final GameSessionCreateRequestValidator createRequestValidator;
     private final GameSessionStateValidator gameSessionStateValidator;
     private final QuestionService questionService;
-    private final UserService userService;
 
     @Override
     public Long createSession(GameSessionCreateRequest request) {
         List<StateValidationError> errors = new ArrayList<>();
 
-        gameSessionStateValidator.validateCreateSessionRequest(userService.getCurrentUser(), errors);
+        gameSessionStateValidator.validateCreateSessionRequest(UserService.getCurrentUser(), errors);
         if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
 
         validate(request);
@@ -53,7 +52,7 @@ public class GameSessionServiceImpl implements GameSessionService {
     @Override
     public Question nextQuestion() {
         List<StateValidationError> errors = new ArrayList<>();
-        UserEntity currentUser = userService.getCurrentUser();
+        UserEntity currentUser = UserService.getCurrentUser();
 
         gameSessionStateValidator.validateNextQuestionRequest(currentUser, errors);
         if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
@@ -74,7 +73,7 @@ public class GameSessionServiceImpl implements GameSessionService {
     @Override
     public boolean processAnswer(QuestionAnswerRequest questionAnswer) {
         List<StateValidationError> errors = new ArrayList<>();
-        UserEntity currentUser = userService.getCurrentUser();
+        UserEntity currentUser = UserService.getCurrentUser();
 
         gameSessionStateValidator.validateQuestionAnswerRequest(currentUser, errors);
         if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);

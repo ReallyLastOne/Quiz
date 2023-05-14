@@ -5,8 +5,10 @@ import com.reallylastone.quiz.exercise.phrase.model.Phrase;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseCreateRequest;
 import com.reallylastone.quiz.exercise.phrase.repository.PhraseRepository;
 import com.reallylastone.quiz.exercise.phrase.validation.PhraseValidator;
+import com.reallylastone.quiz.user.service.UserService;
 import com.reallylastone.quiz.util.validation.ValidationErrorsException;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
@@ -28,9 +30,10 @@ public class PhraseServiceImpl implements PhraseService {
 
     @Override
     public Phrase createPhrase(PhraseCreateRequest request) {
-        List<Phrase> phrases = phraseRepository.getByTranslationValues(request.translationMap().values());
-
         validate(request);
+
+        List<Phrase> phrases = phraseRepository.getByTranslationValues(request.translationMap().values(),
+                BooleanUtils.isTrue(request.userPhrase()) ? UserService.getCurrentUser().getId() : null);
 
         if (phrases.size() == 1) {
             Phrase toMerge = phrases.get(0);
@@ -40,7 +43,6 @@ public class PhraseServiceImpl implements PhraseService {
         }
 
         return phraseRepository.save(phraseMapper.mapToEntity(request));
-
     }
 
     private void validate(PhraseCreateRequest request) {

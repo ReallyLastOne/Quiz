@@ -14,11 +14,19 @@ import org.springframework.stereotype.Service;
 public class UserService implements UserDetailsManager {
     private final UserRepository userRepository;
 
+    /**
+     * Gets currently authenticated user
+     *
+     * @return currently authenticated user
+     */
+    public static UserEntity getCurrentUser() {
+        return (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByNickname(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
-
 
     @Override
     public void createUser(UserDetails user) {
@@ -43,9 +51,5 @@ public class UserService implements UserDetailsManager {
     @Override
     public boolean userExists(String username) {
         return userRepository.existsByNickname(username);
-    }
-
-    public UserEntity getCurrentUser() {
-        return (UserEntity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }
