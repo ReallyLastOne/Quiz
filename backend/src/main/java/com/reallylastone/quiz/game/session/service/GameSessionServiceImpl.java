@@ -59,7 +59,7 @@ public class GameSessionServiceImpl implements GameSessionService {
 
         QuizGameSession activeSession = gameSessionRepository.findActive(currentUser.getId());
         Question randomQuestion = questionService.findRandomQuestion();
-        activeSession.getQuestionsAndStatus().put(randomQuestion, null);
+        activeSession.answer(randomQuestion, null);
         activeSession.setState(GameState.IN_PROGRESS);
 
         return randomQuestion;
@@ -81,7 +81,7 @@ public class GameSessionServiceImpl implements GameSessionService {
         QuizGameSession activeSession = gameSessionRepository.findActive(currentUser.getId());
         Question current = activeSession.findCurrent().get().getKey();
         boolean isCorrectAnswer = current.getCorrectAnswer().equals(questionAnswer.answer());
-        activeSession.getQuestionsAndStatus().put(current, isCorrectAnswer);
+        activeSession.answer(current, isCorrectAnswer);
 
         if (activeSession.getQuestionSize() == activeSession.getQuestionsAndStatus().size())
             activeSession.setState(GameState.COMPLETED);

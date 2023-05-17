@@ -1,0 +1,23 @@
+<div *ngIf="login; else register">
+  <form class="container" autocomplete="off" novalidate>
+    <div>
+      <div class="form-element-container">
+        <label>Nazwa użytkownika</label>
+        <input class="login-input" matInput formControlName="login" placeholder="Nazwa użytkownika">
+
+      </div>
+
+      <div class="form-element-container">
+        <label>Hasło</label>
+        <input class="login-input" type="password" matInput formControlName="password" placeholder="Hasło">
+      </div>
+      <div>
+        <button class="submit-button" type="submit">Zaloguj się</button>
+        <p>Nie masz konta? <a class="register-text" (click)="registerMeClick(false)">Zarejestruj się!</a>
+      </div>
+    </div>
+  </form>
+</div>
+<ng-template #register>
+  <app-register (backToLogin)="registerMeClick(true)"></app-register>
+</ng-template>
