@@ -3,7 +3,9 @@ package com.reallylastone.quiz.exercise.phrase.validation;
 import com.reallylastone.quiz.exercise.phrase.model.Phrase;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseCreateRequest;
 import com.reallylastone.quiz.exercise.phrase.repository.PhraseRepository;
+import com.reallylastone.quiz.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -27,7 +29,8 @@ public class PhraseValidator implements Validator {
     public void validate(Object target, Errors errors) {
         PhraseCreateRequest request = (PhraseCreateRequest) target;
 
-        List<Phrase> phrases = phraseRepository.getByTranslationValues(request.translationMap().values());
+        List<Phrase> phrases = phraseRepository.getByTranslationValues(request.translationMap().values(),
+                BooleanUtils.isTrue(request.userPhrase()) ? UserService.getCurrentUser().getId() : null);
 
         if (validatorAdapter != null) {
             validatorAdapter.validate(request, errors);

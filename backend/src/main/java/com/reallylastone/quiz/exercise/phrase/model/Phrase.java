@@ -22,4 +22,6 @@ public class Phrase extends Exercise {
     private Map<Locale, String> translationMap;
 
     private String imagePath;
+
+    private Long ownerId;
 }

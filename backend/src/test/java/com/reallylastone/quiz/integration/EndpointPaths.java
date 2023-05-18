@@ -13,6 +13,9 @@ public class EndpointPaths {
         public static final String START_GAME_PATH = BASE + "/start";
         public static final String NEXT_QUESTION_PATH = BASE + "/next";
         public static final String ANSWER_QUESTION_PATH = BASE + "/answer";
+    }
 
+    public static class Phrase {
+        public static final String BASE = "/api/v1/exercises/phrases";
     }
 }
