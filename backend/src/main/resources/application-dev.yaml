@@ -15,3 +15,8 @@ spring:
   devtools:
     restart:
       enabled: true
+logging:
+  level:
+    org:
+      zalando:
+        logbook: TRACE
