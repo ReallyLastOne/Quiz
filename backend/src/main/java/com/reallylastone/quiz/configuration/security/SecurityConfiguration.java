@@ -30,6 +30,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/api/v1/health-check").permitAll()
                 .requestMatchers("/api/v1/docs").permitAll()
+                .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers("/api/v1/swagger-ui/**").permitAll()
                 .requestMatchers("/favicon.ico").permitAll()
                 .requestMatchers("/api/v1/docs-json/**").permitAll()
