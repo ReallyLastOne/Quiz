@@ -29,6 +29,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests().requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/api/v1/health-check").permitAll()
                 .requestMatchers("/api/v1/docs").permitAll()
+                .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers("/api/v1/docs-json").permitAll()
                 .anyRequest().authenticated().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
