@@ -12,3 +12,16 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  devtools:
+    restart:
+      enabled: true
+logging:
+  level:
+    org:
+      zalando:
+        logbook: TRACE
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

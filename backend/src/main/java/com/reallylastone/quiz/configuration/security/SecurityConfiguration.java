@@ -26,10 +26,14 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeHttpRequests().requestMatchers("/api/v1/auth/**").permitAll()
+                .authorizeHttpRequests()
+                .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/api/v1/health-check").permitAll()
                 .requestMatchers("/api/v1/docs").permitAll()
-                .requestMatchers("/api/v1/docs-json").permitAll()
+                .requestMatchers("/actuator/**").permitAll()
+                .requestMatchers("/api/v1/swagger-ui/**").permitAll()
+                .requestMatchers("/favicon.ico").permitAll()
+                .requestMatchers("/api/v1/docs-json/**").permitAll()
                 .anyRequest().authenticated().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authenticationProvider(authenticationProvider)
