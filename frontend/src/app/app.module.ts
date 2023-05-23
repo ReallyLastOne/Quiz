@@ -10,6 +10,7 @@ import { ScoreService } from './score/score.service';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home/home.component';
 import { RegisterComponent } from './register/register.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { RegisterComponent } from './register/register.component';
     ScoreComponent,
     LoginComponent,
     RegisterComponent,
+    NavbarComponent,
   ],
   imports: [HttpClientModule, BrowserModule, AppRoutingModule],
   providers: [ScoreService],
