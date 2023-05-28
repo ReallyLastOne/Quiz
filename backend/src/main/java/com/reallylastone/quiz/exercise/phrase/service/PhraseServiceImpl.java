@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,8 +33,11 @@ public class PhraseServiceImpl implements PhraseService {
     public Phrase createPhrase(PhraseCreateRequest request) {
         validate(request);
 
-        List<Phrase> phrases = phraseRepository.getByTranslationValues(request.translationMap().values(),
-                BooleanUtils.isTrue(request.userPhrase()) ? UserService.getCurrentUser().getId() : null);
+        // TODO: refactor, as it unnecessarily fetches all user/global phrases instead of filtering in on database level
+        // TODO: also it would be nice to avoid code duplication as there is same lines in PhraseValidator
+        Long ownerId = BooleanUtils.isTrue(request.userPhrase()) ? UserService.getCurrentUser().getId() : null;
+        List<Phrase> phrases = phraseRepository.findByOwnerId(ownerId).stream()
+                .filter(e -> !Collections.disjoint(e.getTranslationMap().entrySet(), request.translationMap().entrySet())).toList();
 
         if (phrases.size() == 1) {
             Phrase toMerge = phrases.get(0);
