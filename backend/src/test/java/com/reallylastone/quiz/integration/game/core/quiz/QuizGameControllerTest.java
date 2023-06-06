@@ -210,4 +210,26 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
 
         quizUtils.start(1, accessToken).andExpect(status().is2xxSuccessful());
     }
+
+    @Test
+    void shouldStopGameWhenInOne() throws Exception {
+        quizUtils.populateQuestions();
+
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        String accessToken = utils.extract(mvcResult, "accessToken");
+
+        quizUtils.start(1, accessToken);
+        quizUtils.next(accessToken);
+
+        quizUtils.stop(accessToken).andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    void shouldBeOkWhenStoppingNotExistingGame() throws Exception {
+        quizUtils.populateQuestions();
+
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        String accessToken = utils.extract(mvcResult, "accessToken");
+        quizUtils.stop(accessToken).andExpect(status().is2xxSuccessful());
+    }
 }

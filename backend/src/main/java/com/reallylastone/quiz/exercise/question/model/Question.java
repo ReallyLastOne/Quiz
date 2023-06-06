@@ -18,4 +18,8 @@ public class Question extends Exercise {
     @ElementCollection
     @Column(name = "wrong_answer")
     private List<String> wrongAnswers;
+
+    public boolean isCorrect(String answer) {
+        return correctAnswer.equalsIgnoreCase(answer);
+    }
 }

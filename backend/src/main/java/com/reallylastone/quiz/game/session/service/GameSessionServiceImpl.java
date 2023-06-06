@@ -25,6 +25,8 @@ import org.springframework.validation.Errors;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -79,14 +81,31 @@ public class GameSessionServiceImpl implements GameSessionService {
         if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
 
         QuizGameSession activeSession = gameSessionRepository.findActive(currentUser.getId());
-        Question current = activeSession.findCurrent().get().getKey();
-        boolean isCorrectAnswer = current.getCorrectAnswer().equals(questionAnswer.answer());
+        Optional<Map.Entry<Question, Boolean>> currentOptional = activeSession.findCurrent();
+
+        if (currentOptional.isEmpty()) {
+            throw new IllegalStateException("Trying to process the answer for the game session, which has no unanswered questions");
+        }
+
+        Question current = currentOptional.get().getKey();
+        boolean isCorrectAnswer = current.isCorrect(questionAnswer.answer());
         activeSession.answer(current, isCorrectAnswer);
 
-        if (activeSession.getQuestionSize() == activeSession.getQuestionsAndStatus().size())
-            activeSession.setState(GameState.COMPLETED);
+        if (activeSession.isLastQuestion()) {
+            activeSession.finish();
+        }
 
         return isCorrectAnswer;
+    }
+
+    @Override
+    public void stopGame() {
+        UserEntity currentUser = UserService.getCurrentUser();
+
+        QuizGameSession activeSession = gameSessionRepository.findActive(currentUser.getId());
+        if (activeSession != null) {
+            activeSession.finish();
+        }
     }
 
     private void validate(GameSessionCreateRequest request) {

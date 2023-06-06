@@ -44,6 +44,11 @@ public class QuizGameControllerTestUtils {
                 .contentType(MediaType.APPLICATION_JSON));
     }
 
+    public ResultActions stop(String accessToken) throws Exception {
+        return mockMvc.perform(post(STOP_GAME_PATH)
+                .header("Authorization", "Bearer " + accessToken));
+    }
+
     public void populateQuestions() {
         Question question = new Question();
         question.setContent("question?");

@@ -9,4 +9,6 @@ public interface QuizGameService {
     Question next();
 
     boolean processAnswer(QuestionAnswerRequest questionAnswer);
+
+    void stopGame();
 }
