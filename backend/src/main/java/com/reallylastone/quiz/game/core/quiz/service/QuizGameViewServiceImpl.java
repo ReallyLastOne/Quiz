@@ -4,6 +4,7 @@ import com.reallylastone.quiz.exercise.question.mapper.QuestionMapper;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerRequest;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerResponse;
 import com.reallylastone.quiz.exercise.question.model.QuestionView;
+import com.reallylastone.quiz.util.validation.GenericResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +17,9 @@ public class QuizGameViewServiceImpl implements QuizGameViewService {
     private final QuestionMapper questionMapper;
 
     @Override
-    public Long startGame(int questions, HttpServletRequest request) {
-        return quizGameService.startGame(questions);
+    public ResponseEntity<GenericResponse> startGame(int questions, HttpServletRequest request) {
+        quizGameService.startGame(questions);
+        return ResponseEntity.ok(new GenericResponse("Successfully started a quiz game"));
     }
 
     @Override
@@ -28,5 +30,11 @@ public class QuizGameViewServiceImpl implements QuizGameViewService {
     @Override
     public ResponseEntity<QuestionAnswerResponse> answer(QuestionAnswerRequest questionAnswer, HttpServletRequest request) {
         return ResponseEntity.ok(new QuestionAnswerResponse(quizGameService.processAnswer(questionAnswer)));
+    }
+
+    @Override
+    public ResponseEntity<GenericResponse> stopGame() {
+        quizGameService.stopGame();
+        return ResponseEntity.ok(new GenericResponse("Successfully stopped quiz game"));
     }
 }
