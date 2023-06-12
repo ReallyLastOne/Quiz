@@ -33,4 +33,8 @@ public abstract class GameSession {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
+    public void finish() {
+        state = GameState.COMPLETED;
+    }
 }

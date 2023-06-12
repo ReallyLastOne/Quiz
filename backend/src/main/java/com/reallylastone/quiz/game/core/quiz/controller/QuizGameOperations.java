@@ -3,6 +3,7 @@ package com.reallylastone.quiz.game.core.quiz.controller;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerRequest;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerResponse;
 import com.reallylastone.quiz.exercise.question.model.QuestionView;
+import com.reallylastone.quiz.util.validation.GenericResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -22,8 +23,8 @@ public interface QuizGameOperations {
 
     @Operation(summary = "Starts a quiz game for a user")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "422", description = "If user is already in different quiz game or if provided questions parameter is wrong", content = @Content)})
-    @PostMapping(value = "/start", params = "questions", produces = MediaType.APPLICATION_JSON_VALUE)
-    Long startGame(@RequestParam(defaultValue = "5") int questions, HttpServletRequest request);
+    @PostMapping(value = "/start", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<GenericResponse> startGame(@RequestParam(defaultValue = "5") int questions, HttpServletRequest request);
 
     @Operation(summary = "Draws a random question for user's currently active game")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "422", description = "If user is not in quiz game or user does have already active question", content = @Content)})
@@ -34,4 +35,9 @@ public interface QuizGameOperations {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "422", description = "If user is not in quiz game or user does not have active question", content = @Content)})
     @PostMapping(value = "/answer", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<QuestionAnswerResponse> answer(@RequestBody QuestionAnswerRequest questionAnswer, HttpServletRequest request);
+
+    @Operation(summary = "Stops currently active quiz game session and thus allowing to start a new one")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
+    @PostMapping(value = "/stop", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<GenericResponse> stopGame();
 }

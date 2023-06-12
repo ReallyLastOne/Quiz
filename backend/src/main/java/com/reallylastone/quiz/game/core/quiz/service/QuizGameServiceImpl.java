@@ -30,4 +30,9 @@ public class QuizGameServiceImpl implements QuizGameService {
     public boolean processAnswer(QuestionAnswerRequest questionAnswer) {
         return gameSessionService.processAnswer(questionAnswer);
     }
+
+    @Override
+    public void stopGame() {
+        gameSessionService.stopGame();
+    }
 }
