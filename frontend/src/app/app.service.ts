@@ -9,6 +9,6 @@ export class AppService {
   constructor(private http: HttpClient) {}
 
   getAnswer() {
-    return this.http.get(environment.apiUrl + `/exercises/questions/random`);
+    return this.http.post(environment.apiUrl + `/game/quiz/start`, null);
   }
 }

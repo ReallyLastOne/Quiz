@@ -1,21 +1,24 @@
-<form class="container" autocomplete="off" novalidate>
+<form class="container" autocomplete="off" novalidate [formGroup]="regForm">
   <div>
     <div class="form-element-container">
       <label>Nazwa użytkownika</label>
-      <input class="register-input" matInput formControlName="register" placeholder="Nazwa użytkownika">
+      <input class="register-input" formControlName="nickname" placeholder="Nazwa użytkownika"
+        [ngClass]="{ 'is-valid': registerForm.nickname.errors && submitted}">
     </div>
 
     <div class="form-element-container">
       <label>E-Mail</label>
-      <input class="register-input" type="email" matInput formControlName="email" placeholder="E-Mail">
+      <input class="register-input" type="email" formControlName="email" placeholder="E-Mail"
+        [ngClass]="{ 'is-valid': registerForm.email.errors && submitted}">
     </div>
 
     <div class="form-element-container">
       <label>Hasło</label>
-      <input class="register-input" type="password" matInput formControlName="password" placeholder="Hasło">
+      <input class="register-input" type="password" formControlName="password" placeholder="Hasło"
+        [ngClass]="{ 'is-valid': registerForm.password.errors && submitted}">
     </div>
     <div class="back-button">
-      <button class="submit-button" type="submit">Zarejestruj się</button>
+      <button class="submit-button" type="submit" (click)="onRegister()">Zarejestruj się</button>
       <button class="submit-button" type="button" (click)="backToLoginClick()">Wróc</button></div>
   </div>
 </form>
