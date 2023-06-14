@@ -37,4 +37,8 @@ public class QuizGameSession extends GameSession {
         return questionsAndStatus.entrySet().stream().
                 filter(e -> e.getValue() == null).findFirst();
     }
+
+    public boolean isLastQuestion() {
+        return questionSize == questionsAndStatus.size();
+    }
 }

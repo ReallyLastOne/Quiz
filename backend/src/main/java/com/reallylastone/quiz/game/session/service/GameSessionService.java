@@ -14,4 +14,6 @@ public interface GameSessionService {
     Phrase nextPhrase(NextPhraseRequest request);
 
     boolean processAnswer(QuestionAnswerRequest questionAnswer);
+
+    void stopGame();
 }
