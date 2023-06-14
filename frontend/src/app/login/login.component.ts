@@ -61,8 +61,7 @@ export class LoginComponent implements OnInit {
           tap((response) => {
             console.log(response);
           }),
-          catchError((error) => {
-            console.log(error);
+          catchError(() => {
             return of([]);
           })
         )
