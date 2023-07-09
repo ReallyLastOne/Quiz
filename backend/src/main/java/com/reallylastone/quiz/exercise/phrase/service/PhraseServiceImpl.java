@@ -7,6 +7,7 @@ import com.reallylastone.quiz.exercise.phrase.repository.PhraseRepository;
 import com.reallylastone.quiz.exercise.phrase.validation.PhraseValidator;
 import com.reallylastone.quiz.user.service.UserService;
 import com.reallylastone.quiz.util.validation.ValidationErrorsException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class PhraseServiceImpl implements PhraseService {
     }
 
     @Override
+    @Transactional
     public Phrase createPhrase(PhraseCreateRequest request) {
         validate(request);
 

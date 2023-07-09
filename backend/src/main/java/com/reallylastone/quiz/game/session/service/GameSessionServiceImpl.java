@@ -16,6 +16,7 @@ import com.reallylastone.quiz.user.service.UserService;
 import com.reallylastone.quiz.util.validation.StateValidationError;
 import com.reallylastone.quiz.util.validation.StateValidationErrorsException;
 import com.reallylastone.quiz.util.validation.ValidationErrorsException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -52,6 +53,7 @@ public class GameSessionServiceImpl implements GameSessionService {
     }
 
     @Override
+    @Transactional
     public Question nextQuestion() {
         List<StateValidationError> errors = new ArrayList<>();
         UserEntity currentUser = UserService.getCurrentUser();
@@ -68,11 +70,13 @@ public class GameSessionServiceImpl implements GameSessionService {
     }
 
     @Override
+    @Transactional
     public Phrase nextPhrase(NextPhraseRequest request) {
         return null;
     }
 
     @Override
+    @Transactional
     public boolean processAnswer(QuestionAnswerRequest questionAnswer) {
         List<StateValidationError> errors = new ArrayList<>();
         UserEntity currentUser = UserService.getCurrentUser();

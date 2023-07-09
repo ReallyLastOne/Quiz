@@ -12,6 +12,7 @@ import com.reallylastone.quiz.user.model.Role;
 import com.reallylastone.quiz.user.model.UserEntity;
 import com.reallylastone.quiz.user.repository.UserRepository;
 import com.reallylastone.quiz.util.validation.ValidationErrorsException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,6 +35,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final RefreshTokenService refreshTokenService;
 
     @Override
+    @Transactional
     public AuthenticationResponse register(RegisterRequest request) {
         validate(request);
 
