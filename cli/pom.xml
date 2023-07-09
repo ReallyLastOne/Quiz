@@ -18,7 +18,7 @@
     <jdk.version>17</jdk.version>
     <release.version>17</release.version>
     <micronaut.version>3.9.3</micronaut.version>
-    <exec.mainClass>com.reallylastone.QuizCliCommand</exec.mainClass>
+    <exec.mainClass>com.reallylastone.cli.QuizCliCommand</exec.mainClass>
   </properties>
 
   <repositories>
