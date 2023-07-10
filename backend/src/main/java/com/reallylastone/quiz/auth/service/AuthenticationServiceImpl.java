@@ -2,6 +2,7 @@ package com.reallylastone.quiz.auth.service;
 
 import com.reallylastone.quiz.auth.model.AuthenticationRequest;
 import com.reallylastone.quiz.auth.model.AuthenticationResponse;
+import com.reallylastone.quiz.auth.model.AuthenticationServiceResponse;
 import com.reallylastone.quiz.auth.model.RefreshToken;
 import com.reallylastone.quiz.auth.model.RefreshTokenRequest;
 import com.reallylastone.quiz.auth.model.RefreshTokenResponse;
@@ -36,7 +37,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     @Transactional
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationServiceResponse register(RegisterRequest request) {
         validate(request);
 
         UserEntity user = UserEntity.builder().
@@ -50,7 +51,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = refreshTokenService.createToken(user.getId());
 
-        return new AuthenticationResponse(jwtToken, refreshToken, "bearer");
+        return new AuthenticationServiceResponse(jwtToken, refreshToken, "bearer");
     }
 
     private void validate(RegisterRequest request) {
@@ -63,7 +64,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationServiceResponse authenticate(AuthenticationRequest request) {
         authenticationManager.
                 authenticate(new UsernamePasswordAuthenticationToken(request.nickname(), request.password()));
 
@@ -71,7 +72,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = refreshTokenService.createToken(user.getId());
 
-        return new AuthenticationResponse(jwtToken, refreshToken, "bearer");
+        return new AuthenticationServiceResponse(jwtToken, refreshToken, "bearer");
     }
 
     @Override

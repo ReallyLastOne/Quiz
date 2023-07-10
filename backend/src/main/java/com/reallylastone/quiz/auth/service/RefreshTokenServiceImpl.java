@@ -23,7 +23,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     private Long refreshTokenExpiration;
 
     @Override
-    public String createToken(Long userId) {
+    public RefreshToken createToken(Long userId) {
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setUser(userRepository.findById(userId).orElseThrow());
         refreshToken.setExpirationDate(LocalDateTime.now().plus(refreshTokenExpiration, ChronoUnit.MILLIS));
@@ -31,7 +31,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
         refreshTokenRepository.save(refreshToken);
 
-        return refreshToken.getUuid().toString();
+        return refreshToken;
     }
 
     @Override

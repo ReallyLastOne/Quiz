@@ -11,6 +11,6 @@ import org.springframework.context.annotation.Configuration;
 public class SpringDocConfig {
     @Bean
     public OpenAPI baseOpenApi() {
-        return new OpenAPI().info(new Info().title("Quiz API documentation"));
+        return new OpenAPI().info(new Info().title("Quiz API documentation").version("1.0.0"));
     }
 }

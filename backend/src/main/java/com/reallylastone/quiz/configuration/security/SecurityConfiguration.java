@@ -21,6 +21,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
+    private static final String[] NO_AUTHENTICATION_NEED_PATHS = new String[]{"/api/v1/auth/**",
+            "/api/v1/health-check", "/api/v1/docs", "/actuator/**", "/api/v1/swagger-ui/**", "/favicon.ico", "/api/v1/docs-json/**"};
     private final JwtAuthenticationFilter jwtFilter;
     private final AuthenticationProvider authenticationProvider;
 
@@ -28,13 +30,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**").permitAll()
-                .requestMatchers("/api/v1/health-check").permitAll()
-                .requestMatchers("/api/v1/docs").permitAll()
-                .requestMatchers("/actuator/**").permitAll()
-                .requestMatchers("/api/v1/swagger-ui/**").permitAll()
-                .requestMatchers("/favicon.ico").permitAll()
-                .requestMatchers("/api/v1/docs-json/**").permitAll()
+                .requestMatchers(NO_AUTHENTICATION_NEED_PATHS).permitAll()
                 .anyRequest().authenticated().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authenticationProvider(authenticationProvider)
