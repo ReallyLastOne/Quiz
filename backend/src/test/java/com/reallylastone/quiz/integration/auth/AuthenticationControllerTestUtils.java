@@ -2,8 +2,8 @@ package com.reallylastone.quiz.integration.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reallylastone.quiz.auth.model.AuthenticationRequest;
-import com.reallylastone.quiz.auth.model.RefreshTokenRequest;
 import com.reallylastone.quiz.auth.model.RegisterRequest;
+import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static com.reallylastone.quiz.integration.EndpointPaths.Authentication.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @Component
@@ -28,6 +29,7 @@ public class AuthenticationControllerTestUtils {
      */
     public ResultActions register(RegisterRequest request) throws Exception {
         return mockMvc.perform(post(REGISTER_PATH)
+                .with(csrf().asHeader())
                 .content(mapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON));
     }
@@ -51,6 +53,7 @@ public class AuthenticationControllerTestUtils {
      */
     public ResultActions authenticate(AuthenticationRequest request) throws Exception {
         return mockMvc.perform(post(AUTH_PATH)
+                .with(csrf().asHeader())
                 .content(mapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON));
     }
@@ -58,13 +61,13 @@ public class AuthenticationControllerTestUtils {
     /**
      * Provides the result of a refresh token request
      *
-     * @param request refresh token request
      * @return result of refresh token request
      * @throws Exception if a problem occurred in performing request or parsing sending object
      */
-    public ResultActions refresh(RefreshTokenRequest request) throws Exception {
+    public ResultActions refresh(String refreshToken) throws Exception {
         return mockMvc.perform(post(REFRESH_PATH)
-                .content(mapper.writeValueAsString(request))
+                .with(csrf().asHeader())
+                .cookie(new Cookie("refresh_token", refreshToken))
                 .contentType(MediaType.APPLICATION_JSON));
     }
 

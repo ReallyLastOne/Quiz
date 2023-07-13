@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.Arrays;
 
 import static com.reallylastone.quiz.integration.EndpointPaths.QuizGame.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @Component
@@ -27,6 +28,7 @@ public class QuizGameControllerTestUtils {
 
     public ResultActions start(int questions, String accessToken) throws Exception {
         return mockMvc.perform(post(START_GAME_PATH)
+                .with(csrf().asHeader())
                 .header("Authorization", "Bearer " + accessToken)
                 .queryParam("questions", String.valueOf(questions)));
     }
@@ -34,11 +36,13 @@ public class QuizGameControllerTestUtils {
 
     public ResultActions next(String accessToken) throws Exception {
         return mockMvc.perform(post(NEXT_QUESTION_PATH)
+                .with(csrf().asHeader())
                 .header("Authorization", "Bearer " + accessToken));
     }
 
     public ResultActions answer(QuestionAnswerRequest request, String accessToken) throws Exception {
         return mockMvc.perform(post(ANSWER_QUESTION_PATH)
+                .with(csrf().asHeader())
                 .header("Authorization", "Bearer " + accessToken)
                 .content(mapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON));
@@ -46,6 +50,7 @@ public class QuizGameControllerTestUtils {
 
     public ResultActions stop(String accessToken) throws Exception {
         return mockMvc.perform(post(STOP_GAME_PATH)
+                .with(csrf().asHeader())
                 .header("Authorization", "Bearer " + accessToken));
     }
 

@@ -5,7 +5,7 @@ import com.reallylastone.quiz.auth.model.RefreshToken;
 import java.util.Optional;
 
 public interface RefreshTokenService {
-    String createToken(Long userId);
+    RefreshToken createToken(Long userId);
 
     Optional<RefreshToken> findByToken(String refreshToken);
 

@@ -6,6 +6,7 @@ public class EndpointPaths {
         public static final String REGISTER_PATH = BASE + "/register";
         public static final String AUTH_PATH = BASE + "/authenticate";
         public static final String REFRESH_PATH = BASE + "/refresh";
+        public static final String CSRF_PATH = BASE + "/csrf";
     }
 
     public static class QuizGame {
