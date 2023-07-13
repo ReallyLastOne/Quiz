@@ -3,17 +3,20 @@ package com.reallylastone.quiz.auth.service;
 import com.reallylastone.quiz.auth.model.AuthenticationRequest;
 import com.reallylastone.quiz.auth.model.AuthenticationResponse;
 import com.reallylastone.quiz.auth.model.AuthenticationServiceResponse;
-import com.reallylastone.quiz.auth.model.RefreshTokenRequest;
 import com.reallylastone.quiz.auth.model.RefreshTokenResponse;
 import com.reallylastone.quiz.auth.model.RegisterRequest;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.WebUtils;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,8 +34,14 @@ public class AuthenticationViewServiceImpl implements AuthenticationViewService 
     }
 
     @Override
-    public ResponseEntity<RefreshTokenResponse> refresh(RefreshTokenRequest request) {
-        return ResponseEntity.ok(authenticationService.refresh(request));
+    public ResponseEntity<RefreshTokenResponse> refresh(HttpServletRequest request) {
+        Cookie refreshToken = WebUtils.getCookie(request, "refresh_token");
+
+        return Optional.ofNullable(refreshToken)
+                .map(Cookie::getValue)
+                .map(authenticationService::refresh)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new IllegalArgumentException("no refresh_token cookie provided"));
     }
 
     private ResponseEntity<AuthenticationResponse> buildAuthenticationResponse(AuthenticationServiceResponse response) {

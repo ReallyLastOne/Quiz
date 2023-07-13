@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @Component
@@ -19,6 +20,7 @@ public class PhraseControllerTestUtils {
 
     public ResultActions createPhrase(PhraseCreateRequest request, String accessToken) throws Exception {
         return mockMvc.perform(post(EndpointPaths.Phrase.BASE)
+                .with(csrf().asHeader())
                 .content(mapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + accessToken));

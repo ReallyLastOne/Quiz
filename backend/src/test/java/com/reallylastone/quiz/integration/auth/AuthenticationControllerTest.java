@@ -1,7 +1,6 @@
 package com.reallylastone.quiz.integration.auth;
 
 import com.reallylastone.quiz.auth.model.AuthenticationRequest;
-import com.reallylastone.quiz.auth.model.RefreshTokenRequest;
 import com.reallylastone.quiz.auth.model.RegisterRequest;
 import com.reallylastone.quiz.auth.repository.RefreshTokenRepository;
 import com.reallylastone.quiz.integration.AbstractIntegrationTest;
@@ -16,12 +15,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static com.reallylastone.quiz.integration.EndpointPaths.Authentication.CSRF_PATH;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc(print = MockMvcPrint.NONE)
 class AuthenticationControllerTest extends AbstractIntegrationTest {
@@ -100,9 +100,18 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
         MvcResult mvcResult = controllerUtils.register(request).andReturn();
         String refreshToken = generalUtils.extract(mvcResult, "refreshToken");
 
-        RefreshTokenRequest refreshRequest = new RefreshTokenRequest(refreshToken);
-        controllerUtils.refresh(refreshRequest).andExpect(status().is2xxSuccessful())
+        controllerUtils.refresh(refreshToken).andExpect(status().is2xxSuccessful())
                 .andExpect(header().doesNotExist("Set-Cookie"));
+    }
+
+    @Test
+    void shouldNotGetAccessTokenBecauseNoCookie() throws Exception {
+        controllerUtils.refresh(null).andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    void shouldNotGetAccessTokenBecauseWrongRefreshToken() throws Exception {
+        controllerUtils.refresh("definitely wrong").andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -112,7 +121,14 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
         refreshTokenRepository.findAll().get(0).setExpirationDate(LocalDateTime.now().minusDays(1));
 
         String refreshToken = generalUtils.extract(mvcResult, "refreshToken");
-        RefreshTokenRequest refreshRequest = new RefreshTokenRequest(refreshToken);
-        controllerUtils.refresh(refreshRequest).andExpect(status().isUnprocessableEntity());
+        controllerUtils.refresh(refreshToken).andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void shouldReturnCsrfToken() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.
+                        post(CSRF_PATH))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(cookie().exists("XSRF-TOKEN"));
     }
 }

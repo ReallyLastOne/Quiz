@@ -1,10 +1,8 @@
 package com.reallylastone.quiz.auth.service;
 
 import com.reallylastone.quiz.auth.model.AuthenticationRequest;
-import com.reallylastone.quiz.auth.model.AuthenticationResponse;
 import com.reallylastone.quiz.auth.model.AuthenticationServiceResponse;
 import com.reallylastone.quiz.auth.model.RefreshToken;
-import com.reallylastone.quiz.auth.model.RefreshTokenRequest;
 import com.reallylastone.quiz.auth.model.RefreshTokenResponse;
 import com.reallylastone.quiz.auth.model.RegisterRequest;
 import com.reallylastone.quiz.auth.validation.RegisterValidator;
@@ -76,8 +74,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public RefreshTokenResponse refresh(RefreshTokenRequest request) {
-        return refreshTokenService.findByToken(request.refreshToken())
+    public RefreshTokenResponse refresh(String refreshToken) {
+        return refreshTokenService.findByToken(refreshToken)
                 .map(refreshTokenService::verifyExpiration)
                 .map(RefreshToken::getUser)
                 .map(user -> {
