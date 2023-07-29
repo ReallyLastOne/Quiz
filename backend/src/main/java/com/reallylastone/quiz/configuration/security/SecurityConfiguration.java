@@ -9,6 +9,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.csrf.CsrfTokenRequestHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -21,24 +24,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
+    private static final String[] NO_AUTHENTICATION_NEED_PATHS = new String[]{"/api/v1/auth/**",
+            "/api/v1/health-check", "/api/v1/docs", "/actuator/**", "/api/v1/swagger-ui/**", "/favicon.ico", "/api/v1/docs-json/**"};
     private final JwtAuthenticationFilter jwtFilter;
     private final AuthenticationProvider authenticationProvider;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
+        http.cors().and()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**").permitAll()
-                .requestMatchers("/api/v1/health-check").permitAll()
-                .requestMatchers("/api/v1/docs").permitAll()
-                .requestMatchers("/actuator/**").permitAll()
-                .requestMatchers("/api/v1/swagger-ui/**").permitAll()
-                .requestMatchers("/favicon.ico").permitAll()
-                .requestMatchers("/api/v1/docs-json/**").permitAll()
+                .requestMatchers(NO_AUTHENTICATION_NEED_PATHS).permitAll()
                 .anyRequest().authenticated().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .csrfTokenRequestHandler(requestHandler())
+                );
 
         return http.build();
     }
@@ -56,4 +59,11 @@ public class SecurityConfiguration {
         return new CorsFilter(source);
     }
 
+    @Bean
+    public CsrfTokenRequestHandler requestHandler() {
+        CsrfTokenRequestAttributeHandler requestHandler = new CsrfTokenRequestAttributeHandler();
+        requestHandler.setCsrfRequestAttributeName(null);
+
+        return requestHandler;
+    }
 }

@@ -7,8 +7,10 @@ import com.reallylastone.quiz.exercise.phrase.repository.PhraseRepository;
 import com.reallylastone.quiz.exercise.phrase.validation.PhraseValidator;
 import com.reallylastone.quiz.user.service.UserService;
 import com.reallylastone.quiz.util.validation.ValidationErrorsException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.BooleanUtils;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
@@ -30,6 +32,7 @@ public class PhraseServiceImpl implements PhraseService {
     }
 
     @Override
+    @Transactional
     public Phrase createPhrase(PhraseCreateRequest request) {
         validate(request);
 
@@ -47,6 +50,15 @@ public class PhraseServiceImpl implements PhraseService {
         }
 
         return phraseRepository.save(phraseMapper.mapToEntity(request));
+    }
+
+    @Override
+    public List<Phrase> getAllPhrases(PageRequest page) {
+        Long id = UserService.getCurrentUser().getId();
+        System.out.println("id " + id);
+        if (id == null) throw new IllegalStateException("no authenticated user in the context");
+
+        return phraseRepository.findByOwnerId(id, page);
     }
 
     private void validate(PhraseCreateRequest request) {

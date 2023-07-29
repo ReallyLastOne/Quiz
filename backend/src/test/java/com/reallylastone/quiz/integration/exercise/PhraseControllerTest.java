@@ -2,6 +2,7 @@ package com.reallylastone.quiz.integration.exercise;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reallylastone.quiz.auth.model.RegisterRequest;
+import com.reallylastone.quiz.exercise.phrase.model.Phrase;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseCreateRequest;
 import com.reallylastone.quiz.exercise.phrase.repository.PhraseRepository;
 import com.reallylastone.quiz.integration.AbstractIntegrationTest;
@@ -23,7 +24,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @AutoConfigureMockMvc(print = MockMvcPrint.NONE)
 class PhraseControllerTest extends AbstractIntegrationTest {
@@ -119,6 +123,26 @@ class PhraseControllerTest extends AbstractIntegrationTest {
 
         phraseControllerTestUtils.createPhrase(repeated, generalUtils.extract(mvcResult, "accessToken"))
                 .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    void shouldReturnOwnPhrases() throws Exception {
+        MvcResult mvcResult = authenticationUtils.register().andReturn();
+
+        Phrase ownEntity = new Phrase();
+        // TODO: it looks like @Transactional annotation on test methods does not clean sequences value, so we pick user id this way
+        // TODO: see if we can achieve sequences cleanup also
+        Long userId = userRepository.findAll().get(0).getId();
+        ownEntity.setOwnerId(userId);
+        phraseRepository.save(ownEntity);
+
+        Phrase other = new Phrase();
+        other.setOwnerId(-1L);
+        phraseRepository.save(other);
+
+        phraseControllerTestUtils.getAllPhrases(generalUtils.extract(mvcResult, "accessToken"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$", hasSize(1)));
     }
 
 }

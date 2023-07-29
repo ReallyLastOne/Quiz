@@ -1,9 +1,8 @@
 package com.reallylastone.quiz.auth.service;
 
 import com.reallylastone.quiz.auth.model.AuthenticationRequest;
-import com.reallylastone.quiz.auth.model.AuthenticationResponse;
+import com.reallylastone.quiz.auth.model.AuthenticationServiceResponse;
 import com.reallylastone.quiz.auth.model.RefreshToken;
-import com.reallylastone.quiz.auth.model.RefreshTokenRequest;
 import com.reallylastone.quiz.auth.model.RefreshTokenResponse;
 import com.reallylastone.quiz.auth.model.RegisterRequest;
 import com.reallylastone.quiz.auth.validation.RegisterValidator;
@@ -12,6 +11,7 @@ import com.reallylastone.quiz.user.model.Role;
 import com.reallylastone.quiz.user.model.UserEntity;
 import com.reallylastone.quiz.user.repository.UserRepository;
 import com.reallylastone.quiz.util.validation.ValidationErrorsException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,7 +34,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final RefreshTokenService refreshTokenService;
 
     @Override
-    public AuthenticationResponse register(RegisterRequest request) {
+    @Transactional
+    public AuthenticationServiceResponse register(RegisterRequest request) {
         validate(request);
 
         UserEntity user = UserEntity.builder().
@@ -48,7 +49,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = refreshTokenService.createToken(user.getId());
 
-        return new AuthenticationResponse(jwtToken, refreshToken, "bearer");
+        return new AuthenticationServiceResponse(jwtToken, refreshToken, "bearer");
     }
 
     private void validate(RegisterRequest request) {
@@ -61,7 +62,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationServiceResponse authenticate(AuthenticationRequest request) {
         authenticationManager.
                 authenticate(new UsernamePasswordAuthenticationToken(request.nickname(), request.password()));
 
@@ -69,12 +70,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = refreshTokenService.createToken(user.getId());
 
-        return new AuthenticationResponse(jwtToken, refreshToken, "bearer");
+        return new AuthenticationServiceResponse(jwtToken, refreshToken, "bearer");
     }
 
     @Override
-    public RefreshTokenResponse refresh(RefreshTokenRequest request) {
-        return refreshTokenService.findByToken(request.refreshToken())
+    public RefreshTokenResponse refresh(String refreshToken) {
+        return refreshTokenService.findByToken(refreshToken)
                 .map(refreshTokenService::verifyExpiration)
                 .map(RefreshToken::getUser)
                 .map(user -> {

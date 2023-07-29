@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.util.stream.Stream;
 
 import static com.reallylastone.quiz.integration.EndpointPaths.QuizGame.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -61,7 +62,9 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
     @ParameterizedTest
     @MethodSource("forbiddenPaths")
     void shouldBeForbidden(String path) throws Exception {
-        mockMvc.perform(post(path)).andExpect(status().isForbidden());
+        mockMvc.perform(post(path)
+                .with(csrf().asHeader())
+        ).andExpect(status().isForbidden());
     }
 
     @ParameterizedTest

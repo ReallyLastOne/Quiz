@@ -1,7 +1,6 @@
 package com.reallylastone.quiz.integration.auth;
 
 import com.reallylastone.quiz.auth.model.AuthenticationRequest;
-import com.reallylastone.quiz.auth.model.RefreshTokenRequest;
 import com.reallylastone.quiz.auth.model.RegisterRequest;
 import com.reallylastone.quiz.auth.repository.RefreshTokenRepository;
 import com.reallylastone.quiz.integration.AbstractIntegrationTest;
@@ -14,13 +13,17 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
+import org.springframework.context.ApplicationContext;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static com.reallylastone.quiz.integration.EndpointPaths.Authentication.CSRF_PATH;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc(print = MockMvcPrint.NONE)
 class AuthenticationControllerTest extends AbstractIntegrationTest {
@@ -35,7 +38,8 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
 
     @Autowired
     private AuthenticationControllerTestUtils controllerUtils;
-
+    @Autowired
+    private ApplicationContext applicationContext;
     @Autowired
     private IntegrationTestUtils generalUtils;
 
@@ -58,7 +62,7 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
     @ParameterizedTest
     @MethodSource("correctRegisterRequests")
     void shouldRegisterUser(RegisterRequest request) throws Exception {
-        controllerUtils.register(request).andExpect(status().isOk());
+        controllerUtils.register(request).andExpect(status().isOk()).andExpect(header().exists("Set-Cookie"));
 
         Assertions.assertEquals(1, userRepository.findAll().size());
         Assertions.assertEquals(1, refreshTokenRepository.findAll().size());
@@ -67,7 +71,7 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
     @ParameterizedTest
     @MethodSource("wrongRegisterRequests")
     void shouldNotRegisterUser(RegisterRequest request) throws Exception {
-        controllerUtils.register(request).andExpect(status().isUnprocessableEntity());
+        controllerUtils.register(request).andExpect(status().isUnprocessableEntity()).andExpect(header().doesNotExist("Set-Cookie"));
 
         Assertions.assertEquals(0, userRepository.findAll().size());
         Assertions.assertEquals(0, refreshTokenRepository.findAll().size());
@@ -76,7 +80,8 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
     @Test
     void shouldNotAuthenticateUser() throws Exception {
         AuthenticationRequest request = new AuthenticationRequest("notExistingUser", "password");
-        controllerUtils.authenticate(request).andExpect(status().isUnprocessableEntity());
+        controllerUtils.authenticate(request).andExpect(status().isUnprocessableEntity())
+                .andExpect(header().doesNotExist("Set-Cookie"));
     }
 
     @Test
@@ -85,7 +90,8 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
         controllerUtils.register(request);
 
         AuthenticationRequest authRequest = new AuthenticationRequest("existingUser", "password");
-        controllerUtils.authenticate(authRequest).andExpect(status().is2xxSuccessful());
+        controllerUtils.authenticate(authRequest).andExpect(status().is2xxSuccessful())
+                .andExpect(header().exists("Set-Cookie"));
 
         Assertions.assertEquals(2, refreshTokenRepository.findAll().size());
     }
@@ -97,8 +103,18 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
         MvcResult mvcResult = controllerUtils.register(request).andReturn();
         String refreshToken = generalUtils.extract(mvcResult, "refreshToken");
 
-        RefreshTokenRequest refreshRequest = new RefreshTokenRequest(refreshToken);
-        controllerUtils.refresh(refreshRequest).andExpect(status().is2xxSuccessful());
+        controllerUtils.refresh(refreshToken).andExpect(status().is2xxSuccessful())
+                .andExpect(header().doesNotExist("Set-Cookie"));
+    }
+
+    @Test
+    void shouldNotGetAccessTokenBecauseNoCookie() throws Exception {
+        controllerUtils.refresh(null).andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    void shouldNotGetAccessTokenBecauseWrongRefreshToken() throws Exception {
+        controllerUtils.refresh("definitely wrong").andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -108,7 +124,15 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
         refreshTokenRepository.findAll().get(0).setExpirationDate(LocalDateTime.now().minusDays(1));
 
         String refreshToken = generalUtils.extract(mvcResult, "refreshToken");
-        RefreshTokenRequest refreshRequest = new RefreshTokenRequest(refreshToken);
-        controllerUtils.refresh(refreshRequest).andExpect(status().isUnprocessableEntity());
+        controllerUtils.refresh(refreshToken).andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
+    void shouldReturnCsrfToken() throws Exception {
+        // TODO: remove @DirtiesContext annotation - context need to be deleted to pass the test, don't know why
+        mockMvc.perform(MockMvcRequestBuilders.
+                get(CSRF_PATH)).andExpectAll(status().is2xxSuccessful(),
+                cookie().exists("XSRF-TOKEN"));
     }
 }
