@@ -13,6 +13,7 @@ import { HomeComponent } from './home/home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { CsrfTokenInterceptor } from './interceptors/csrf-token.interceptor';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
   providers: [
     ScoreService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: CsrfTokenInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
 })
