@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,8 +36,8 @@ public interface AuthenticationOperations {
     @PostMapping("/refresh")
     ResponseEntity<RefreshTokenResponse> refresh(HttpServletRequest request);
 
-    @Operation(summary = "Returns XSRF-TOKEN in cookie to be used in further requests")
-    @ApiResponses(value = @ApiResponse(responseCode = "204", description = "OK"))
-    @PostMapping(value = "/csrf", produces = MediaType.ALL_VALUE, consumes = MediaType.ALL_VALUE)
-    ResponseEntity<Void> csrf(HttpServletRequest request);
+    @Operation(summary = "Returns XSRF-TOKEN in cookie to be used in further requests. To pass the CSRF protection the cookie and 'X-XSRF-TOKEN' header.")
+    @ApiResponses(value = @ApiResponse(responseCode = "200", description = "OK"))
+    @GetMapping(value = "/csrf", produces = MediaType.ALL_VALUE, consumes = MediaType.ALL_VALUE)
+    ResponseEntity<Void> csrf();
 }

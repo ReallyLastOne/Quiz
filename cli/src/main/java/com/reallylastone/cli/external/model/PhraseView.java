@@ -6,5 +6,5 @@ import java.util.Locale;
 import java.util.Map;
 
 @Introspected
-public record PhraseView(Long id, Map<Locale, String> translationMap, String imagePath) {
+public record PhraseView(Long id, Map<Locale, String> translationMap) {
 }

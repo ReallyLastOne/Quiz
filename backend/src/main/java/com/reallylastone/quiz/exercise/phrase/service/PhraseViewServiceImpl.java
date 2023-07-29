@@ -5,9 +5,11 @@ import com.reallylastone.quiz.exercise.phrase.model.Phrase;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseCreateRequest;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseView;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,5 +27,12 @@ public class PhraseViewServiceImpl implements PhraseViewService {
     @Override
     public ResponseEntity<PhraseView> createPhrase(PhraseCreateRequest createRequest) {
         return ResponseEntity.ok(phraseMapper.mapToView(phraseService.createPhrase(createRequest)));
+    }
+
+    @Override
+    public ResponseEntity<List<PhraseView>> getAllPhrases(int page, int size) {
+        return ResponseEntity.ok(
+                phraseService.getAllPhrases(PageRequest.of(page, size)).stream().map(phraseMapper::mapToView)
+                        .toList());
     }
 }

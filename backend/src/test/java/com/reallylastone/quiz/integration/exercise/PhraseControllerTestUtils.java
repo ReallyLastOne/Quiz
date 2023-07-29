@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @Component
@@ -23,6 +24,13 @@ public class PhraseControllerTestUtils {
                 .with(csrf().asHeader())
                 .content(mapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + accessToken));
+    }
+
+    public ResultActions getAllPhrases(String accessToken) throws Exception {
+        return mockMvc.perform(get(EndpointPaths.Phrase.BASE)
+                .with(csrf().asHeader())
+                .contentType(MediaType.ALL)
                 .header("Authorization", "Bearer " + accessToken));
     }
 }

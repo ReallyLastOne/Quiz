@@ -1,3 +1,6 @@
 micronaut:
   application:
     name: cli
+quiz:
+  api:
+    url: http://localhost:8080

@@ -7,10 +7,7 @@ import com.reallylastone.quiz.auth.model.RegisterRequest;
 import com.reallylastone.quiz.auth.service.AuthenticationViewService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,14 +32,7 @@ public class AuthenticationController implements AuthenticationOperations {
     }
 
     @Override
-    public ResponseEntity<Void> csrf(HttpServletRequest request) {
-        CsrfToken token = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-        ResponseCookie cookie = ResponseCookie.from("XSRF-TOKEN", token.getToken())
-                .build();
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.SET_COOKIE, cookie.toString());
-
-
-        return ResponseEntity.noContent().headers(headers).build();
+    public ResponseEntity<Void> csrf() {
+        return ResponseEntity.ok().build();
     }
 }

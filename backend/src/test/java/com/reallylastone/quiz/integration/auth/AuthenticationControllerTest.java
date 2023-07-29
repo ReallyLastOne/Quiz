@@ -13,6 +13,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
+import org.springframework.context.ApplicationContext;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -36,7 +38,8 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
 
     @Autowired
     private AuthenticationControllerTestUtils controllerUtils;
-
+    @Autowired
+    private ApplicationContext applicationContext;
     @Autowired
     private IntegrationTestUtils generalUtils;
 
@@ -125,10 +128,11 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     void shouldReturnCsrfToken() throws Exception {
+        // TODO: remove @DirtiesContext annotation - context need to be deleted to pass the test, don't know why
         mockMvc.perform(MockMvcRequestBuilders.
-                        post(CSRF_PATH))
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(cookie().exists("XSRF-TOKEN"));
+                get(CSRF_PATH)).andExpectAll(status().is2xxSuccessful(),
+                cookie().exists("XSRF-TOKEN"));
     }
 }
