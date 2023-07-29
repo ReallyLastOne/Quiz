@@ -1,11 +1,8 @@
 package com.reallylastone.cli.command.phrase;
 
-import picocli.CommandLine.Command;
+import picocli.CommandLine;
 
-
-@Command(name = "phrase", subcommands = {
-        AddPhraseCommand.class,
-})
+@CommandLine.Command(name = "phrase", subcommands = {AddPhraseCommand.class, GetAllPhrasesCommand.class})
 public class PhraseCommand implements Runnable {
     @Override
     public void run() {
