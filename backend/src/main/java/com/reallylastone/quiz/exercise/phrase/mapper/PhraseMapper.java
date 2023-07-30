@@ -8,11 +8,14 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(imports = {UserService.class, BooleanUtils.class})
+import java.time.LocalDateTime;
+
+@Mapper(imports = {UserService.class, BooleanUtils.class, LocalDateTime.class})
 public interface PhraseMapper {
     PhraseView mapToView(Phrase exercise);
 
     @Mapping(target = "ownerId",
             expression = "java(BooleanUtils.isTrue(createRequest.userPhrase()) ? UserService.getCurrentUser().getId() : null)")
+    @Mapping(target = "addDate", expression = "java(LocalDateTime.now())")
     Phrase mapToEntity(PhraseCreateRequest createRequest);
 }

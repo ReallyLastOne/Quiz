@@ -55,7 +55,6 @@ public class PhraseServiceImpl implements PhraseService {
     @Override
     public List<Phrase> getAllPhrases(PageRequest page) {
         Long id = UserService.getCurrentUser().getId();
-        System.out.println("id " + id);
         if (id == null) throw new IllegalStateException("no authenticated user in the context");
 
         return phraseRepository.findByOwnerId(id, page);
