@@ -3,6 +3,7 @@ package com.reallylastone.quiz.exercise.phrase.service;
 import com.reallylastone.quiz.exercise.phrase.mapper.PhraseMapper;
 import com.reallylastone.quiz.exercise.phrase.model.Phrase;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseCreateRequest;
+import com.reallylastone.quiz.exercise.phrase.model.PhraseFilter;
 import com.reallylastone.quiz.exercise.phrase.repository.PhraseRepository;
 import com.reallylastone.quiz.exercise.phrase.validation.PhraseValidator;
 import com.reallylastone.quiz.user.service.UserService;
@@ -53,12 +54,17 @@ public class PhraseServiceImpl implements PhraseService {
     }
 
     @Override
-    public List<Phrase> getAllPhrases(PageRequest page) {
+    public List<Phrase> getAllPhrases(PageRequest page, PhraseFilter phraseFilter) {
         Long id = UserService.getCurrentUser().getId();
-        System.out.println("id " + id);
+
         if (id == null) throw new IllegalStateException("no authenticated user in the context");
 
-        return phraseRepository.findByOwnerId(id, page);
+
+        if (phraseFilter == null) {
+            return phraseRepository.findByOwnerId(id, page);
+        }
+
+        return phraseRepository.findByOwnerId(id, page).stream().filter(phraseFilter).toList();
     }
 
     private void validate(PhraseCreateRequest request) {

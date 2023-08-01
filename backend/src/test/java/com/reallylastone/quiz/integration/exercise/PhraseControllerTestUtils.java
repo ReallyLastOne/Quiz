@@ -2,6 +2,7 @@ package com.reallylastone.quiz.integration.exercise;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseCreateRequest;
+import com.reallylastone.quiz.exercise.phrase.model.PhraseFilter;
 import com.reallylastone.quiz.integration.EndpointPaths;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -27,10 +28,11 @@ public class PhraseControllerTestUtils {
                 .header("Authorization", "Bearer " + accessToken));
     }
 
-    public ResultActions getAllPhrases(String accessToken) throws Exception {
+    public ResultActions getAllPhrases(String accessToken, PhraseFilter phraseFilter) throws Exception {
         return mockMvc.perform(get(EndpointPaths.Phrase.BASE)
                 .with(csrf().asHeader())
-                .contentType(MediaType.ALL)
+                .content(mapper.writeValueAsString(phraseFilter))
+                .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + accessToken));
     }
 }
