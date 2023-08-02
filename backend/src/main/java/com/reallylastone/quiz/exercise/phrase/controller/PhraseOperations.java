@@ -1,7 +1,6 @@
 package com.reallylastone.quiz.exercise.phrase.controller;
 
 import com.reallylastone.quiz.exercise.phrase.model.PhraseCreateRequest;
-import com.reallylastone.quiz.exercise.phrase.model.PhraseFilter;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,5 +31,5 @@ public interface PhraseOperations {
     @GetMapping
     ResponseEntity<List<PhraseView>> getAllPhrases(@RequestParam(defaultValue = "0") int page,
                                                    @RequestParam(defaultValue = "100") int size,
-                                                   @RequestBody(required = false) PhraseFilter phraseFilter);
+                                                   @RequestParam(value = "languages", required = false) String[] languages);
 }

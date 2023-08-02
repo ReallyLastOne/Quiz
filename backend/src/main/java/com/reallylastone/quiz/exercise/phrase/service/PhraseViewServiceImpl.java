@@ -3,7 +3,6 @@ package com.reallylastone.quiz.exercise.phrase.service;
 import com.reallylastone.quiz.exercise.phrase.mapper.PhraseMapper;
 import com.reallylastone.quiz.exercise.phrase.model.Phrase;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseCreateRequest;
-import com.reallylastone.quiz.exercise.phrase.model.PhraseFilter;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -31,9 +30,9 @@ public class PhraseViewServiceImpl implements PhraseViewService {
     }
 
     @Override
-    public ResponseEntity<List<PhraseView>> getAllPhrases(int page, int size, PhraseFilter phraseFilter) {
+    public ResponseEntity<List<PhraseView>> getAllPhrases(int page, int size, String[] languages) {
         return ResponseEntity.ok(
-                phraseService.getAllPhrases(PageRequest.of(page, size), phraseFilter).stream().map(phraseMapper::mapToView)
+                phraseService.getAllPhrases(PageRequest.of(page, size), languages).stream().map(phraseMapper::mapToView)
                         .toList());
     }
 }

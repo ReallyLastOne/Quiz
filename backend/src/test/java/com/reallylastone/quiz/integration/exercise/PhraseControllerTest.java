@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reallylastone.quiz.auth.model.RegisterRequest;
 import com.reallylastone.quiz.exercise.phrase.model.Phrase;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseCreateRequest;
-import com.reallylastone.quiz.exercise.phrase.model.PhraseFilter;
 import com.reallylastone.quiz.exercise.phrase.repository.PhraseRepository;
 import com.reallylastone.quiz.integration.AbstractIntegrationTest;
 import com.reallylastone.quiz.integration.IntegrationTestUtils;
@@ -21,7 +20,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -142,7 +140,7 @@ class PhraseControllerTest extends AbstractIntegrationTest {
         other.setOwnerId(-1L);
         phraseRepository.save(other);
 
-        phraseControllerTestUtils.getAllPhrases(generalUtils.extract(mvcResult, "accessToken"), null)
+        phraseControllerTestUtils.getAllPhrases(generalUtils.extract(mvcResult, "accessToken"))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$", hasSize(1)));
     }
@@ -174,8 +172,7 @@ class PhraseControllerTest extends AbstractIntegrationTest {
         other.setTranslationMap(translationMap);
         phraseRepository.save(other);
 
-        phraseControllerTestUtils.getAllPhrases(generalUtils.extract(mvcResult, "accessToken"),
-                        new PhraseFilter(Arrays.asList("it", "en")))
+        phraseControllerTestUtils.getAllPhrases(generalUtils.extract(mvcResult, "accessToken"), "it", "en")
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$", hasSize(2)));
     }
