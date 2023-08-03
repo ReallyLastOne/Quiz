@@ -14,6 +14,12 @@ import { RegisterComponent } from './register/register.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { CsrfTokenInterceptor } from './interceptors/csrf-token.interceptor';
+import { PhraseComponent } from './phrase/phrase.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -25,12 +31,18 @@ import { CsrfTokenInterceptor } from './interceptors/csrf-token.interceptor';
     LoginComponent,
     RegisterComponent,
     NavbarComponent,
+    PhraseComponent,
   ],
   imports: [
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    MatPaginatorModule,
+    MatTableModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatIconModule
   ],
   providers: [
     ScoreService,
@@ -39,4 +51,4 @@ import { CsrfTokenInterceptor } from './interceptors/csrf-token.interceptor';
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

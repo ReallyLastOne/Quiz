@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
-import { AppService } from '../app.service';
+import { AppService } from '../services/app.service';
 import { Exercise } from '../model/Exercise.model';
 import { Router } from '@angular/router';
 import { ScoreService } from '../score/score.service';
