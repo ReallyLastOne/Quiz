@@ -1,16 +1,12 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router'; // CLI imports router
-import { HomeComponent } from './home/home.component';
+import { Routes, RouterModule } from '@angular/router';
 import { ExerciseComponent } from './exercise/exercise.component';
-import { ErrorComponent } from './error/error.component';
-import { ScoreComponent } from './score/score.component';
 import { LoginComponent } from './login/login.component';
-import { PhraseComponent } from './phrase/phrase.component';
 
 const routes: Routes = [
   {
     path: 'home',
-    component: HomeComponent,
+    loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
   },
   {
     path: 'exercise',
@@ -18,11 +14,13 @@ const routes: Routes = [
   },
   {
     path: 'score',
-    component: ScoreComponent,
+    loadChildren: () =>
+      import('./score/score.module').then((m) => m.ScoreModule),
   },
   {
     path: 'error',
-    component: ErrorComponent,
+    loadChildren: () =>
+      import('./error/error.module').then((m) => m.ErrorModule),
   },
   {
     path: 'login',
@@ -30,7 +28,8 @@ const routes: Routes = [
   },
   {
     path: 'phrase',
-    component: PhraseComponent,
+    loadChildren: () =>
+      import('./phrase/phrase.module').then((m) => m.PhraseModule),
   },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'error' },
