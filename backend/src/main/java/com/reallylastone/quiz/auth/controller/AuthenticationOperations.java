@@ -33,7 +33,7 @@ public interface AuthenticationOperations {
 
     @Operation(summary = "Extends the lifespan of the access token based on given refresh token in cookie")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "422", description = "If provided credentials are semantically wrong or no refresh_token cookie provided", content = @Content)})
-    @PostMapping("/refresh")
+    @PostMapping(value = "/refresh", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
     ResponseEntity<RefreshTokenResponse> refresh(HttpServletRequest request);
 
     @Operation(summary = "Returns XSRF-TOKEN in cookie to be used in further requests. To pass the CSRF protection the cookie and 'X-XSRF-TOKEN' header.")
