@@ -44,10 +44,8 @@ export class UserAuthenticationService {
       );
   }
 
-  refreshToken(token: string) {
-    return this.http.post(environment.apiUrl + 'auth/refresh', {
-      refreshToken: token,
-    });
+  refreshToken() {
+    return this.http.post(environment.apiUrl + '/auth/refresh', null);
   }
 
   private setSession(authResult) {
@@ -88,7 +86,8 @@ export class UserAuthenticationService {
   }
 
   public isLoggedIn() {
-    return moment().isBefore(this.getExpiration());
+   return this.getAccessToken() != null;
+    // return moment().isBefore(this.getExpiration());
   }
 
   isLoggedOut() {
@@ -102,6 +101,6 @@ export class UserAuthenticationService {
   }
 
   getCsrfToken() {
-    return this._cookieService.get('XSRF_=-TOKEN');
+    return this._cookieService.get('XSRF-TOKEN');
   }
 }

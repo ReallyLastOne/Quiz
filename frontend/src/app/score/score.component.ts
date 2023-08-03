@@ -38,4 +38,8 @@ export class ScoreComponent implements OnInit {
   startAgain() {
     this.router.navigate([`/exercise`]);
   }
+
+  dataSource() {
+    
+  }
 }

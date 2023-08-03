@@ -5,6 +5,7 @@ import { ExerciseComponent } from './exercise/exercise.component';
 import { ErrorComponent } from './error/error.component';
 import { ScoreComponent } from './score/score.component';
 import { LoginComponent } from './login/login.component';
+import { PhraseComponent } from './phrase/phrase.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+  },
+  {
+    path: 'phrase',
+    component: PhraseComponent,
   },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'error' },
