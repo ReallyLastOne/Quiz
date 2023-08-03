@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router'; // CLI imports router
-import { HomeComponent } from './home/home/home.component';
+import { HomeComponent } from './home/home.component';
 import { ExerciseComponent } from './exercise/exercise.component';
 import { ErrorComponent } from './error/error.component';
 import { ScoreComponent } from './score/score.component';

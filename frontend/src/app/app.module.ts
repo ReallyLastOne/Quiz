@@ -9,7 +9,7 @@ import { ErrorComponent } from './error/error.component';
 import { ScoreComponent } from './score/score.component';
 import { ScoreService } from './score/score.service';
 import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home/home.component';
+import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
@@ -42,7 +42,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatTableModule,
     BrowserAnimationsModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
   ],
   providers: [
     ScoreService,
@@ -51,4 +51,4 @@ import { MatIconModule } from '@angular/material/icon';
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
