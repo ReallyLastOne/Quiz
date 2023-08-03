@@ -30,5 +30,6 @@ public interface PhraseOperations {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK", content = @Content)})
     @GetMapping
     ResponseEntity<List<PhraseView>> getAllPhrases(@RequestParam(defaultValue = "0") int page,
-                                                   @RequestParam(defaultValue = "100") int size);
+                                                   @RequestParam(defaultValue = "100") int size,
+                                                   @RequestParam(value = "languages", required = false) String[] languages);
 }

@@ -12,5 +12,5 @@ public interface PhraseService {
 
     Phrase createPhrase(PhraseCreateRequest createRequest);
 
-    List<Phrase> getAllPhrases(PageRequest of);
+    List<Phrase> getAllPhrases(PageRequest of, String[] languages);
 }

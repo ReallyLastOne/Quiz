@@ -145,4 +145,36 @@ class PhraseControllerTest extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$", hasSize(1)));
     }
 
+    @Test
+    void shouldReturnOwnPhrasesByLocales() throws Exception {
+        MvcResult mvcResult = authenticationUtils.register().andReturn();
+
+        Map<Locale, String> translationMap = Map.of(Locale.ENGLISH, "hello", Locale.ITALIAN, "ciao");
+        Long userId = userRepository.findAll().get(0).getId();
+
+        Phrase ownEntity = new Phrase();
+        ownEntity.setOwnerId(userId);
+        ownEntity.setTranslationMap(translationMap);
+        phraseRepository.save(ownEntity);
+
+        Phrase otherOwnEntity = new Phrase();
+        otherOwnEntity.setTranslationMap(translationMap);
+        otherOwnEntity.setOwnerId(userId);
+        phraseRepository.save(otherOwnEntity);
+
+        Phrase anotherOwnEntity = new Phrase();
+        anotherOwnEntity.setTranslationMap(Map.of(Locale.ENGLISH, "door", Locale.forLanguageTag("pl"), "drzwi"));
+        anotherOwnEntity.setOwnerId(userId);
+        phraseRepository.save(anotherOwnEntity);
+
+        Phrase other = new Phrase();
+        other.setOwnerId(-1L);
+        other.setTranslationMap(translationMap);
+        phraseRepository.save(other);
+
+        phraseControllerTestUtils.getAllPhrases(generalUtils.extract(mvcResult, "accessToken"), "it", "en")
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$", hasSize(2)));
+    }
+
 }

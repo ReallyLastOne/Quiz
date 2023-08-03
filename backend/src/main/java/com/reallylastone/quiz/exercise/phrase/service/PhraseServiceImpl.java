@@ -16,7 +16,9 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -53,12 +55,18 @@ public class PhraseServiceImpl implements PhraseService {
     }
 
     @Override
-    public List<Phrase> getAllPhrases(PageRequest page) {
+    public List<Phrase> getAllPhrases(PageRequest page, String[] languages) {
         Long id = UserService.getCurrentUser().getId();
-        System.out.println("id " + id);
+
         if (id == null) throw new IllegalStateException("no authenticated user in the context");
 
-        return phraseRepository.findByOwnerId(id, page);
+
+        if (languages == null) {
+            return phraseRepository.findByOwnerId(id, page);
+        }
+
+        return phraseRepository.findByOwnerId(id, page).stream()
+                .filter(e -> new HashSet<>(e.getTranslationMap().keySet().stream().map(Locale::toLanguageTag).toList()).containsAll(List.of(languages))).toList();
     }
 
     private void validate(PhraseCreateRequest request) {

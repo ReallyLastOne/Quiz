@@ -30,9 +30,9 @@ public class PhraseViewServiceImpl implements PhraseViewService {
     }
 
     @Override
-    public ResponseEntity<List<PhraseView>> getAllPhrases(int page, int size) {
+    public ResponseEntity<List<PhraseView>> getAllPhrases(int page, int size, String[] languages) {
         return ResponseEntity.ok(
-                phraseService.getAllPhrases(PageRequest.of(page, size)).stream().map(phraseMapper::mapToView)
+                phraseService.getAllPhrases(PageRequest.of(page, size), languages).stream().map(phraseMapper::mapToView)
                         .toList());
     }
 }
