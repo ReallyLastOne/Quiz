@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { UserAuthenticationService } from './services/user-authentication.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'frontend';
+  constructor(private readonly userAuthenticationService: UserAuthenticationService) { }
+
+  get userAuthService() {
+    return this.userAuthenticationService;
+  }
 }

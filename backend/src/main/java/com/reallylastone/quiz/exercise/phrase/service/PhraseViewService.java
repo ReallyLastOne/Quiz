@@ -11,5 +11,5 @@ public interface PhraseViewService {
 
     ResponseEntity<PhraseView> createPhrase(PhraseCreateRequest createRequest);
 
-    ResponseEntity<List<PhraseView>> getAllPhrases(int page, int size);
+    ResponseEntity<List<PhraseView>> getAllPhrases(int page, int size, String[] languages);
 }

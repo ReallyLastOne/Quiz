@@ -10,9 +10,7 @@ import {
   BehaviorSubject,
   Observable,
   catchError,
-  filter,
   switchMap,
-  take,
   throwError,
 } from 'rxjs';
 import { UserAuthenticationService } from '../services/user-authentication.service';
@@ -37,14 +35,19 @@ export class AuthInterceptor implements HttpInterceptor {
 
       return next.handle(cloned).pipe(
         catchError((error) => {
-          if (error instanceof HttpErrorResponse && error.status === 401) {
+          if (error instanceof HttpErrorResponse && (error.status === 401 || error.status === 403)) {
+            console.log('errrrrrrr');
             return this.handle401Error(cloned, next);
           }
           return throwError(() => new Error(error));
         })
       );
     } else {
-      return next.handle(request);
+      return next.handle(
+        request.clone({
+          withCredentials: true,
+        })
+      );
     }
   }
 
@@ -52,33 +55,24 @@ export class AuthInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    if (!this.isRefreshing) {
-      this.isRefreshing = true;
-      this.refreshTokenSubject.next(null);
 
-      const token = this._userAuthenticationService.getRefreshToken();
-
-      return this._userAuthenticationService.refreshToken(token).pipe(
-        switchMap((token: any) => {
-          this.isRefreshing = false;
-          this.refreshTokenSubject.next(token.accessToken);
-          return next.handle(this.buildRequest(request, token.accessToken));
-        })
-      );
-    } else {
-      return this.refreshTokenSubject.pipe(
-        filter((token) => token != null),
-        take(1),
-        switchMap((jwt) => {
-          return next.handle(this.buildRequest(request, jwt));
-        })
-      );
-    }
+    return this._userAuthenticationService.refreshToken().pipe(
+      switchMap((token: any) => {
+        console.log("token " + token.accessToken);
+        this._userAuthenticationService.saveAccessToken(token.accessToken);
+        return next.handle(this.buildRequest(request, token.accessToken));
+      }),
+      catchError((error: HttpErrorResponse) => {
+        this._userAuthenticationService.logout();
+        return throwError(() => error);
+      })
+    );
   }
 
   private buildRequest(request: HttpRequest<any>, token: string) {
     return request.clone({
       headers: request.headers.set('Authorization', 'Bearer ' + token),
+      withCredentials: true,
     });
   }
 }

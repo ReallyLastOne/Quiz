@@ -6,13 +6,18 @@ import { environment } from '../../environments/environment';
 import { LoginRequest } from '../model/login-request.model';
 import { tap, shareReplay, catchError } from 'rxjs/operators';
 import * as moment from 'moment';
-import { of, throwError } from 'rxjs';
+import { of } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserAuthenticationService {
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private readonly _cookieService: CookieService
+  ) {}
 
   registration(registrationRequest: RegistrationRequest) {
     return this.http.post(
@@ -28,7 +33,8 @@ export class UserAuthenticationService {
       )
       .pipe(
         tap((res) => this.setSession(res)),
-        tap(() => {
+        tap((res) => {
+          console.log(res);
           this.router.navigate(['/home']);
         }),
         catchError(() => {
@@ -38,10 +44,8 @@ export class UserAuthenticationService {
       );
   }
 
-  refreshToken(token: string) {
-    return this.http.post(environment.apiUrl + 'auth/refresh', {
-      refreshToken: token,
-    });
+  refreshToken() {
+    return this.http.post(environment.apiUrl + '/auth/refresh', null);
   }
 
   private setSession(authResult) {
@@ -82,7 +86,8 @@ export class UserAuthenticationService {
   }
 
   public isLoggedIn() {
-    return moment().isBefore(this.getExpiration());
+   return this.getAccessToken() != null;
+    // return moment().isBefore(this.getExpiration());
   }
 
   isLoggedOut() {
@@ -93,5 +98,9 @@ export class UserAuthenticationService {
     const expiration = localStorage.getItem('expires_at');
     const expiresAt = JSON.parse(expiration);
     return moment(expiresAt);
+  }
+
+  getCsrfToken() {
+    return this._cookieService.get('XSRF-TOKEN');
   }
 }

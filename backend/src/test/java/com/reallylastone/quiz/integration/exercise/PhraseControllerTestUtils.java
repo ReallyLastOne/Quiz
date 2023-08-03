@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -27,10 +28,14 @@ public class PhraseControllerTestUtils {
                 .header("Authorization", "Bearer " + accessToken));
     }
 
-    public ResultActions getAllPhrases(String accessToken) throws Exception {
-        return mockMvc.perform(get(EndpointPaths.Phrase.BASE)
+    public ResultActions getAllPhrases(String accessToken, String... languages) throws Exception {
+        MockHttpServletRequestBuilder builder = get(EndpointPaths.Phrase.BASE)
                 .with(csrf().asHeader())
-                .contentType(MediaType.ALL)
-                .header("Authorization", "Bearer " + accessToken));
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + accessToken);
+
+        if (languages != null && languages.length != 0) builder.queryParam("languages", languages);
+
+        return mockMvc.perform(builder);
     }
 }
