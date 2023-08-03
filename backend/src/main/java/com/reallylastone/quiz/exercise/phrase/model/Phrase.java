@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapKeyColumn;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Map;
 
@@ -24,4 +25,6 @@ public class Phrase extends Exercise {
     private String imagePath;
 
     private Long ownerId;
+
+    private LocalDateTime addDate;
 }
