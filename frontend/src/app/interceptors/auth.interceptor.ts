@@ -35,7 +35,8 @@ export class AuthInterceptor implements HttpInterceptor {
 
       return next.handle(cloned).pipe(
         catchError((error) => {
-          if (error instanceof HttpErrorResponse && error.status === 401) {
+          if (error instanceof HttpErrorResponse && (error.status === 401 || error.status === 403)) {
+            console.log('errrrrrrr');
             return this.handle401Error(cloned, next);
           }
           return throwError(() => new Error(error));
@@ -54,10 +55,11 @@ export class AuthInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const token = this._userAuthenticationService.getRefreshToken();
 
-    return this._userAuthenticationService.refreshToken(token).pipe(
+    return this._userAuthenticationService.refreshToken().pipe(
       switchMap((token: any) => {
+        console.log("token " + token.accessToken);
+        this._userAuthenticationService.saveAccessToken(token.accessToken);
         return next.handle(this.buildRequest(request, token.accessToken));
       }),
       catchError((error: HttpErrorResponse) => {
