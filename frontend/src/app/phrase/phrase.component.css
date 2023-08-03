@@ -1,0 +1,16 @@
+table {
+  width: 100%;
+}
+
+.button-holder {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+img {
+  margin-right: 8px;
+  width: 10%;
+  height: 50px;
+  filter: grayscale(100%);
+}

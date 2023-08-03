@@ -44,10 +44,8 @@ export class UserAuthenticationService {
       );
   }
 
-  refreshToken(token: string) {
-    return this.http.post(environment.apiUrl + 'auth/refresh', {
-      refreshToken: token,
-    });
+  refreshToken() {
+    return this.http.post(environment.apiUrl + '/auth/refresh', null);
   }
 
   private setSession(authResult) {
