@@ -29,13 +29,12 @@ export class AuthInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const idToken = this._userAuthenticationService.getAccessToken();
-
     if (idToken != null) {
       const cloned = this.buildRequest(request, idToken);
 
       return next.handle(cloned).pipe(
         catchError((error) => {
-          if (error instanceof HttpErrorResponse && (error.status === 401 || error.status === 403)) {
+          if (error.status === 401 || error.status === 403) {
             console.log('errrrrrrr');
             return this.handle401Error(cloned, next);
           }
@@ -55,10 +54,9 @@ export class AuthInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-
     return this._userAuthenticationService.refreshToken().pipe(
       switchMap((token: any) => {
-        console.log("token " + token.accessToken);
+        console.log('token ' + token.accessToken);
         this._userAuthenticationService.saveAccessToken(token.accessToken);
         return next.handle(this.buildRequest(request, token.accessToken));
       }),

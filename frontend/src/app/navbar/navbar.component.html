@@ -6,8 +6,12 @@
     <li><a >Contact</a></li>
     <li><a >About</a></li>
     <li *ngIf="userAuthService.isLoggedIn()"><a (click)="phraseClick()">Phrase</a></li>
-    <li class = "my-account"><a ><span class="material-symbols-outlined">
-        expand_circle_down
-        </span></a></li>
+    <li class = "my-account"><a (click)="expandMenuClick()" [ngClass]="isActive ? 'rotate-icon' : ''"><span class="material-symbols-outlined">
+      expand_circle_down
+      </span></a>
+</li>
   </ul>
+  <div class="expand-menu" [ngClass]="!isActive ? 'expand-menu-hide' : ''">
+    <a (click)="logoutClick()">logout</a>
+  </div>
 </div>
