@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { ExerciseComponent } from './exercise/exercise.component';
 import { ScoreService } from './score/score.service';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { CsrfTokenInterceptor } from './interceptors/csrf-token.interceptor';
@@ -13,7 +12,7 @@ import { NavbarModule } from './navbar/navbar.module';
 import { LoginModule } from './login/login.module';
 
 @NgModule({
-  declarations: [AppComponent, ExerciseComponent],
+  declarations: [AppComponent],
   imports: [
     HttpClientModule,
     BrowserModule,

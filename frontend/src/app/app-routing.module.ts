@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ExerciseComponent } from './exercise/exercise.component';
 import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
@@ -10,7 +9,8 @@ const routes: Routes = [
   },
   {
     path: 'exercise',
-    component: ExerciseComponent,
+    loadChildren: () =>
+      import('./exercise/exercise.module').then((m) => m.ExerciseModule),
   },
   {
     path: 'score',
