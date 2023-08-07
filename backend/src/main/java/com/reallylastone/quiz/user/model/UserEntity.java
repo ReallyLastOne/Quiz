@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +28,8 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserEntity implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_entity_generator")
+    @SequenceGenerator(name = "user_entity_generator", sequenceName = "user_entity_seq", allocationSize = 1)
     private Long id;
     private String nickname;
     private String email;

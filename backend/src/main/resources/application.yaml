@@ -5,6 +5,11 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
+  liquibase:
+    change-log: classpath:/db/changelog/changelog.xml
+  jpa:
+    hibernate:
+      ddl-auto: validate
 springdoc:
   swagger-ui:
     path: /api/v1/docs
