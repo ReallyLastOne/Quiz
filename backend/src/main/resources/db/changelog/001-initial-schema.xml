@@ -1,0 +1,208 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-1">
+        <createSequence sequenceName="exercise_seq" incrementBy="1"/>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-2">
+        <createSequence sequenceName="game_session_seq" incrementBy="1"/>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-3">
+        <createSequence sequenceName="refresh_token_seq" incrementBy="1"/>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-4">
+        <createSequence sequenceName="user_entity_seq" incrementBy="1"/>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-5">
+        <createTable tableName="phrase">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="phrase_pkey"/>
+            </column>
+            <column name="add_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="image_path" type="VARCHAR(255)"/>
+            <column name="owner_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-6">
+        <createTable tableName="question">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="question_pkey"/>
+            </column>
+            <column name="content" type="VARCHAR(255)"/>
+            <column name="correct_answer" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-7">
+        <createTable tableName="question_wrong_answers">
+            <column name="question_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="wrong_answer" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-8">
+        <createTable tableName="quiz_game_session">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="quiz_game_session_pkey"/>
+            </column>
+            <column name="finish_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="start_date" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="state" type="SMALLINT"/>
+            <column name="user_id" type="BIGINT"/>
+            <column name="question_size" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-9">
+        <createTable tableName="quiz_game_session_questions">
+            <column name="game_session" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="quiz_game_session_questions_pkey"/>
+            </column>
+            <column name="status" type="BOOLEAN"/>
+            <column name="question_id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="quiz_game_session_questions_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-10">
+        <createTable tableName="refresh_token">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="refresh_token_pkey"/>
+            </column>
+            <column name="expiration_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="uuid" type="UUID"/>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-11">
+        <createTable tableName="translation_game_session">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="translation_game_session_pkey"/>
+            </column>
+            <column name="finish_date" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="start_date" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="state" type="SMALLINT"/>
+            <column name="user_id" type="BIGINT"/>
+            <column name="destination_language" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="source_language" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-12">
+        <createTable tableName="translation_game_session_phrases">
+            <column name="game_session" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="translation_game_session_phrases_pkey"/>
+            </column>
+            <column name="status" type="BOOLEAN"/>
+            <column name="phrase_id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="translation_game_session_phrases_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-13">
+        <createTable tableName="translation_map">
+            <column name="phrase_id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="translation_map_pkey"/>
+            </column>
+            <column name="translation" type="VARCHAR(255)"/>
+            <column name="locale" type="VARCHAR(255)">
+                <constraints primaryKey="true" primaryKeyName="translation_map_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-14">
+        <createTable tableName="user_entity">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="user_entity_pkey"/>
+            </column>
+            <column name="email" type="VARCHAR(255)"/>
+            <column name="nickname" type="VARCHAR(255)"/>
+            <column name="password" type="VARCHAR(255)"/>
+            <column name="roles" type="_INT2"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-15">
+        <createTable tableName="user_entity_game_sessions">
+            <column name="user_entity_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="game_sessions_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-16">
+        <addUniqueConstraint columnNames="game_sessions_id" constraintName="uk_nk5idgnu6uly3esxe1fhd29xh"
+                             tableName="user_entity_game_sessions"/>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-17">
+        <addForeignKeyConstraint baseColumnNames="question_id" baseTableName="quiz_game_session_questions"
+                                 constraintName="fk1bq43c18lhmeqrmnr51iwhiva" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="question" validate="true"/>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-18">
+        <addForeignKeyConstraint baseColumnNames="game_session" baseTableName="quiz_game_session_questions"
+                                 constraintName="fk1gdfokclujw2td4ybx8odhohp" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="quiz_game_session" validate="true"/>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-19">
+        <addForeignKeyConstraint baseColumnNames="question_id" baseTableName="question_wrong_answers"
+                                 constraintName="fk9thusvh2s8wjgxjf3gkwr7bnu" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="question" validate="true"/>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-20">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="translation_game_session"
+                                 constraintName="fk_3vkyqgq4jsbjf87wp7tuxtrfq" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="user_entity" validate="true"/>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-21">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="quiz_game_session"
+                                 constraintName="fk_e3nv32lo7tcq82ntqfbv4ym00" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="user_entity" validate="true"/>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-22">
+        <addForeignKeyConstraint baseColumnNames="phrase_id" baseTableName="translation_map"
+                                 constraintName="fkde7jkx3pbffj76yp6ps31ikl" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="phrase" validate="true"/>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-23">
+        <addForeignKeyConstraint baseColumnNames="phrase_id" baseTableName="translation_game_session_phrases"
+                                 constraintName="fkehhs3yog5pawoi8lay2xd8ink" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="phrase" validate="true"/>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-24">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="refresh_token"
+                                 constraintName="fkh0wyrn37470h7q8h87pfiud8n" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="user_entity" validate="true"/>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-25">
+        <addForeignKeyConstraint baseColumnNames="user_entity_id" baseTableName="user_entity_game_sessions"
+                                 constraintName="fkmsjssbtqf3bnevxi4sbmxgwm0" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="user_entity" validate="true"/>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207869-26">
+        <addForeignKeyConstraint baseColumnNames="game_session" baseTableName="translation_game_session_phrases"
+                                 constraintName="fkqnbwem7ytil5t95oiyy35mfgj" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="translation_game_session"
+                                 validate="true"/>
+    </changeSet>
+</databaseChangeLog>

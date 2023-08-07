@@ -4,6 +4,7 @@ import com.reallylastone.quiz.auth.model.AuthenticationRequest;
 import com.reallylastone.quiz.auth.model.AuthenticationResponse;
 import com.reallylastone.quiz.auth.model.RefreshTokenResponse;
 import com.reallylastone.quiz.auth.model.RegisterRequest;
+import com.reallylastone.quiz.auth.model.UserInformation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -40,4 +41,9 @@ public interface AuthenticationOperations {
     @ApiResponses(value = @ApiResponse(responseCode = "200", description = "OK"))
     @GetMapping(value = "/csrf", produces = MediaType.ALL_VALUE, consumes = MediaType.ALL_VALUE)
     ResponseEntity<Void> csrf();
+
+    @Operation(summary = "Retrieves basic information about user")
+    @ApiResponses(value = @ApiResponse(responseCode = "200", description = "OK"))
+    @GetMapping(value = "/me", consumes = MediaType.ALL_VALUE)
+    ResponseEntity<UserInformation> me();
 }

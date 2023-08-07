@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -23,6 +24,11 @@ import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
 import static com.reallylastone.quiz.integration.EndpointPaths.Authentication.CSRF_PATH;
+import static com.reallylastone.quiz.integration.EndpointPaths.Authentication.ME_PATH;
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc(print = MockMvcPrint.NONE)
@@ -134,5 +140,28 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
         mockMvc.perform(MockMvcRequestBuilders.
                 get(CSRF_PATH)).andExpectAll(status().is2xxSuccessful(),
                 cookie().exists("XSRF-TOKEN"));
+    }
+
+    @Test
+    void shouldBeForbidden() throws Exception {
+        mockMvc.perform(post(ME_PATH)
+                .with(csrf().asHeader())
+        ).andExpect(status().isForbidden());
+    }
+
+    @Test
+    void shouldReturnMe() throws Exception {
+        RegisterRequest request = new RegisterRequest("existingUser", "email@gmail.com", "password");
+        MvcResult mvcResult = controllerUtils.register(request).andReturn();
+
+        mockMvc.perform(get(ME_PATH)
+                        .header("Authorization", "Bearer " + generalUtils.extract(mvcResult, "accessToken"))
+                        .contentType(MediaType.ALL)
+                        .with(csrf().asHeader()))
+                .andExpectAll(
+                        status().is2xxSuccessful(),
+                        jsonPath("$.username").value("existingUser"),
+                        jsonPath("$.roles", hasSize(1))
+                );
     }
 }

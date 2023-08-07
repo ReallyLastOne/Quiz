@@ -7,6 +7,7 @@ public class EndpointPaths {
         public static final String AUTH_PATH = BASE + "/authenticate";
         public static final String REFRESH_PATH = BASE + "/refresh";
         public static final String CSRF_PATH = BASE + "/csrf";
+        public static final String ME_PATH = BASE + "/me";
     }
 
     public static class QuizGame {

@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.SequenceGenerator;
 import lombok.Data;
 
 @Data
@@ -13,6 +14,7 @@ import lombok.Data;
 @Entity
 public abstract class Exercise {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exercise_generator")
+    @SequenceGenerator(name = "exercise_generator", sequenceName = "exercise_seq", allocationSize = 1)
     public Long id;
 }

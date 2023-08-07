@@ -24,24 +24,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    private static final String[] NO_AUTHENTICATION_NEED_PATHS = new String[]{"/api/v1/auth/**",
-            "/api/v1/health-check", "/api/v1/docs", "/actuator/**", "/api/v1/swagger-ui/**", "/favicon.ico", "/api/v1/docs-json/**"};
+    private static final String[] NO_AUTHENTICATION_NEED_PATHS = new String[]{"/api/v1/auth/authenticate",
+            "/api/v1/auth/register", "/api/v1/auth/refresh", "/api/v1/auth/csrf", "/api/v1/health-check",
+            "/api/v1/docs", "/actuator/**", "/api/v1/swagger-ui/**", "/favicon.ico", "/api/v1/docs-json/**"};
     private final JwtAuthenticationFilter jwtFilter;
     private final AuthenticationProvider authenticationProvider;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors().and()
-                .authorizeHttpRequests()
-                .requestMatchers(NO_AUTHENTICATION_NEED_PATHS).permitAll()
-                .anyRequest().authenticated().and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .csrf(csrf -> csrf
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .csrfTokenRequestHandler(requestHandler())
-                );
+        http.cors().and().authorizeHttpRequests().requestMatchers(NO_AUTHENTICATION_NEED_PATHS).permitAll().anyRequest().authenticated().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authenticationProvider(authenticationProvider).addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class).csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).csrfTokenRequestHandler(requestHandler()));
 
         return http.build();
     }
