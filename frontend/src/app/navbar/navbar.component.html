@@ -1,17 +1,23 @@
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-<div>
-    <ul>
-    <li><a (click)="homeClick()">Home</a></li>
-    <li><a >Contact</a></li>
-    <li><a >About</a></li>
-    <li *ngIf="userAuthService.isLoggedIn()"><a (click)="phraseClick()">Phrase</a></li>
-    <li class = "my-account"><a (click)="expandMenuClick()" [ngClass]="isActive ? 'rotate-icon' : ''"><span class="material-symbols-outlined">
-      expand_circle_down
-      </span></a>
-</li>
-  </ul>
-  <div class="expand-menu" [ngClass]="!isActive ? 'expand-menu-hide' : ''">
-    <a (click)="logoutClick()">logout</a>
-  </div>
-</div>
+  <mat-toolbar class="navbar" color="primary">
+    <mat-toolbar-row>
+      <span>Super hiper turbo quiz</span>
+      <button mat-stroked-button (click)="homeClick()">Home</button>
+      <button mat-stroked-button (click)="phraseClick()">Phrase</button>
+      <span class="example-spacer"></span>
+      <button mat-icon-button class="example-icon" [matMenuTriggerFor]="menu">
+        <mat-icon>expand_circle_down</mat-icon>
+      </button>
+      <mat-menu class="dupa" #menu="matMenu">
+        <button mat-menu-item>
+          <mat-icon>account_circle</mat-icon>
+          <span>Profil</span>
+        </button>
+        <button mat-menu-item (click)="logoutClick()">
+          <mat-icon>arrow_back</mat-icon>
+          <span>Wyloguj</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar-row>
+
+  </mat-toolbar>
