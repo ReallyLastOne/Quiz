@@ -5,6 +5,8 @@ import com.reallylastone.quiz.auth.model.AuthenticationResponse;
 import com.reallylastone.quiz.auth.model.AuthenticationServiceResponse;
 import com.reallylastone.quiz.auth.model.RefreshTokenResponse;
 import com.reallylastone.quiz.auth.model.RegisterRequest;
+import com.reallylastone.quiz.auth.model.UserInformation;
+import com.reallylastone.quiz.user.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +44,11 @@ public class AuthenticationViewServiceImpl implements AuthenticationViewService 
                 .map(authenticationService::refresh)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new IllegalArgumentException("no refresh_token cookie provided"));
+    }
+
+    @Override
+    public ResponseEntity<UserInformation> me() {
+        return ResponseEntity.ok(new UserInformation(UserService.getCurrentUser()));
     }
 
     private ResponseEntity<AuthenticationResponse> buildAuthenticationResponse(AuthenticationServiceResponse response) {
