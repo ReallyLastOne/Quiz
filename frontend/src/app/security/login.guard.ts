@@ -1,12 +1,17 @@
 import { Injectable, inject } from '@angular/core';
-import { Router, UrlTree } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  CanActivateFn,
+  Router,
+  UrlTree,
+} from '@angular/router';
 import { Observable } from 'rxjs';
 import { UserAuthenticationService } from '../services/user-authentication.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LoginGuard  {
+export class LoginGuard {
   constructor(
     private readonly _userAuthService: UserAuthenticationService,
     private readonly _router: Router
@@ -19,3 +24,9 @@ export class LoginGuard  {
     }
   }
 }
+
+export const loginGuard: CanActivateFn = (
+  route: ActivatedRouteSnapshot
+): boolean | UrlTree | Observable<boolean | UrlTree> => {
+  return inject(LoginGuard).canActivate();
+};
