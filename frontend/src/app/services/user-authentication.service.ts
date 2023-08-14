@@ -75,7 +75,7 @@ export class UserAuthenticationService {
     return localStorage.getItem('auth-refreshtoken');
   }
 
-  public getAccessToken(): string {
+  public getAccessToken(): string | null {
     return localStorage.getItem('accessToken');
   }
 
@@ -86,8 +86,7 @@ export class UserAuthenticationService {
   }
 
   public isLoggedIn() {
-   return this.getAccessToken() != null;
-    // return moment().isBefore(this.getExpiration());
+    return this.getAccessToken() != null;
   }
 
   isLoggedOut() {

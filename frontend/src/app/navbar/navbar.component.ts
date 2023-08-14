@@ -8,11 +8,14 @@ import { UserAuthenticationService } from '../services/user-authentication.servi
   styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent implements OnInit {
+  isActive = false;
 
+  constructor(
+    private readonly _userAuthenticationService: UserAuthenticationService,
+    private router: Router
+  ) {}
 
-  constructor(private readonly userAuthenticationService: UserAuthenticationService, private router: Router) { }
-
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   homeClick(): void {
     this.router.navigate([`/home`]);
@@ -23,7 +26,14 @@ export class NavbarComponent implements OnInit {
   }
 
   get userAuthService() {
-    return this.userAuthenticationService;
+    return this._userAuthenticationService;
   }
 
+  expandMenuClick(): void {
+    this.isActive = !this.isActive;
+  }
+
+  logoutClick(): void {
+    this._userAuthenticationService.logout();
+  }
 }

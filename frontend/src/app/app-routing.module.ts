@@ -1,39 +1,46 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router'; // CLI imports router
-import { HomeComponent } from './home/home/home.component';
-import { ExerciseComponent } from './exercise/exercise.component';
-import { ErrorComponent } from './error/error.component';
-import { ScoreComponent } from './score/score.component';
+import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { PhraseComponent } from './phrase/phrase.component';
+import { LoginGuard } from './security/login.guard';
+import { AuthGuard } from './security/auth.guard';
 
 const routes: Routes = [
   {
     path: 'home',
-    component: HomeComponent,
+    loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
+    canActivate: [AuthGuard],
   },
   {
     path: 'exercise',
-    component: ExerciseComponent,
+    loadChildren: () =>
+      import('./exercise/exercise.module').then((m) => m.ExerciseModule),
+    canActivate: [AuthGuard],
   },
   {
     path: 'score',
-    component: ScoreComponent,
+    loadChildren: () =>
+      import('./score/score.module').then((m) => m.ScoreModule),
+    canActivate: [AuthGuard],
   },
   {
     path: 'error',
-    component: ErrorComponent,
+    loadChildren: () =>
+      import('./error/error.module').then((m) => m.ErrorModule),
+    canActivate: [AuthGuard],
   },
   {
     path: 'login',
     component: LoginComponent,
+    canActivate: [LoginGuard],
   },
   {
     path: 'phrase',
-    component: PhraseComponent,
+    loadChildren: () =>
+      import('./phrase/phrase.module').then((m) => m.PhraseModule),
+    canActivate: [AuthGuard],
   },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: '**', redirectTo: 'error' },
+  { path: '**', redirectTo: 'home' },
 ];
 
 @NgModule({

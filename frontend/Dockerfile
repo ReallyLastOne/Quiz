@@ -1,5 +1,5 @@
 FROM mcr.microsoft.com/devcontainers/typescript-node:16-buster as build
-RUN npm install -g @angular/cli@13.3.10
+RUN npm install -g @angular/cli@15.2.9
 RUN mkdir -p home/app
 COPY ./ ./home/app
 WORKDIR /home/app
