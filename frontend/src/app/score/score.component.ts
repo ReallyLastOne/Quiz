@@ -5,7 +5,7 @@ import { ScoreService } from './score.service';
 @Component({
   selector: 'app-score',
   templateUrl: './score.component.html',
-  styleUrls: ['./score.component.css'],
+  styleUrls: ['./score.component.scss'],
 })
 export class ScoreComponent implements OnInit {
   constructor(private router: Router, private _scoreService: ScoreService) {}
@@ -39,7 +39,5 @@ export class ScoreComponent implements OnInit {
     this.router.navigate([`/exercise`]);
   }
 
-  dataSource() {
-    
-  }
+  dataSource() {}
 }

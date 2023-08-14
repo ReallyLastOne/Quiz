@@ -9,7 +9,7 @@ import { ScoreService } from '../score/score.service';
 @Component({
   selector: 'app-exercise',
   templateUrl: './exercise.component.html',
-  styleUrls: ['./exercise.component.css'],
+  styleUrls: ['./exercise.component.scss'],
 })
 export class ExerciseComponent implements OnDestroy, OnInit {
   private subscriptions = new Subscription();

@@ -15,7 +15,7 @@ import { PhraseTableEntry } from './phrase';
 @Component({
   selector: 'app-phrase',
   templateUrl: './phrase.component.html',
-  styleUrls: ['./phrase.component.css'],
+  styleUrls: ['./phrase.component.scss'],
 })
 export class PhraseComponent implements OnInit, AfterViewInit {
   // TODO: all locales or something like that
