@@ -1,6 +1,7 @@
 package com.reallylastone.quiz.exercise.phrase.service;
 
 import com.reallylastone.quiz.exercise.phrase.model.Phrase;
+import com.reallylastone.quiz.exercise.phrase.model.PhraseCreateBatchResponse;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseCreateRequest;
 import org.springframework.data.domain.PageRequest;
 
@@ -13,4 +14,6 @@ public interface PhraseService {
     Phrase createPhrase(PhraseCreateRequest createRequest);
 
     List<Phrase> getAllPhrases(PageRequest of, String[] languages);
+
+    PhraseCreateBatchResponse createPhrases(List<Phrase> phrases);
 }

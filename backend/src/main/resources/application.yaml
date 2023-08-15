@@ -7,6 +7,10 @@ spring:
       matching-strategy: ANT_PATH_MATCHER
   liquibase:
     change-log: classpath:/db/changelog/changelog.xml
+  servlet:
+    multipart:
+      max-file-size: 128KB
+      max-request-size: 128KB
   jpa:
     hibernate:
       ddl-auto: validate

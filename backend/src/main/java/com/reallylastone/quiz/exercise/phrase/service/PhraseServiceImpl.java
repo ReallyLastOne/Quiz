@@ -16,9 +16,7 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -67,6 +65,24 @@ public class PhraseServiceImpl implements PhraseService {
 
         return phraseRepository.findByOwnerId(id, page).stream()
                 .filter(e -> new HashSet<>(e.getTranslationMap().keySet().stream().map(Locale::toLanguageTag).toList()).containsAll(List.of(languages))).toList();
+    }
+
+    @Override
+    @Transactional
+    public PhraseCreateBatchResponse createPhrases(List<Phrase> phrases) {
+        Map<Long, Map<Locale, String>> correct = new HashMap<>();
+        Map<Long, List<String>> incorrect = new HashMap<>();
+
+        for (int i = 0; i < phrases.size(); i++) {
+            Phrase phrase = phrases.get(i);
+            try {
+                Phrase p = createPhrase(new PhraseCreateRequest(phrase.getTranslationMap(), true));
+                correct.put((long) i + 1, p.getTranslationMap());
+            } catch (ValidationErrorsException e) {
+                incorrect.put((long) i + 1, e.getErrors().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList());
+            }
+        }
+        return new PhraseCreateBatchResponse(correct, incorrect);
     }
 
     private void validate(PhraseCreateRequest request) {

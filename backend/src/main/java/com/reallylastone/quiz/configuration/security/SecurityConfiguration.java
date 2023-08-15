@@ -25,8 +25,8 @@ import java.util.List;
 public class SecurityConfiguration {
 
     private static final String[] NO_AUTHENTICATION_NEED_PATHS = new String[]{"/api/v1/auth/authenticate",
-            "/api/v1/auth/register", "/api/v1/auth/refresh", "/api/v1/auth/csrf", "/api/v1/health-check",
-            "/api/v1/docs", "/actuator/**", "/api/v1/swagger-ui/**", "/favicon.ico", "/api/v1/docs-json/**"};
+            "/api/v1/auth/register", "/api/v1/auth/refresh", "/api/v1/auth/csrf", "/api/v1/docs", "/actuator/**",
+            "/api/v1/swagger-ui/**", "/favicon.ico", "/api/v1/docs-json/**"};
     private final JwtAuthenticationFilter jwtFilter;
     private final AuthenticationProvider authenticationProvider;
 
