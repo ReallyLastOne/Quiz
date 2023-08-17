@@ -41,7 +41,7 @@ public interface PhraseOperations {
             ignoreLeadingWhiteSpace: true
             ignoreQuotations: false
             For null parser separator is determined on the fly and remaining properties are defaults.
-            Phrases created this way MUST be committed, and before committing it is impossible to use them. Phrases can be created only for user.
+            Phrases can be created only for user.
             """)
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "422", description = "If content is wrong or if there are translations that cannot be merge into another phrase", content = @Content)})
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})

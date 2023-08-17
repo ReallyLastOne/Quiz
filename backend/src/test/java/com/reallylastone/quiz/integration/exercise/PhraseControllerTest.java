@@ -24,7 +24,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -55,6 +55,19 @@ class PhraseControllerTest extends AbstractIntegrationTest {
 
     private static Stream<Arguments> phrasesToMergeData() {
         return Stream.of(Arguments.of((Object) new PhraseCreateRequest[]{new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple"), false), new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko"), false)}), Arguments.of((Object) new PhraseCreateRequest[]{new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", Locale.GERMAN, "apfel"), false), new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko"), false)}));
+    }
+
+    private static Stream<PhraseControllerTestUtils.BatchPhraseCreateCase> createPhrasesData() {
+        Stream<PhraseControllerTestUtils.BatchPhraseCreateCase> stream = Stream.of(
+                        new PhraseControllerTestUtils
+                                .BatchPhraseCreateCase("pl,en\ndrzwi,door", 1, 0, 1),
+                        new PhraseControllerTestUtils.BatchPhraseCreateCase("pl,en\ndrzwi,door\njabłko,apple", 2, 0, 2),
+                        new PhraseControllerTestUtils.BatchPhraseCreateCase("pl,en\ndrzwi,door\ndrzwi,door", 2, 0, 1),
+                        new PhraseControllerTestUtils.BatchPhraseCreateCase("pl,en\ndrzwi,door\njabłko,apple\njabłko,door", 2, 1, 2),
+                        new PhraseControllerTestUtils.BatchPhraseCreateCase("pl,en\ndrzwi,door\njabłko,apple\njabłko,door\ntrait,cecha", 3, 1, 3)
+        );
+
+        return stream;
     }
 
     @ParameterizedTest
@@ -177,4 +190,40 @@ class PhraseControllerTest extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$", hasSize(2)));
     }
 
+}
+    @Test
+    void shouldCreatePhrasesWithCorrectTranslations() throws Exception {
+        MvcResult mvcResult = authenticationUtils.register().andReturn();
+
+        MockMultipartFile file = new MockMultipartFile("name", "pl,en\ndrzwi,door".getBytes());
+
+        ResultActions result = phraseControllerTestUtils.createPhrases(null, generalUtils.extract(mvcResult, "accessToken"), file);
+        result
+                .andExpectAll(
+                        jsonPath("$.incorrect", is(aMapWithSize(0))),
+                        jsonPath("$.correct", is(aMapWithSize(1))),
+                        jsonPath("$.correct.1", allOf(
+                                is(aMapWithSize(2)),
+                                hasEntry(is("pl"), is("drzwi")),
+                                hasEntry(is("en"), is("door")))
+                        )
+                );
+    }
+
+    @ParameterizedTest
+    @MethodSource("createPhrasesData")
+    void shouldCreatePhrases(PhraseControllerTestUtils.BatchPhraseCreateCase testCase) throws Exception {
+        MvcResult mvcResult = authenticationUtils.register().andReturn();
+
+        MockMultipartFile file = new MockMultipartFile("name", testCase.getData().getBytes());
+
+        ResultActions result = phraseControllerTestUtils.createPhrases(null, generalUtils.extract(mvcResult, "accessToken"), file);
+        result
+                .andExpectAll(
+                        jsonPath("$.correct", is(aMapWithSize(testCase.getCorrectPhrases()))),
+                        jsonPath("$.incorrect", is(aMapWithSize(testCase.getWrongPhrases())))
+                );
+
+        Assertions.assertEquals(phraseRepository.findAll().size(), testCase.getResultativePhrasesCount());
+    }
 }

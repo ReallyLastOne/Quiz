@@ -40,16 +40,6 @@ public class CSVUtils {
     }
 
     /**
-     * Creates a CSVParser from a CSVFileParser.
-     *
-     * @param parser the CSVFileParser to create the CSVParser from
-     * @return a CSVParser that is configured according to the given CSVFileParser
-     */
-    public static CSVParser toCSVParser(CSVFileParser parser) {
-        return BASE_BUILDER.withSeparator(parser.separator()).withQuoteChar(parser.quoteChar()).withIgnoreLeadingWhiteSpace(parser.ignoreLeadingWhiteSpace()).withEscapeChar(parser.escapeChar()).withIgnoreQuotations(parser.ignoreQuotations()).withStrictQuotes(parser.strictQuotes()).build();
-    }
-
-    /**
      * Extracts the first line of text from a byte array.
      * If no end of line byte is provided then String built from all bytes is returned.
      *
@@ -106,5 +96,16 @@ public class CSVUtils {
         }
 
         return new FileReader(file);
+    }
+
+
+    /**
+     * Creates a CSVParser from a CSVFileParser.
+     *
+     * @param parser the CSVFileParser to create the CSVParser from
+     * @return a CSVParser that is configured according to the given CSVFileParser
+     */
+    private static CSVParser toCSVParser(CSVFileParser parser) {
+        return BASE_BUILDER.withSeparator(parser.separator()).withQuoteChar(parser.quoteChar()).withIgnoreLeadingWhiteSpace(parser.ignoreLeadingWhiteSpace()).withEscapeChar(parser.escapeChar()).withIgnoreQuotations(parser.ignoreQuotations()).withStrictQuotes(parser.strictQuotes()).build();
     }
 }
