@@ -2,6 +2,7 @@ package com.reallylastone.quiz.exercise.phrase.service;
 
 import com.reallylastone.quiz.exercise.phrase.mapper.PhraseMapper;
 import com.reallylastone.quiz.exercise.phrase.model.Phrase;
+import com.reallylastone.quiz.exercise.phrase.model.PhraseCreateBatchResponse;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseCreateRequest;
 import com.reallylastone.quiz.exercise.phrase.repository.PhraseRepository;
 import com.reallylastone.quiz.exercise.phrase.validation.PhraseValidator;
@@ -10,13 +11,18 @@ import com.reallylastone.quiz.util.validation.ValidationErrorsException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.BooleanUtils;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 
 @Service

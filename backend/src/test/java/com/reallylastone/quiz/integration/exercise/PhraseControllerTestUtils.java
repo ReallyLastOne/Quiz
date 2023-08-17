@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reallylastone.quiz.exercise.phrase.model.CSVFileParser;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseCreateRequest;
 import com.reallylastone.quiz.integration.EndpointPaths;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
