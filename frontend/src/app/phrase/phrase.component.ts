@@ -1,16 +1,19 @@
 import {
   AfterViewInit,
   Component,
+  DestroyRef,
   ElementRef,
   OnInit,
   Renderer2,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { AppService } from '../services/app.service';
 import { tap } from 'rxjs/operators';
 import { PhraseTableEntry } from './phrase';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-phrase',
@@ -18,6 +21,7 @@ import { PhraseTableEntry } from './phrase';
   styleUrls: ['./phrase.component.scss'],
 })
 export class PhraseComponent implements OnInit, AfterViewInit {
+  private _destroyRef = inject(DestroyRef);
   // TODO: all locales or something like that
   definedColumns: string[] = ['pl', 'it', 'us', 'es', 'de'];
   columnToDisplay: Set<string> = new Set(['id']);
@@ -74,7 +78,8 @@ export class PhraseComponent implements OnInit, AfterViewInit {
             ELEMENT_DATA.push(element);
           }
           this.dataSource = new MatTableDataSource(ELEMENT_DATA);
-        })
+        }),
+        takeUntilDestroyed(this._destroyRef)
       )
       .subscribe();
   }

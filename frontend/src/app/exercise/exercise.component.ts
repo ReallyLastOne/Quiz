@@ -1,18 +1,19 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription, of } from 'rxjs';
+import { Component, OnInit, inject, DestroyRef } from '@angular/core';
+import { of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { AppService } from '../services/app.service';
 import { Exercise } from '../model/Exercise.model';
 import { Router } from '@angular/router';
 import { ScoreService } from '../score/score.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-exercise',
   templateUrl: './exercise.component.html',
   styleUrls: ['./exercise.component.scss'],
 })
-export class ExerciseComponent implements OnDestroy, OnInit {
-  private subscriptions = new Subscription();
+export class ExerciseComponent implements OnInit {
+  private _destroyRef = inject(DestroyRef);
   private newParsedData: Exercise;
   private nextExercise: number = 1;
   private exerciseCount: number;
@@ -63,22 +64,21 @@ export class ExerciseComponent implements OnDestroy, OnInit {
   }
 
   nextApi() {
-    this.subscriptions.add(
-      this._appService
-        .startGame()
-        .pipe(
-          tap((data) => {
-            this.newParsedData = JSON.parse(JSON.stringify(data));
-            this.initializeExercise(this.newParsedData);
-            this.exerciseEnd = false;
-          }),
-          catchError(() => {
-            this.router.navigate([`/error`]);
-            return of([]);
-          })
-        )
-        .subscribe()
-    );
+    this._appService
+      .startGame()
+      .pipe(
+        tap((data) => {
+          this.newParsedData = JSON.parse(JSON.stringify(data));
+          this.initializeExercise(this.newParsedData);
+          this.exerciseEnd = false;
+        }),
+        catchError(() => {
+          this.router.navigate([`/error`]);
+          return of([]);
+        }),
+        takeUntilDestroyed(this._destroyRef)
+      )
+      .subscribe();
   }
 
   nextQuestion() {
@@ -104,9 +104,5 @@ export class ExerciseComponent implements OnDestroy, OnInit {
     this.answers.length = 0;
     this.question = '';
     this.clicked = false;
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.unsubscribe();
   }
 }

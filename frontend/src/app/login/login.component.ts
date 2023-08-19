@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { tap, catchError } from 'rxjs/operators';
 import { LoginRequest } from '../model/login-request.model';
 import { UserAuthenticationService } from '../services/user-authentication.service';
 import { of } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
+  private _destroyRef = inject(DestroyRef);
   private _logForm: FormGroup;
   private _submitted = false;
   login = true;
@@ -63,7 +65,8 @@ export class LoginComponent implements OnInit {
           }),
           catchError(() => {
             return of([]);
-          })
+          }),
+          takeUntilDestroyed(this._destroyRef)
         )
         .subscribe();
     }

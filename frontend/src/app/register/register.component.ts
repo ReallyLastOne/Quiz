@@ -1,9 +1,17 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  DestroyRef,
+  inject,
+} from '@angular/core';
 import { UserAuthenticationService } from '../services/user-authentication.service';
 import { RegistrationRequest } from '../model/registration-request.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-register',
@@ -11,6 +19,7 @@ import { of } from 'rxjs';
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
+  private _destroyRef = inject(DestroyRef);
   private _regForm: FormGroup;
   private _submitted = false;
   constructor(private _userAuthenticationService: UserAuthenticationService) {}
@@ -67,7 +76,8 @@ export class RegisterComponent implements OnInit {
           catchError((error) => {
             console.log(error);
             return of([]);
-          })
+          }),
+          takeUntilDestroyed(this._destroyRef)
         )
         .subscribe();
     }
