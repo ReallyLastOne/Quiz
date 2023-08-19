@@ -25,6 +25,6 @@ public interface GameSessionRepository extends JpaRepository<GameSession, Long> 
             nativeQuery = true)
     boolean hasUnansweredQuestion(Long userId);
 
-    @Query("SELECT gs FROM GameSession gs WHERE gs.user.id = :userId AND gs.finishDate IS NULL AND TYPE(gs) = QuizGameSession")
+    @Query("SELECT gs FROM GameSession gs WHERE gs.user.id = :userId AND gs.state <> 2 AND TYPE(gs) = QuizGameSession")
     QuizGameSession findActive(Long userId);
 }

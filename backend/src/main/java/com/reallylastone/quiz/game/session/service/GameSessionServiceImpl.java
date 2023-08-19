@@ -103,6 +103,7 @@ public class GameSessionServiceImpl implements GameSessionService {
     }
 
     @Override
+    @Transactional
     public void stopGame() {
         UserEntity currentUser = UserService.getCurrentUser();
 

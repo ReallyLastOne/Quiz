@@ -225,6 +225,7 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
         quizUtils.next(accessToken);
 
         quizUtils.stop(accessToken).andExpect(status().is2xxSuccessful());
+        Assertions.assertEquals(GameState.COMPLETED, gameSessionRepository.findAll().get(0).getState());
     }
 
     @Test
