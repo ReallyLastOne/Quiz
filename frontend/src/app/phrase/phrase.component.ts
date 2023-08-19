@@ -43,7 +43,7 @@ export class PhraseComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {}
 
-  onFlagClick(flag: string) {
+  onFlagClick(flag: string): void {
     const element = document.getElementsByClassName('fi-' + flag)[0];
     if (this.buttonsClicked.has(flag)) {
       this._renderer.setStyle(element, 'filter', 'grayscale(100%)');
@@ -57,7 +57,7 @@ export class PhraseComponent implements OnInit, AfterViewInit {
     this.updateTable();
   }
 
-  updateTable() {
+  private updateTable(): void {
     ELEMENT_DATA.splice(0);
     if (this.buttonsClicked.size == 0) return;
 

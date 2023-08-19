@@ -9,7 +9,10 @@ import { AppService } from '../services/app.service';
 })
 export class HomeComponent implements OnInit {
   private _destroyRef = inject(DestroyRef);
-  constructor(private router: Router, private _appService: AppService) {}
+  constructor(
+    private readonly _router: Router,
+    private readonly _appService: AppService
+  ) {}
 
   ngOnInit(): void {
     this._appService
@@ -18,7 +21,7 @@ export class HomeComponent implements OnInit {
       .subscribe();
   }
 
-  startLearning() {
-    this.router.navigate([`/exercise`]);
+  startLearning(): void {
+    this._router.navigate([`/exercise`]);
   }
 }

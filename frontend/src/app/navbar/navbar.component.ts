@@ -10,23 +10,23 @@ import { UserAuthenticationService } from '../services/user-authentication.servi
 export class NavbarComponent implements OnInit {
   isActive = false;
 
+  get userAuthService() {
+    return this._userAuthenticationService;
+  }
+
   constructor(
     private readonly _userAuthenticationService: UserAuthenticationService,
-    private router: Router
+    private readonly _router: Router
   ) {}
 
   ngOnInit(): void {}
 
   homeClick(): void {
-    this.router.navigate([`/home`]);
+    this._router.navigate([`/home`]);
   }
 
   phraseClick(): void {
-    this.router.navigate([`/phrase`]);
-  }
-
-  get userAuthService() {
-    return this._userAuthenticationService;
+    this._router.navigate([`/phrase`]);
   }
 
   expandMenuClick(): void {

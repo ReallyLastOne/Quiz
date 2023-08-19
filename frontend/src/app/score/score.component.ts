@@ -8,7 +8,10 @@ import { ScoreService } from './score.service';
   styleUrls: ['./score.component.scss'],
 })
 export class ScoreComponent implements OnInit {
-  constructor(private router: Router, private _scoreService: ScoreService) {}
+  constructor(
+    private readonly _router: Router,
+    private readonly _scoreService: ScoreService
+  ) {}
 
   private _score = 0;
   private _scoreString = '';
@@ -36,7 +39,7 @@ export class ScoreComponent implements OnInit {
   }
 
   startAgain() {
-    this.router.navigate([`/exercise`]);
+    this._router.navigate([`/exercise`]);
   }
 
   dataSource() {}

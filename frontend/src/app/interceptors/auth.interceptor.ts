@@ -17,12 +17,9 @@ import { UserAuthenticationService } from '../services/user-authentication.servi
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  private isRefreshing = false;
-  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(
-    null
-  );
-
-  constructor(private _userAuthenticationService: UserAuthenticationService) {}
+  constructor(
+    private readonly _userAuthenticationService: UserAuthenticationService
+  ) {}
 
   intercept(
     request: HttpRequest<any>,
@@ -35,7 +32,6 @@ export class AuthInterceptor implements HttpInterceptor {
       return next.handle(cloned).pipe(
         catchError((error) => {
           if (error.status === 401 || error.status === 403) {
-            console.log('errrrrrrr');
             return this.handle401Error(cloned, next);
           }
           return throwError(() => new Error(error));
@@ -51,9 +47,9 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   private handle401Error(
-    request: HttpRequest<any>,
+    request: HttpRequest<unknown>,
     next: HttpHandler
-  ): Observable<HttpEvent<any>> {
+  ): Observable<HttpEvent<unknown>> {
     return this._userAuthenticationService.refreshToken().pipe(
       switchMap((token: any) => {
         console.log('token ' + token.accessToken);
@@ -67,7 +63,10 @@ export class AuthInterceptor implements HttpInterceptor {
     );
   }
 
-  private buildRequest(request: HttpRequest<any>, token: string) {
+  private buildRequest(
+    request: HttpRequest<unknown>,
+    token: string
+  ): HttpRequest<unknown> {
     return request.clone({
       headers: request.headers.set('Authorization', 'Bearer ' + token),
       withCredentials: true,

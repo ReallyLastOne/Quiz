@@ -22,7 +22,12 @@ export class RegisterComponent implements OnInit {
   private _destroyRef = inject(DestroyRef);
   private _regForm: FormGroup;
   private _submitted = false;
-  constructor(private _userAuthenticationService: UserAuthenticationService) {}
+
+  @Output() backToLogin = new EventEmitter<boolean>();
+
+  constructor(
+    private readonly _userAuthenticationService: UserAuthenticationService
+  ) {}
 
   get regForm(): FormGroup {
     return this._regForm;
@@ -34,6 +39,10 @@ export class RegisterComponent implements OnInit {
 
   set submitted(value: boolean) {
     this._submitted = value;
+  }
+
+  get registerForm() {
+    return this.regForm.controls;
   }
 
   ngOnInit(): void {
@@ -50,13 +59,11 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  @Output() backToLogin = new EventEmitter<boolean>();
-
-  backToLoginClick() {
+  backToLoginClick(): void {
     this.backToLogin.emit(false);
   }
 
-  onRegister() {
+  onRegister(): void {
     this.submitted = true;
     if (this._regForm.invalid) {
       return;
@@ -81,9 +88,5 @@ export class RegisterComponent implements OnInit {
         )
         .subscribe();
     }
-  }
-
-  get registerForm() {
-    return this.regForm.controls;
   }
 }

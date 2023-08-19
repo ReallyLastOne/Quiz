@@ -12,12 +12,12 @@ export class ScoreService implements OnDestroy {
     return this._scorePoints;
   }
 
-  addScore(value: number) {
+  addScore(value: number): void {
     this._scorePoints += value;
     this._dataSource.next('value');
   }
 
-  resetScore() {
+  resetScore(): void {
     this._scorePoints = 0;
   }
 

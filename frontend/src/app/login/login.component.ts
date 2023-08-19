@@ -16,7 +16,9 @@ export class LoginComponent implements OnInit {
   private _submitted = false;
   login = true;
 
-  constructor(private _userAuthenticationService: UserAuthenticationService) {}
+  get loginForm() {
+    return this._logForm.controls;
+  }
 
   get submitted(): boolean {
     return this._submitted;
@@ -29,6 +31,10 @@ export class LoginComponent implements OnInit {
   get logForm(): FormGroup {
     return this._logForm;
   }
+
+  constructor(
+    private readonly _userAuthenticationService: UserAuthenticationService
+  ) {}
 
   ngOnInit(): void {
     this._logForm = new FormGroup({
@@ -43,11 +49,11 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  registerMeClick(register: boolean) {
+  registerMeClick(register: boolean): void {
     this.login = register;
   }
 
-  onLogin() {
+  onLogin(): void {
     this.submitted = true;
     if (this._logForm.invalid) {
       return;
@@ -70,9 +76,5 @@ export class LoginComponent implements OnInit {
         )
         .subscribe();
     }
-  }
-
-  get loginForm() {
-    return this._logForm.controls;
   }
 }

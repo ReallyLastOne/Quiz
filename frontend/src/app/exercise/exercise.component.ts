@@ -14,11 +14,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class ExerciseComponent implements OnInit {
   private _destroyRef = inject(DestroyRef);
-  private newParsedData: Exercise;
-  private nextExercise: number = 1;
-  private exerciseCount: number;
-  private points: number = 0;
-  private allPoints: number = 0;
+  private _newParsedData: Exercise;
+  private _nextExercise: number = 1;
+  private _exerciseCount: number;
+  private _points: number = 0;
+  private _allPoints: number = 0;
   answers: string[] = [];
   marked: boolean[] = [false, false, false, false];
   correctAnswer: string;
@@ -27,24 +27,54 @@ export class ExerciseComponent implements OnInit {
   exerciseEnd = false;
   questionCount = '';
   constructor(
-    private _appService: AppService,
-    private router: Router,
-    private _scoreService: ScoreService
+    private readonly _appService: AppService,
+    private readonly _router: Router,
+    private readonly _scoreService: ScoreService
   ) {}
 
   ngOnInit(): void {
-    this.exerciseCount = 3;
+    this._exerciseCount = 3;
     this._scoreService.resetScore();
     this.nextApi();
   }
 
   private initializeExercise(exercise: Exercise): void {
-    this.questionCount = `${this.nextExercise}/${this.exerciseCount}`;
+    this.questionCount = `${this._nextExercise}/${this._exerciseCount}`;
     this.question = exercise.question;
     this.correctAnswer = exercise.correctAnswer;
     this.answers.push(...exercise.wrongAnswers);
     this.answers.push(exercise.correctAnswer);
     this.answers.sort((a, b) => 0.5 - Math.random());
+  }
+
+  private nextApi(): void {
+    this._appService
+      .startGame()
+      .pipe(
+        tap((data) => {
+          this._newParsedData = JSON.parse(JSON.stringify(data));
+          this.initializeExercise(this._newParsedData);
+          this.exerciseEnd = false;
+        }),
+        catchError(() => {
+          this._router.navigate([`/error`]);
+          return of([]);
+        }),
+        takeUntilDestroyed(this._destroyRef)
+      )
+      .subscribe();
+  }
+
+  private summarizePoints(): void {
+    this._allPoints += this._points;
+    this._points = 0;
+  }
+  private prepareNextQuestion(): void {
+    this.exerciseEnd = true;
+    this.marked = [false, false, false, false];
+    this.answers.length = 0;
+    this.question = '';
+    this.clicked = false;
   }
 
   getAnswer(event: any) {
@@ -58,51 +88,21 @@ export class ExerciseComponent implements OnInit {
     for (let i = 0; i < this.marked.length; i++) {
       this.marked[i] = i + 1 == button ? true : false;
     }
-    if (event.target.innerText == this.correctAnswer) this.points = 1;
-    else this.points = 0;
+    if (event.target.innerText == this.correctAnswer) this._points = 1;
+    else this._points = 0;
     this.clicked = true;
-  }
-
-  nextApi() {
-    this._appService
-      .startGame()
-      .pipe(
-        tap((data) => {
-          this.newParsedData = JSON.parse(JSON.stringify(data));
-          this.initializeExercise(this.newParsedData);
-          this.exerciseEnd = false;
-        }),
-        catchError(() => {
-          this.router.navigate([`/error`]);
-          return of([]);
-        }),
-        takeUntilDestroyed(this._destroyRef)
-      )
-      .subscribe();
   }
 
   nextQuestion() {
     this.prepareNextQuestion();
     this.summarizePoints();
-    this.nextExercise++;
-    if (this.nextExercise < 4) {
+    this._nextExercise++;
+    if (this._nextExercise < 4) {
       this.nextApi();
     } else {
       this.exerciseEnd = true;
-      this._scoreService.addScore(this.allPoints);
-      this.router.navigate([`/score`], { skipLocationChange: true });
+      this._scoreService.addScore(this._allPoints);
+      this._router.navigate([`/score`], { skipLocationChange: true });
     }
-  }
-
-  summarizePoints() {
-    this.allPoints += this.points;
-    this.points = 0;
-  }
-  prepareNextQuestion() {
-    this.exerciseEnd = true;
-    this.marked = [false, false, false, false];
-    this.answers.length = 0;
-    this.question = '';
-    this.clicked = false;
   }
 }
