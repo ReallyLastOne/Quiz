@@ -65,7 +65,7 @@ export class ExerciseComponent implements OnDestroy, OnInit {
   nextApi() {
     this.subscriptions.add(
       this._appService
-        .getAnswer()
+        .startGame()
         .pipe(
           tap((data) => {
             this.newParsedData = JSON.parse(JSON.stringify(data));
