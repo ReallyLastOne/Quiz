@@ -237,7 +237,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"correct\": {\n    \"cillum51\": {\n      \"veniam1b6\": \"<string>\"\n    }\n  },\n  \"incorrect\": {\n    \"in7\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"minim60\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"magna__2\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
+              "body": "{\n  \"correct\": {\n    \"sunt__47\": {\n      \"elit_31_\": \"<string>\"\n    },\n    \"in_cb\": {\n      \"dolore1\": \"<string>\",\n      \"dolorf9\": \"<string>\"\n    },\n    \"dolore_c10\": {\n      \"nullaed\": \"<string>\",\n      \"sed_7b\": \"<string>\"\n    }\n  },\n  \"incorrect\": {\n    \"consectetur5cb\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"cillum_d\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
@@ -901,7 +901,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"<long>\",\n  \"username\": \"<string>\",\n  \"roles\": [\n    \"USER\",\n    \"USER\"\n  ]\n}",
+              "body": "{\n  \"id\": \"<long>\",\n  \"username\": \"<string>\",\n  \"roles\": [\n    \"USER\",\n    \"ADMIN\"\n  ]\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -1425,7 +1425,7 @@
       "script": {
         "type": "text/javascript",
         "exec": [
-          "pm.environment.set(\"csrfToken\", pm.cookies.get(\"XSRF-TOKEN\"));"
+          "pm.environment.set(\"csrfToken\", pm.cookies.get(\"XSRF-TOKEN\"));\r\n\r\nif (pm.response != null) {\r\n    var response = pm.response.json();\r\n    if (response.accessToken != null) {\r\n        pm.environment.set(\"accessToken\", response.accessToken);\r\n    }\r\n\r\n    if (response.refreshToken != null) {\r\n        pm.environment.set(\"refreshToken\", response.refreshToken);\r\n    }\r\n}"
         ]
       }
     },
@@ -1434,7 +1434,7 @@
       "script": {
         "type": "text/javascript",
         "exec": [
-          "pm.request.headers.add(\"X-XSRF-TOKEN: \" + pm.environment.get(\"csrfToken\"));"
+          "pm.request.headers.add(\"X-XSRF-TOKEN: \" + pm.environment.get(\"csrfToken\"));\r\npm.request.headers.add(\"Authorization: Bearer \" + pm.environment.get(\"accessToken\"));"
         ]
       }
     }
