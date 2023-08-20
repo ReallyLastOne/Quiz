@@ -237,7 +237,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"correct\": {\n    \"sunt__47\": {\n      \"elit_31_\": \"<string>\"\n    },\n    \"in_cb\": {\n      \"dolore1\": \"<string>\",\n      \"dolorf9\": \"<string>\"\n    },\n    \"dolore_c10\": {\n      \"nullaed\": \"<string>\",\n      \"sed_7b\": \"<string>\"\n    }\n  },\n  \"incorrect\": {\n    \"consectetur5cb\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"cillum_d\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
+              "body": "{\n  \"correct\": {\n    \"in5\": {\n      \"nostrud76\": \"<string>\"\n    },\n    \"magna_1\": {\n      \"reprehenderit_c\": \"<string>\",\n      \"nulla_dc7\": \"<string>\",\n      \"laboris_fe2\": \"<string>\"\n    }\n  },\n  \"incorrect\": {\n    \"velitca\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"reprehenderitebb\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"in0\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"labore_9\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
@@ -901,7 +901,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"<long>\",\n  \"username\": \"<string>\",\n  \"roles\": [\n    \"USER\",\n    \"ADMIN\"\n  ]\n}",
+              "body": "{\n  \"id\": \"<long>\",\n  \"username\": \"<string>\",\n  \"roles\": [\n    \"ADMIN\",\n    \"USER\"\n  ]\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -1425,7 +1425,7 @@
       "script": {
         "type": "text/javascript",
         "exec": [
-          "pm.environment.set(\"csrfToken\", pm.cookies.get(\"XSRF-TOKEN\"));\r\n\r\nif (pm.response != null) {\r\n    var response = pm.response.json();\r\n    if (response.accessToken != null) {\r\n        pm.environment.set(\"accessToken\", response.accessToken);\r\n    }\r\n\r\n    if (response.refreshToken != null) {\r\n        pm.environment.set(\"refreshToken\", response.refreshToken);\r\n    }\r\n}"
+          "// fetch csrf token from cookie and set as environmental variable\r\npm.environment.set(\"csrfToken\", pm.cookies.get(\"XSRF-TOKEN\"));\r\n\r\n// fetch access/refresh token from response if present and set as environmental variables\r\nif (pm.response != null) {\r\n    var response = pm.response.json();\r\n    if (response.accessToken != null) {\r\n        pm.environment.set(\"accessToken\", response.accessToken);\r\n    }\r\n\r\n    if (response.refreshToken != null) {\r\n        pm.environment.set(\"refreshToken\", response.refreshToken);\r\n    }\r\n}"
         ]
       }
     },
@@ -1434,7 +1434,7 @@
       "script": {
         "type": "text/javascript",
         "exec": [
-          "pm.request.headers.add(\"X-XSRF-TOKEN: \" + pm.environment.get(\"csrfToken\"));\r\npm.request.headers.add(\"Authorization: Bearer \" + pm.environment.get(\"accessToken\"));"
+          "// add csrf token to header from environmental variable\r\npm.request.headers.add(\"X-XSRF-TOKEN: \" + pm.environment.get(\"csrfToken\"));\r\n\r\n// add access token to Authorization header from environmental variable\r\npm.request.headers.add(\"Authorization: Bearer \" + pm.environment.get(\"accessToken\"));"
         ]
       }
     }
