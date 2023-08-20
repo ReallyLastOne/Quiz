@@ -5,7 +5,6 @@
       "description": "Provides operations to work on Phrase objects",
       "item": [
         {
-          "id": "28cd5544-bcb5-4e36-933a-ec468b710ab4",
           "name": "Get all phrases for currently authenticated user",
           "request": {
             "name": "Get all phrases for currently authenticated user",
@@ -66,7 +65,6 @@
           },
           "response": [
             {
-              "id": "a6f51918-88b6-4585-af9c-a1bca3b9a58d",
               "name": "OK",
               "originalRequest": {
                 "url": {
@@ -126,7 +124,6 @@
           }
         },
         {
-          "id": "4585e8bf-42ba-4c1d-ba34-3c2651205d2d",
           "name": "Creates or merges if possible a phrase translations. Phrase is created for user or global context",
           "request": {
             "name": "Creates or merges if possible a phrase translations. Phrase is created for user or global context",
@@ -182,7 +179,6 @@
           },
           "response": [
             {
-              "id": "9876d39b-22e5-4d5a-8dac-4031db219f75",
               "name": "OK",
               "originalRequest": {
                 "url": {
@@ -241,12 +237,11 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"correct\": {\n    \"velit9\": {\n      \"dolore4\": \"<string>\",\n      \"tempor__a\": \"<string>\"\n    }\n  },\n  \"incorrect\": {\n    \"tempor5b7\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"deseruntc\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"sedb_\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
+              "body": "{\n  \"correct\": {\n    \"cillum51\": {\n      \"veniam1b6\": \"<string>\"\n    }\n  },\n  \"incorrect\": {\n    \"in7\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"minim60\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"magna__2\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "97a5e7af-ab09-4f31-bb42-847fbc91fbf4",
               "name": "If content is wrong or if there are translations that cannot be merge into another phrase",
               "originalRequest": {
                 "url": {
@@ -312,7 +307,6 @@
       "description": "Provides operations to entirely handle a translation game",
       "item": [
         {
-          "id": "2914dd2f-8405-4da6-ad79-fcb3e262007f",
           "name": "Starts a translation game for a user",
           "request": {
             "name": "Starts a translation game for a user",
@@ -361,7 +355,6 @@
           },
           "response": [
             {
-              "id": "edf771cc-289f-4395-8238-73c767c6cca9",
               "name": "OK",
               "originalRequest": {
                 "url": {
@@ -418,7 +411,6 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "be799022-7779-4c1e-b004-4f3662992acd",
               "name": "If user is already in different translation game or if provided parameters are wrong",
               "originalRequest": {
                 "url": {
@@ -475,7 +467,6 @@
       "description": "Provides operations to work with user authentication",
       "item": [
         {
-          "id": "b1d392a5-4d2c-462b-be9d-d8fcb7b72cec",
           "name": "Register given user",
           "request": {
             "name": "Register given user",
@@ -518,7 +509,6 @@
           },
           "response": [
             {
-              "id": "e66b9837-a778-4de1-aa78-d4358cfc8e54",
               "name": "OK",
               "originalRequest": {
                 "url": {
@@ -569,7 +559,6 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "8128ccbe-d95f-481d-9e16-93849ef11c67",
               "name": "If provided credentials are taken by another user or if credentials are semantically wrong",
               "originalRequest": {
                 "url": {
@@ -616,7 +605,6 @@
           }
         },
         {
-          "id": "a0a64fa6-20b5-4857-87dd-b255dad921ef",
           "name": "Extends the lifespan of the access token based on given refresh token in cookie",
           "request": {
             "name": "Extends the lifespan of the access token based on given refresh token in cookie",
@@ -646,7 +634,6 @@
           },
           "response": [
             {
-              "id": "50cf3166-f376-4047-af33-c3563f4346aa",
               "name": "OK",
               "originalRequest": {
                 "url": {
@@ -684,7 +671,6 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "4301b0d4-61a8-49f2-aae2-e09080e14bbd",
               "name": "If provided credentials are semantically wrong or no refresh_token cookie provided",
               "originalRequest": {
                 "url": {
@@ -716,7 +702,6 @@
           }
         },
         {
-          "id": "2ac6374e-fcad-4f6f-9f42-f96b4a4c91a1",
           "name": "Authenticates given user",
           "request": {
             "name": "Authenticates given user",
@@ -759,7 +744,6 @@
           },
           "response": [
             {
-              "id": "54b0d89d-c21a-4a4b-b6c6-3779200410ae",
               "name": "OK",
               "originalRequest": {
                 "url": {
@@ -810,7 +794,6 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "17807016-bbcd-41a9-973f-436dc4520a46",
               "name": "If provided credentials are semantically wrong",
               "originalRequest": {
                 "url": {
@@ -857,7 +840,6 @@
           }
         },
         {
-          "id": "50048f0d-3c1f-4036-b722-cf114607ac12",
           "name": "Retrieves basic information about user",
           "request": {
             "name": "Retrieves basic information about user",
@@ -887,7 +869,6 @@
           },
           "response": [
             {
-              "id": "ef2ba846-99c4-444e-87e4-3aab15608bef",
               "name": "OK",
               "originalRequest": {
                 "url": {
@@ -931,7 +912,6 @@
           }
         },
         {
-          "id": "3d2f2dd8-78e7-442e-a91a-720e8ea6c67e",
           "name": "Returns XSRF-TOKEN in cookie to be used in further requests. To pass the CSRF protection the cookie and 'X-XSRF-TOKEN' header.",
           "request": {
             "name": "Returns XSRF-TOKEN in cookie to be used in further requests. To pass the CSRF protection the cookie and 'X-XSRF-TOKEN' header.",
@@ -955,7 +935,6 @@
           },
           "response": [
             {
-              "id": "37c86d59-501f-4dee-ae10-bc29761390ff",
               "name": "OK",
               "originalRequest": {
                 "url": {
@@ -993,7 +972,6 @@
       "description": "Provides operations to entirely handle a quiz game. Operations are executed for a user associated with given authentication",
       "item": [
         {
-          "id": "483361bf-f934-4ad3-bfda-2d024a507c1c",
           "name": "Stops currently active quiz game session and thus allowing to start a new one",
           "request": {
             "name": "Stops currently active quiz game session and thus allowing to start a new one",
@@ -1024,7 +1002,6 @@
           },
           "response": [
             {
-              "id": "ef2cc9b7-de29-41f7-8895-7c5a1693d80c",
               "name": "OK",
               "originalRequest": {
                 "url": {
@@ -1069,7 +1046,6 @@
           }
         },
         {
-          "id": "f4e1e4d8-4a14-49a1-94fc-5896b26dbe10",
           "name": "Starts a quiz game for a user",
           "request": {
             "name": "Starts a quiz game for a user",
@@ -1110,7 +1086,6 @@
           },
           "response": [
             {
-              "id": "88668c94-3b10-458d-a167-c74f0a767f43",
               "name": "OK",
               "originalRequest": {
                 "url": {
@@ -1159,7 +1134,6 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "d71fbeda-7f20-4d72-8474-fe3fbbb38b69",
               "name": "If user is already in different quiz game or if provided questions parameter is wrong",
               "originalRequest": {
                 "url": {
@@ -1202,7 +1176,6 @@
           }
         },
         {
-          "id": "6eb31b7b-a8b0-4721-a319-15c843f2e478",
           "name": "Draws a random question for user's currently active game",
           "request": {
             "name": "Draws a random question for user's currently active game",
@@ -1233,7 +1206,6 @@
           },
           "response": [
             {
-              "id": "76c9b165-527f-4697-9519-2cfb14755ebc",
               "name": "OK",
               "originalRequest": {
                 "url": {
@@ -1272,7 +1244,6 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "a9beaab6-7268-4115-9c6b-f5fc65d316dd",
               "name": "If user is not in quiz game or user does have already active question",
               "originalRequest": {
                 "url": {
@@ -1305,7 +1276,6 @@
           }
         },
         {
-          "id": "ee10bc27-bb3c-4400-b07b-98d537fbeba3",
           "name": "Answers a question associated with active quiz game session",
           "request": {
             "name": "Answers a question associated with active quiz game session",
@@ -1349,7 +1319,6 @@
           },
           "response": [
             {
-              "id": "96d1db48-3cbe-46fa-a7fa-2ae2d29ba235",
               "name": "OK",
               "originalRequest": {
                 "url": {
@@ -1401,7 +1370,6 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "05b03082-64f5-46c0-b7f6-031de0dc9b27",
               "name": "If user is not in quiz game or user does not have active question",
               "originalRequest": {
                 "url": {
@@ -1460,6 +1428,15 @@
           "pm.environment.set(\"csrfToken\", pm.cookies.get(\"XSRF-TOKEN\"));"
         ]
       }
+    },
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.request.headers.add(\"X-XSRF-TOKEN: \" + pm.environment.get(\"csrfToken\"));"
+        ]
+      }
     }
   ],
   "variable": [
@@ -1469,7 +1446,6 @@
     }
   ],
   "info": {
-    "_postman_id": "b58a30c4-a412-48ec-ba59-5eba1342befe",
     "name": "Quiz API documentation",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {
