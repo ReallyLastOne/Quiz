@@ -43,6 +43,20 @@ public class GameSessionStateValidator {
     }
 
     /**
+     * Method validates if given user has correct properties to be given next phrase
+     *
+     * @param user   user to be checked
+     * @param errors errors to be optionally filled
+     */
+    public void validateNextPhraseRequest(UserEntity user, List<StateValidationError> errors) {
+        if (!gameSessionRepository.hasActiveTranslationSession(user.getId())) {
+            errors.add(StateValidationError.USER_INACTIVE_SESSION);
+        } else if (gameSessionRepository.hasUnansweredPhrases(user.getId())) {
+            errors.add(StateValidationError.USER_UNANSWERED_PHRASES);
+        }
+    }
+
+    /**
      * Method validates if given user has correct properties to answer the question
      *
      * @param user   user to be checked
@@ -51,8 +65,23 @@ public class GameSessionStateValidator {
     public void validateQuestionAnswerRequest(UserEntity user, List<StateValidationError> errors) {
         if (!gameSessionRepository.hasActiveQuizSession(user.getId())) {
             errors.add(StateValidationError.USER_INACTIVE_SESSION);
-        } else if (gameSessionRepository.findActive(user.getId()).findCurrent().isEmpty()) {
+        } else if (gameSessionRepository.findActiveQuizGameSession(user.getId()).findCurrent().isEmpty()) {
             errors.add(StateValidationError.USER_NO_QUESTION_TO_ANSWER);
         }
     }
+
+    /**
+     * Method validates if given user has correct properties to answer the phrase
+     *
+     * @param user   user to be checked
+     * @param errors errors to be optionally filled
+     */
+    public void validatePhraseAnswerRequest(UserEntity user, List<StateValidationError> errors) {
+        if (!gameSessionRepository.hasActiveTranslationSession(user.getId())) {
+            errors.add(StateValidationError.USER_INACTIVE_SESSION);
+        } else if (gameSessionRepository.findActiveTranslationGameSession(user.getId()).findCurrent().isEmpty()) {
+            errors.add(StateValidationError.USER_NO_PHRASE_TO_ANSWER);
+        }
+    }
+
 }

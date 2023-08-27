@@ -1,13 +1,16 @@
 package com.reallylastone.quiz.game.session.service;
 
 import com.reallylastone.quiz.exercise.phrase.model.Phrase;
+import com.reallylastone.quiz.exercise.phrase.service.PhraseService;
 import com.reallylastone.quiz.exercise.question.model.Question;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerRequest;
 import com.reallylastone.quiz.exercise.question.service.QuestionService;
 import com.reallylastone.quiz.game.core.quiz.model.QuizGameSession;
+import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
+import com.reallylastone.quiz.game.core.translation.model.TranslationGameSession;
+import com.reallylastone.quiz.game.session.model.GameSession;
 import com.reallylastone.quiz.game.session.model.GameSessionCreateRequest;
 import com.reallylastone.quiz.game.session.model.GameState;
-import com.reallylastone.quiz.game.session.model.NextPhraseRequest;
 import com.reallylastone.quiz.game.session.repository.GameSessionRepository;
 import com.reallylastone.quiz.game.session.validation.GameSessionCreateRequestValidator;
 import com.reallylastone.quiz.game.session.validation.GameSessionStateValidator;
@@ -31,11 +34,14 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+// TODO: code is duplicated mostly for one quiz/translation game session, it would be nice to generify it
+// TODO: same for other classes like GameSessionCreateRequestValidator or GameSessionRepository
 public class GameSessionServiceImpl implements GameSessionService {
     private final GameSessionRepository gameSessionRepository;
     private final GameSessionCreateRequestValidator createRequestValidator;
     private final GameSessionStateValidator gameSessionStateValidator;
     private final QuestionService questionService;
+    private final PhraseService phraseService;
 
     @Override
     public Long createSession(GameSessionCreateRequest request) {
@@ -61,7 +67,7 @@ public class GameSessionServiceImpl implements GameSessionService {
         gameSessionStateValidator.validateNextQuestionRequest(currentUser, errors);
         if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
 
-        QuizGameSession activeSession = gameSessionRepository.findActive(currentUser.getId());
+        QuizGameSession activeSession = gameSessionRepository.findActiveQuizGameSession(currentUser.getId());
         Question randomQuestion = questionService.findRandomQuestion();
         activeSession.answer(randomQuestion, null);
         activeSession.setState(GameState.IN_PROGRESS);
@@ -71,8 +77,19 @@ public class GameSessionServiceImpl implements GameSessionService {
 
     @Override
     @Transactional
-    public Phrase nextPhrase(NextPhraseRequest request) {
-        return null;
+    public Phrase nextPhrase() {
+        List<StateValidationError> errors = new ArrayList<>();
+        UserEntity currentUser = UserService.getCurrentUser();
+
+        gameSessionStateValidator.validateNextPhraseRequest(currentUser, errors);
+        if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
+
+        TranslationGameSession activeSession = gameSessionRepository.findActiveTranslationGameSession(currentUser.getId());
+        Phrase randomPhrase = phraseService.findRandomPhrase(activeSession.getSourceLanguage(), activeSession.getDestinationLanguage(), currentUser.getId());
+        activeSession.answer(randomPhrase, null);
+        activeSession.setState(GameState.IN_PROGRESS);
+
+        return randomPhrase;
     }
 
     @Override
@@ -84,7 +101,7 @@ public class GameSessionServiceImpl implements GameSessionService {
         gameSessionStateValidator.validateQuestionAnswerRequest(currentUser, errors);
         if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
 
-        QuizGameSession activeSession = gameSessionRepository.findActive(currentUser.getId());
+        QuizGameSession activeSession = gameSessionRepository.findActiveQuizGameSession(currentUser.getId());
         Optional<Map.Entry<Question, Boolean>> currentOptional = activeSession.findCurrent();
 
         if (currentOptional.isEmpty()) {
@@ -104,10 +121,37 @@ public class GameSessionServiceImpl implements GameSessionService {
 
     @Override
     @Transactional
+    public boolean processAnswer(PhraseAnswerRequest phraseAnswer) {
+        List<StateValidationError> errors = new ArrayList<>();
+        UserEntity currentUser = UserService.getCurrentUser();
+
+        gameSessionStateValidator.validatePhraseAnswerRequest(currentUser, errors);
+        if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
+
+        TranslationGameSession activeSession = gameSessionRepository.findActiveTranslationGameSession(currentUser.getId());
+        Optional<Map.Entry<Phrase, Boolean>> currentOptional = activeSession.findCurrent();
+
+        if (currentOptional.isEmpty()) {
+            throw new IllegalStateException("Trying to process the phrase for the game session, which has no unanswered phrases");
+        }
+
+        Phrase current = currentOptional.get().getKey();
+        boolean isCorrectAnswer = current.isCorrect(phraseAnswer.translation(), activeSession.getDestinationLanguage());
+        activeSession.answer(current, isCorrectAnswer);
+
+        if (activeSession.isLastPhrase()) {
+            activeSession.finish();
+        }
+
+        return isCorrectAnswer;
+    }
+
+    @Override
+    @Transactional
     public void stopGame() {
         UserEntity currentUser = UserService.getCurrentUser();
 
-        QuizGameSession activeSession = gameSessionRepository.findActive(currentUser.getId());
+        GameSession activeSession = gameSessionRepository.findActive(currentUser.getId());
         if (activeSession != null) {
             activeSession.finish();
         }

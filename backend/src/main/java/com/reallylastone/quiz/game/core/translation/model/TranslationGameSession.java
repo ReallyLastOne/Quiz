@@ -11,8 +11,10 @@ import jakarta.persistence.MapKeyJoinColumn;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 @Entity
 @Data
@@ -23,11 +25,27 @@ public class TranslationGameSession extends GameSession {
             joinColumns = @JoinColumn(name = "game_session"))
     @Column(name = "status")
     @MapKeyJoinColumn(name = "phrase_id", referencedColumnName = "id")
-    private Map<Phrase, Boolean> translationsAndStatus;
+    private Map<Phrase, Boolean> translationsAndStatus = new HashMap<>();
 
     @Column(nullable = false)
     private Locale sourceLanguage;
 
     @Column(nullable = false)
     private Locale destinationLanguage;
+
+    @Column(nullable = false)
+    private int phrasesSize;
+
+    public void answer(Phrase phrase, Boolean answer) {
+        translationsAndStatus.put(phrase, answer);
+    }
+
+    public Optional<Map.Entry<Phrase, Boolean>> findCurrent() {
+        return translationsAndStatus.entrySet().stream().
+                filter(e -> e.getValue() == null).findFirst();
+    }
+
+    public boolean isLastPhrase() {
+        return phrasesSize == translationsAndStatus.size();
+    }
 }

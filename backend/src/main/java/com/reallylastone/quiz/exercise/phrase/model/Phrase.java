@@ -27,4 +27,8 @@ public class Phrase extends Exercise {
     private Long ownerId;
 
     private LocalDateTime addDate;
+
+    public boolean isCorrect(String translation, Locale destinationLanguage) {
+        return translationMap.get(destinationLanguage).equals(translation);
+    }
 }

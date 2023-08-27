@@ -6,6 +6,7 @@ import com.reallylastone.quiz.exercise.phrase.model.PhraseCreateRequest;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 public interface PhraseService {
@@ -16,4 +17,6 @@ public interface PhraseService {
     List<Phrase> getAllPhrases(PageRequest of, String[] languages);
 
     PhraseCreateBatchResponse createPhrases(List<Phrase> phrases);
+
+    Phrase findRandomPhrase(Locale sourceLanguage, Locale destinationLanguage, Long userId);
 }

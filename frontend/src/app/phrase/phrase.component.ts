@@ -19,7 +19,7 @@ import { PhraseTableEntry } from './phrase';
 })
 export class PhraseComponent implements OnInit, AfterViewInit {
   // TODO: all locales or something like that
-  definedColumns: string[] = ['pl', 'it', 'us', 'es', 'de'];
+  definedColumns: string[] = ['pl', 'it', 'en', 'es', 'de'];
   columnToDisplay: Set<string> = new Set(['id']);
   // TODO: read from button states and couple with columnToDisplay
   buttonsClicked: Set<string> = new Set();
@@ -31,16 +31,16 @@ export class PhraseComponent implements OnInit, AfterViewInit {
     private _appService: AppService,
     private _elementRef: ElementRef,
     private _renderer: Renderer2
-  ) {}
+  ) { }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onFlagClick(flag: string) {
-    const element = document.getElementsByClassName('fi-' + flag)[0];
+    const element = document.getElementsByClassName('fi-' + (flag == 'en' ? 'us' : flag))[0];
     if (this.buttonsClicked.has(flag)) {
       this._renderer.setStyle(element, 'filter', 'grayscale(100%)');
       this.buttonsClicked.delete(flag);
@@ -66,7 +66,7 @@ export class PhraseComponent implements OnInit, AfterViewInit {
             const element: PhraseTableEntry = {
               id: res['id'],
               es: res['translationMap']['es'],
-              us: res['translationMap']['en'],
+              en: res['translationMap']['en'],
               de: res['translationMap']['de'],
               pl: res['translationMap']['pl'],
               it: res['translationMap']['it'],
