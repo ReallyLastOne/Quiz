@@ -3,7 +3,7 @@ pm.environment.set("csrfToken", pm.cookies.get("XSRF-TOKEN"));
 
 // fetch access/refresh token from response if present and set as environmental variables
 if (pm.response != null) {
-    var response = pm.response.json();
+    var response = pm.response.toJSON();
     if (response.accessToken != null) {
         pm.environment.set("accessToken", response.accessToken);
     }
