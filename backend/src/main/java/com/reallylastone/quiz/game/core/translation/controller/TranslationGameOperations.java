@@ -1,6 +1,6 @@
 package com.reallylastone.quiz.game.core.translation.controller;
 
-import com.reallylastone.quiz.exercise.phrase.model.PhraseView;
+import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerResponse;
 import com.reallylastone.quiz.util.validation.GenericResponse;
@@ -32,7 +32,7 @@ public interface TranslationGameOperations {
     @Operation(summary = "Draws a random phrase for user's currently active game")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "422", description = "If user is not in quiz game or user does have already active question", content = @Content)})
     @PostMapping(value = "/next")
-    ResponseEntity<PhraseView> nextPhrase(HttpServletRequest request);
+    ResponseEntity<PhraseToTranslate> nextPhrase(HttpServletRequest request);
 
     @Operation(summary = "Translates a phrase associated with active translation game session")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "422", description = "If user is not in quiz game or user does not have active question", content = @Content)})

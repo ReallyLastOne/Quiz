@@ -1,6 +1,6 @@
 package com.reallylastone.quiz.game.session.service;
 
-import com.reallylastone.quiz.exercise.phrase.model.Phrase;
+import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
 import com.reallylastone.quiz.exercise.question.model.Question;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerRequest;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
@@ -11,7 +11,7 @@ public interface GameSessionService {
 
     Question nextQuestion();
 
-    Phrase nextPhrase();
+    PhraseToTranslate nextPhrase();
 
     boolean processAnswer(QuestionAnswerRequest questionAnswer);
 

@@ -1,6 +1,6 @@
 package com.reallylastone.quiz.game.core.translation.service;
 
-import com.reallylastone.quiz.exercise.phrase.model.Phrase;
+import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
 import com.reallylastone.quiz.game.core.translation.model.TranslationGameSession;
 import com.reallylastone.quiz.game.session.model.GameSessionCreateRequest;
@@ -27,7 +27,7 @@ public class TranslationGameServiceImpl implements TranslationGameService {
     }
 
     @Override
-    public Phrase next() {
+    public PhraseToTranslate next() {
         return gameSessionService.nextPhrase();
     }
 

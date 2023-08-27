@@ -1,6 +1,8 @@
 package com.reallylastone.quiz.game.session.service;
 
+import com.reallylastone.quiz.exercise.phrase.mapper.PhraseMapper;
 import com.reallylastone.quiz.exercise.phrase.model.Phrase;
+import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
 import com.reallylastone.quiz.exercise.phrase.service.PhraseService;
 import com.reallylastone.quiz.exercise.question.model.Question;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerRequest;
@@ -29,6 +31,7 @@ import org.springframework.validation.Errors;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
@@ -42,6 +45,7 @@ public class GameSessionServiceImpl implements GameSessionService {
     private final GameSessionStateValidator gameSessionStateValidator;
     private final QuestionService questionService;
     private final PhraseService phraseService;
+    private final PhraseMapper phraseMapper;
 
     @Override
     public Long createSession(GameSessionCreateRequest request) {
@@ -77,7 +81,7 @@ public class GameSessionServiceImpl implements GameSessionService {
 
     @Override
     @Transactional
-    public Phrase nextPhrase() {
+    public PhraseToTranslate nextPhrase() {
         List<StateValidationError> errors = new ArrayList<>();
         UserEntity currentUser = UserService.getCurrentUser();
 
@@ -85,11 +89,12 @@ public class GameSessionServiceImpl implements GameSessionService {
         if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
 
         TranslationGameSession activeSession = gameSessionRepository.findActiveTranslationGameSession(currentUser.getId());
-        Phrase randomPhrase = phraseService.findRandomPhrase(activeSession.getSourceLanguage(), activeSession.getDestinationLanguage(), currentUser.getId());
+        Locale sourceLanguage = activeSession.getSourceLanguage();
+        Phrase randomPhrase = phraseService.findRandomPhrase(sourceLanguage, activeSession.getDestinationLanguage(), currentUser.getId());
         activeSession.answer(randomPhrase, null);
         activeSession.setState(GameState.IN_PROGRESS);
 
-        return randomPhrase;
+        return new PhraseToTranslate(randomPhrase.getTranslationMap().get(sourceLanguage), sourceLanguage, activeSession.getDestinationLanguage());
     }
 
     @Override

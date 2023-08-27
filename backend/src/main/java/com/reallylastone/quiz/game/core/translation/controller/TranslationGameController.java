@@ -1,5 +1,6 @@
 package com.reallylastone.quiz.game.core.translation.controller;
 
+import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseView;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerResponse;
@@ -25,7 +26,7 @@ public class TranslationGameController implements TranslationGameOperations {
     }
 
     @Override
-    public ResponseEntity<PhraseView> nextPhrase(HttpServletRequest request) {
+    public ResponseEntity<PhraseToTranslate> nextPhrase(HttpServletRequest request) {
         return translationGameViewService.next();
     }
 
