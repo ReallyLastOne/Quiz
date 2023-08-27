@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -89,6 +91,15 @@ public class PhraseServiceImpl implements PhraseService {
             }
         }
         return new PhraseCreateBatchResponse(correct, incorrect);
+    }
+
+    @Override
+    public Phrase findRandomPhrase(Locale sourceLanguage, Locale destinationLanguage, Long userId) {
+        List<Phrase> phrases = phraseRepository.findByOwnerId(userId).stream()
+                .filter(e -> e.getTranslationMap().keySet().containsAll(Set.of(sourceLanguage, destinationLanguage))).toList();
+        int toPick = new Random().nextInt(phrases.size());
+
+        return phrases.get(toPick);
     }
 
     private void validate(PhraseCreateRequest request) {

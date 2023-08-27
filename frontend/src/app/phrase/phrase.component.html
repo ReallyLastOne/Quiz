@@ -2,7 +2,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/css/flag-icons.min.css" />
   <div class="button-holder">
     <img class="fib fi-pl" (click)="onFlagClick('pl')" />
-    <img class="fib fi-us" (click)="onFlagClick('us')" />
+    <img class="fib fi-us" (click)="onFlagClick('en')" />
     <img class="fib fi-it" (click)="onFlagClick('it')" />
     <img class="fib fi-es" (click)="onFlagClick('es')" />
     <img class="fib fi-de" (click)="onFlagClick('de')" />
@@ -19,9 +19,9 @@
       <td mat-cell *matCellDef="let element"> {{element.pl}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="us">
+    <ng-container matColumnDef="en">
       <th mat-header-cell *matHeaderCellDef> English </th>
-      <td mat-cell *matCellDef="let element"> {{element.us}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.en}} </td>
     </ng-container>
 
     <ng-container matColumnDef="it">
