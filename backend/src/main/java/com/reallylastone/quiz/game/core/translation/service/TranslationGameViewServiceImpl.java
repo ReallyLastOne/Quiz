@@ -1,7 +1,7 @@
 package com.reallylastone.quiz.game.core.translation.service;
 
 import com.reallylastone.quiz.exercise.phrase.mapper.PhraseMapper;
-import com.reallylastone.quiz.exercise.phrase.model.PhraseView;
+import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerResponse;
 import com.reallylastone.quiz.user.model.UserEntity;
@@ -27,8 +27,8 @@ public class TranslationGameViewServiceImpl implements TranslationGameViewServic
     }
 
     @Override
-    public ResponseEntity<PhraseView> next() {
-        return ResponseEntity.ok(phraseMapper.mapToView(translationGameService.next()));
+    public ResponseEntity<PhraseToTranslate> next() {
+        return ResponseEntity.ok(translationGameService.next());
     }
 
     @Override
