@@ -10,10 +10,11 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -35,8 +36,7 @@ public class CSVUtils {
         if (parser == null) {
             parser = CSVFileParser.fromSeparator(determineSeparator(grabFirstLine(bytes)));
         }
-
-        return new CSVReaderBuilder(toFileReader(bytes, multipartFile.getName())).withCSVParser(toCSVParser(parser)).build();
+        return new CSVReaderBuilder(toReader(bytes)).withCSVParser(toCSVParser(parser)).build();
     }
 
     /**
@@ -81,21 +81,15 @@ public class CSVUtils {
         return maxDelimiter;
     }
 
-    /**
-     * Creates a FileReader from a byte array and a file name.
-     *
-     * @param bytes the byte array to create the FileReader from
-     * @param name  the name of the file to create
-     * @return a FileReader that reads from the given byte array
-     * @throws IOException if an I/O error occurs while creating the file or writing to it
-     */
-    public static FileReader toFileReader(byte[] bytes, String name) throws IOException {
-        File file = new File(name);
-        try (FileOutputStream fos = new FileOutputStream(file)) {
-            fos.write(bytes);
-        }
 
-        return new FileReader(file);
+    /**
+     * Converts a byte array into a Reader by wrapping it in a BufferedReader and an InputStreamReader.
+     *
+     * @param bytes The byte array to be converted into a Reader.
+     * @return A Reader object that allows reading character data from the provided byte array.
+     */
+    public static Reader toReader(byte[] bytes) {
+        return new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes)));
     }
 
 
