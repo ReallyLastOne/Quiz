@@ -10,8 +10,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.runners.Parameterized;
 import org.springframework.mock.web.MockMultipartFile;
 
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.stream.Stream;
 
 class CSVUtilsTest {
@@ -58,15 +58,17 @@ class CSVUtilsTest {
 
     @Test
     void shouldCreateCorrectCSVReader() throws Exception {
-        CSVReader reader = CSVUtils.toCSVReader(new MockMultipartFile("name", "bytes".getBytes()), null);
-        Assertions.assertEquals(",".toCharArray()[0], reader.getParser().getSeparator());
+        try (CSVReader reader = CSVUtils.toCSVReader(new MockMultipartFile("ehh", "bytes".getBytes()), null)) {
+            Assertions.assertEquals(",".toCharArray()[0], reader.getParser().getSeparator());
+        }
     }
 
     @Test
     void shouldReadCorrectNumberOfCharacter() throws IOException {
-        FileReader fileReader = CSVUtils.toFileReader("bytes".getBytes(), "name");
-        char[] buffer = new char[5];
-        int read = fileReader.read(buffer, 0, 5);
-        Assertions.assertEquals(5, read);
+        try (Reader fileReader = CSVUtils.toReader("bytes".getBytes())) {
+            char[] buffer = new char[5];
+            int read = fileReader.read(buffer, 0, 5);
+            Assertions.assertEquals(5, read);
+        }
     }
 }
