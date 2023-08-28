@@ -39,11 +39,16 @@ public class PhraseViewServiceImpl implements PhraseViewService {
     }
 
     @Override
-    public ResponseEntity<PhraseCreateBatchResponse> createPhrases(MultipartFile multipartFile, CSVFileParser parser) throws IOException {
-        CsvToBean<PhraseCSVEntry> entries = new CsvToBeanBuilder(CSVUtils.toCSVReader(multipartFile, parser))
-                .withMappingStrategy(new PhraseCSVEntryMappingStrategy())
-                .withType(PhraseCSVEntry.class)
-                .build();
+    public ResponseEntity<PhraseCreateBatchResponse> createPhrases(MultipartFile multipartFile, CSVFileParser parser) {
+        CsvToBean<PhraseCSVEntry> entries = null;
+        try {
+            entries = new CsvToBeanBuilder<PhraseCSVEntry>(CSVUtils.toCSVReader(multipartFile, parser))
+                    .withMappingStrategy(new PhraseCSVEntryMappingStrategy())
+                    .withType(PhraseCSVEntry.class)
+                    .build();
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not access file " + multipartFile.getName(), e);
+        }
 
         List<PhraseCSVEntry> phrases = IteratorUtils.toList(entries.iterator());
 

@@ -7,7 +7,6 @@ import com.reallylastone.quiz.exercise.phrase.model.PhraseView;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface PhraseViewService {
@@ -17,5 +16,5 @@ public interface PhraseViewService {
 
     ResponseEntity<List<PhraseView>> getAllPhrases(int page, int size, String[] languages);
 
-    ResponseEntity<PhraseCreateBatchResponse> createPhrases(MultipartFile file, CSVFileParser parser) throws IOException;
+    ResponseEntity<PhraseCreateBatchResponse> createPhrases(MultipartFile file, CSVFileParser parser);
 }

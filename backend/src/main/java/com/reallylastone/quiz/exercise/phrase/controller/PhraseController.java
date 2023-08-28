@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -27,7 +26,7 @@ public class PhraseController implements PhraseOperations {
     }
 
     @Override
-    public ResponseEntity<PhraseCreateBatchResponse> createPhrases(@RequestPart(value = "file") MultipartFile file, @RequestPart(value = "body", required = false) CSVFileParser parser) throws IOException {
+    public ResponseEntity<PhraseCreateBatchResponse> createPhrases(@RequestPart(value = "file") MultipartFile file, @RequestPart(value = "body", required = false) CSVFileParser parser) {
         return phraseViewService.createPhrases(file, parser);
     }
 
