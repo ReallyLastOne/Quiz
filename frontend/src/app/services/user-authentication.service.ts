@@ -32,9 +32,8 @@ export class UserAuthenticationService {
         JSON.parse(JSON.stringify(loginRequest))
       )
       .pipe(
-        tap((res) => this.setSession(res)),
         tap((res) => {
-          console.log(res);
+          this.setSession(res);
           this._router.navigate(['/home']);
         }),
         catchError(() => {
@@ -50,7 +49,6 @@ export class UserAuthenticationService {
 
   private setSession(authResult) {
     const expiresAt = moment().add(authResult.expiresIn, 'second');
-    console.log(authResult);
     this.saveAccessToken(authResult.accessToken);
     this.saveExpirationTokenTime(JSON.stringify(expiresAt.valueOf()));
     this.saveRefreshToken(authResult.refreshToken);

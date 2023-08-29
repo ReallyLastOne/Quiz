@@ -6,13 +6,7 @@ import {
   HttpInterceptor,
   HttpErrorResponse,
 } from '@angular/common/http';
-import {
-  BehaviorSubject,
-  Observable,
-  catchError,
-  switchMap,
-  throwError,
-} from 'rxjs';
+import { Observable, catchError, switchMap, throwError } from 'rxjs';
 import { UserAuthenticationService } from '../services/user-authentication.service';
 
 @Injectable()
@@ -52,7 +46,6 @@ export class AuthInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     return this._userAuthenticationService.refreshToken().pipe(
       switchMap((token: any) => {
-        console.log('token ' + token.accessToken);
         this._userAuthenticationService.saveAccessToken(token.accessToken);
         return next.handle(this.buildRequest(request, token.accessToken));
       }),

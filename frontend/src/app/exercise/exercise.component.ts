@@ -65,7 +65,6 @@ export class ExerciseComponent implements OnInit {
       )
       .subscribe({
         next: (response: Exercise) => {
-          console.log(response);
           this._question = response.content;
           this._answers = response.answers;
         },

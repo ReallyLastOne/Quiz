@@ -9,7 +9,7 @@ import {
 import { UserAuthenticationService } from '../services/user-authentication.service';
 import { RegistrationRequest } from '../model/registration-request.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -77,16 +77,15 @@ export class RegisterComponent implements OnInit {
       this._userAuthenticationService
         .registration(registrationRequest)
         .pipe(
-          tap((response) => {
-            console.log(response);
-          }),
           catchError((error) => {
-            console.log(error);
+            console.error(error);
             return of([]);
           }),
           takeUntilDestroyed(this._destroyRef)
         )
-        .subscribe();
+        .subscribe({
+          next: () => this.backToLogin.emit(false),
+        });
     }
   }
 }

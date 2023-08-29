@@ -1,6 +1,6 @@
 import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { tap, catchError } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { LoginRequest } from '../model/login-request.model';
 import { UserAuthenticationService } from '../services/user-authentication.service';
 import { of } from 'rxjs';
@@ -66,9 +66,6 @@ export class LoginComponent implements OnInit {
       this._userAuthenticationService
         .signIn(loginRequest)
         .pipe(
-          tap((response) => {
-            console.log(response);
-          }),
           catchError(() => {
             return of([]);
           }),
