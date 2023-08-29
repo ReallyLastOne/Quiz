@@ -1,15 +1,22 @@
-import { Component, OnInit, inject, DestroyRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  DestroyRef,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { of } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import { catchError, finalize, switchMap } from 'rxjs/operators';
 import { AppService } from '../services/app.service';
 import { Exercise } from '../model/Exercise.model';
-import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-exercise',
   templateUrl: './exercise.component.html',
   styleUrls: ['./exercise.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExerciseComponent implements OnInit {
   private _destroyRef = inject(DestroyRef);
@@ -35,7 +42,7 @@ export class ExerciseComponent implements OnInit {
 
   constructor(
     private readonly _appService: AppService,
-    private readonly _router: Router
+    private readonly _changeDetector: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -49,10 +56,12 @@ export class ExerciseComponent implements OnInit {
         switchMap(() => this._appService.nextQuestion()),
         catchError((error) => {
           console.error(error);
-          this._router.navigate([`/error`]);
           return of([]);
         }),
-        takeUntilDestroyed(this._destroyRef)
+        takeUntilDestroyed(this._destroyRef),
+        finalize(() => {
+          this._changeDetector.detectChanges();
+        })
       )
       .subscribe({
         next: (response: Exercise) => {
