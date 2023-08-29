@@ -1,5 +1,5 @@
 export interface Exercise {
-         correctAnswer: string;
-         question: string;
-         wrongAnswers: string[];
+  id: number;
+  content: string;
+  answers: string[];
 }
