@@ -13,3 +13,5 @@ spring:
   datasource:
     hikari:
       maxLifeTime: 600000
+  liquibase:
+    change-log: classpath:/db/changelog/changelog.xml

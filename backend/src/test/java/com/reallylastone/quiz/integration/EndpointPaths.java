@@ -7,6 +7,7 @@ public class EndpointPaths {
         public static final String AUTH_PATH = BASE + "/authenticate";
         public static final String REFRESH_PATH = BASE + "/refresh";
         public static final String CSRF_PATH = BASE + "/csrf";
+        public static final String ME_PATH = BASE + "/me";
     }
 
     public static class QuizGame {
@@ -14,6 +15,14 @@ public class EndpointPaths {
         public static final String START_GAME_PATH = BASE + "/start";
         public static final String NEXT_QUESTION_PATH = BASE + "/next";
         public static final String ANSWER_QUESTION_PATH = BASE + "/answer";
+        public static final String STOP_GAME_PATH = BASE + "/stop";
+    }
+
+    public static class TranslationGame {
+        public static final String BASE = "/api/v1/game/translation";
+        public static final String START_GAME_PATH = BASE + "/start";
+        public static final String NEXT_PHRASE_PATH = BASE + "/next";
+        public static final String ANSWER_PHRASE_PATH = BASE + "/answer";
         public static final String STOP_GAME_PATH = BASE + "/stop";
     }
 

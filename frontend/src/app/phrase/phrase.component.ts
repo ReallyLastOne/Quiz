@@ -23,7 +23,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class PhraseComponent implements OnInit, AfterViewInit {
   private _destroyRef = inject(DestroyRef);
   // TODO: all locales or something like that
-  definedColumns: string[] = ['pl', 'it', 'us', 'es', 'de'];
+  definedColumns: string[] = ['pl', 'it', 'en', 'es', 'de'];
   columnToDisplay: Set<string> = new Set(['id']);
   // TODO: read from button states and couple with columnToDisplay
   buttonsClicked: Set<string> = new Set();
@@ -43,8 +43,10 @@ export class PhraseComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {}
 
-  onFlagClick(flag: string): void {
-    const element = document.getElementsByClassName('fi-' + flag)[0];
+  onFlagClick(flag: string) {
+    const element = document.getElementsByClassName(
+      'fi-' + (flag == 'en' ? 'us' : flag)
+    )[0];
     if (this.buttonsClicked.has(flag)) {
       this._renderer.setStyle(element, 'filter', 'grayscale(100%)');
       this.buttonsClicked.delete(flag);
@@ -70,7 +72,7 @@ export class PhraseComponent implements OnInit, AfterViewInit {
             const element: PhraseTableEntry = {
               id: res['id'],
               es: res['translationMap']['es'],
-              us: res['translationMap']['en'],
+              en: res['translationMap']['en'],
               de: res['translationMap']['de'],
               pl: res['translationMap']['pl'],
               it: res['translationMap']['it'],

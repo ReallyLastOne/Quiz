@@ -11,7 +11,7 @@ export class PhraseTableEntry {
   id: number;
   pl: string;
   it: string;
-  us: string;
+  en: string;
   es: string;
   de: string;
 }

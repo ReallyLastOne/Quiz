@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.util.stream.Stream;
 
 import static com.reallylastone.quiz.integration.EndpointPaths.QuizGame.*;
+import static com.reallylastone.quiz.integration.EndpointPaths.TranslationGame.STOP_GAME_PATH;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -47,7 +48,7 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
     private GameSessionRepository gameSessionRepository;
 
     private static Stream<String> forbiddenPaths() {
-        return Stream.of(START_GAME_PATH, NEXT_QUESTION_PATH, ANSWER_QUESTION_PATH);
+        return Stream.of(START_GAME_PATH, NEXT_QUESTION_PATH, ANSWER_QUESTION_PATH, STOP_GAME_PATH);
     }
 
     private static Stream<Integer> validQuestionSize() {
@@ -76,6 +77,7 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
         quizUtils.start(questionSize, accessToken).andExpect(status().is2xxSuccessful());
         Assertions.assertEquals(1, gameSessionRepository.findAll().size());
         Assertions.assertEquals(GameState.NEW, gameSessionRepository.findAll().get(0).getState());
+        Assertions.assertEquals(QuizGameSession.class, gameSessionRepository.findAll().get(0).getClass());
     }
 
     @ParameterizedTest
@@ -98,6 +100,7 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
         quizUtils.start(5, accessToken).andExpect(status().isUnprocessableEntity());
         Assertions.assertEquals(1, gameSessionRepository.findAll().size());
         Assertions.assertEquals(GameState.NEW, gameSessionRepository.findAll().get(0).getState());
+        Assertions.assertEquals(QuizGameSession.class, gameSessionRepository.findAll().get(0).getClass());
     }
 
     @Test
@@ -225,6 +228,7 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
         quizUtils.next(accessToken);
 
         quizUtils.stop(accessToken).andExpect(status().is2xxSuccessful());
+        Assertions.assertEquals(GameState.COMPLETED, gameSessionRepository.findAll().get(0).getState());
     }
 
     @Test
