@@ -21,6 +21,7 @@
       mat-raised-button
       class="exercise-btn"
       [disabled]="checkedAnswer == undefined"
+      (click)="onConfirm()"
     >
       Zatwierdź
     </button>

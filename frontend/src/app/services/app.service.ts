@@ -28,6 +28,12 @@ export class AppService {
     );
   }
 
+  answerQuestion(answer: string): Observable<void> {
+    return this._http.post<void>(environment.apiUrl + `/game/quiz/answer`, {
+      answer: answer,
+    });
+  }
+
   getPhrases(locales: string[]) {
     if (locales != null) {
       var body = {};

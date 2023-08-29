@@ -49,6 +49,19 @@ export class ExerciseComponent implements OnInit {
     this.nextApi();
   }
 
+  onConfirm(): void {
+    if (this._checkedAnswer != undefined) {
+      this._appService
+        .answerQuestion(this._checkedAnswer)
+        .pipe(takeUntilDestroyed(this._destroyRef))
+        .subscribe({
+          next: (res) => {
+            console.log(res);
+          },
+        });
+    }
+  }
+
   private nextApi(): void {
     this._appService
       .startGame()
