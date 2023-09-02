@@ -1,5 +1,6 @@
 package com.reallylastone.quiz.game.core.translation.model;
 
+import com.reallylastone.quiz.exercise.core.ExerciseState;
 import com.reallylastone.quiz.exercise.phrase.model.Phrase;
 import com.reallylastone.quiz.game.session.model.GameSession;
 import jakarta.persistence.CollectionTable;
@@ -16,6 +17,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.reallylastone.quiz.exercise.core.ExerciseState.NO_ANSWER;
+
 @Entity
 @Data
 @ToString(callSuper = true)
@@ -25,7 +28,7 @@ public class TranslationGameSession extends GameSession {
             joinColumns = @JoinColumn(name = "game_session"))
     @Column(name = "status")
     @MapKeyJoinColumn(name = "phrase_id", referencedColumnName = "id")
-    private Map<Phrase, Boolean> translationsAndStatus = new HashMap<>();
+    private Map<Phrase, ExerciseState> translationsAndStatus = new HashMap<>();
 
     @Column(nullable = false)
     private Locale sourceLanguage;
@@ -36,13 +39,13 @@ public class TranslationGameSession extends GameSession {
     @Column(nullable = false)
     private int phrasesSize;
 
-    public void answer(Phrase phrase, Boolean answer) {
+    public void answer(Phrase phrase, ExerciseState answer) {
         translationsAndStatus.put(phrase, answer);
     }
 
-    public Optional<Map.Entry<Phrase, Boolean>> findCurrent() {
+    public Optional<Map.Entry<Phrase, ExerciseState>> findCurrent() {
         return translationsAndStatus.entrySet().stream().
-                filter(e -> e.getValue() == null).findFirst();
+                filter(e -> NO_ANSWER.equals(e.getValue())).findFirst();
     }
 
     public boolean isLastPhrase() {
