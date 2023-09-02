@@ -31,6 +31,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public Question findRandomQuestion() {
         long count = questionRepository.count();
+        if (count == 0) throw new IllegalStateException("no questions in database, can not draw one");
         int toPick = new Random().nextInt((int) count);
         Page<Question> questionPage = questionRepository.findAll(PageRequest.of(toPick, 1));
         Question question = null;

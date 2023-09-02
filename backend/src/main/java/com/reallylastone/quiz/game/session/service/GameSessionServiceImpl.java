@@ -1,5 +1,6 @@
 package com.reallylastone.quiz.game.session.service;
 
+import com.reallylastone.quiz.exercise.core.ExerciseState;
 import com.reallylastone.quiz.exercise.phrase.mapper.PhraseMapper;
 import com.reallylastone.quiz.exercise.phrase.model.Phrase;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
@@ -34,6 +35,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+
+import static com.reallylastone.quiz.exercise.core.ExerciseState.NO_ANSWER;
 
 @Service
 @RequiredArgsConstructor
@@ -73,7 +76,7 @@ public class GameSessionServiceImpl implements GameSessionService {
 
         QuizGameSession activeSession = gameSessionRepository.findActiveQuizGameSession(currentUser.getId());
         Question randomQuestion = questionService.findRandomQuestion();
-        activeSession.answer(randomQuestion, null);
+        activeSession.answer(randomQuestion, NO_ANSWER);
         activeSession.setState(GameState.IN_PROGRESS);
 
         return randomQuestion;
@@ -91,7 +94,7 @@ public class GameSessionServiceImpl implements GameSessionService {
         TranslationGameSession activeSession = gameSessionRepository.findActiveTranslationGameSession(currentUser.getId());
         Locale sourceLanguage = activeSession.getSourceLanguage();
         Phrase randomPhrase = phraseService.findRandomPhrase(sourceLanguage, activeSession.getDestinationLanguage(), currentUser.getId());
-        activeSession.answer(randomPhrase, null);
+        activeSession.answer(randomPhrase, NO_ANSWER);
         activeSession.setState(GameState.IN_PROGRESS);
 
         return new PhraseToTranslate(randomPhrase.getTranslationMap().get(sourceLanguage), sourceLanguage, activeSession.getDestinationLanguage());
@@ -107,7 +110,7 @@ public class GameSessionServiceImpl implements GameSessionService {
         if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
 
         QuizGameSession activeSession = gameSessionRepository.findActiveQuizGameSession(currentUser.getId());
-        Optional<Map.Entry<Question, Boolean>> currentOptional = activeSession.findCurrent();
+        Optional<Map.Entry<Question, ExerciseState>> currentOptional = activeSession.findCurrent();
 
         if (currentOptional.isEmpty()) {
             throw new IllegalStateException("Trying to process the answer for the game session, which has no unanswered questions");
@@ -115,7 +118,7 @@ public class GameSessionServiceImpl implements GameSessionService {
 
         Question current = currentOptional.get().getKey();
         boolean isCorrectAnswer = current.isCorrect(questionAnswer.answer());
-        activeSession.answer(current, isCorrectAnswer);
+        activeSession.answer(current, ExerciseState.from(isCorrectAnswer));
 
         if (activeSession.isLastQuestion()) {
             activeSession.finish();
@@ -134,7 +137,7 @@ public class GameSessionServiceImpl implements GameSessionService {
         if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
 
         TranslationGameSession activeSession = gameSessionRepository.findActiveTranslationGameSession(currentUser.getId());
-        Optional<Map.Entry<Phrase, Boolean>> currentOptional = activeSession.findCurrent();
+        Optional<Map.Entry<Phrase, ExerciseState>> currentOptional = activeSession.findCurrent();
 
         if (currentOptional.isEmpty()) {
             throw new IllegalStateException("Trying to process the phrase for the game session, which has no unanswered phrases");
@@ -142,7 +145,7 @@ public class GameSessionServiceImpl implements GameSessionService {
 
         Phrase current = currentOptional.get().getKey();
         boolean isCorrectAnswer = current.isCorrect(phraseAnswer.translation(), activeSession.getDestinationLanguage());
-        activeSession.answer(current, isCorrectAnswer);
+        activeSession.answer(current, ExerciseState.from(isCorrectAnswer));
 
         if (activeSession.isLastPhrase()) {
             activeSession.finish();

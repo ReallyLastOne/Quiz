@@ -1,0 +1,11 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="ReallyLastOne (generated)" id="1691315207871-1">
+        <modifyDataType tableName="quiz_game_session_questions" columnName="status" newDataType="int"/>
+        <modifyDataType tableName="quiz_game_session_questions" columnName="status" newDataType="int2"/>
+        <modifyDataType tableName="translation_game_session_phrases" columnName="status" newDataType="int"/>
+        <modifyDataType tableName="translation_game_session_phrases" columnName="status" newDataType="int2"/>
+    </changeSet>
+</databaseChangeLog>
