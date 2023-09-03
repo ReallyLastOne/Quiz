@@ -5,7 +5,9 @@ import com.reallylastone.quiz.auth.model.AuthenticationServiceResponse;
 import com.reallylastone.quiz.auth.model.RefreshToken;
 import com.reallylastone.quiz.auth.model.RefreshTokenResponse;
 import com.reallylastone.quiz.auth.model.RegisterRequest;
+import com.reallylastone.quiz.auth.model.UserInformation;
 import com.reallylastone.quiz.auth.validation.RegisterValidator;
+import com.reallylastone.quiz.configuration.kafka.KafkaProducerService;
 import com.reallylastone.quiz.configuration.security.JwtService;
 import com.reallylastone.quiz.user.model.Role;
 import com.reallylastone.quiz.user.model.UserEntity;
@@ -32,6 +34,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final RegisterValidator registerValidator;
     private final RefreshTokenService refreshTokenService;
+    private final KafkaProducerService kafkaProducerService;
 
     @Override
     @Transactional
@@ -48,6 +51,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = refreshTokenService.createToken(user.getId());
+
+        kafkaProducerService.send("user-topic", String.valueOf(user.getId()), new UserInformation(user));
 
         return new AuthenticationServiceResponse(jwtToken, refreshToken, "bearer");
     }
