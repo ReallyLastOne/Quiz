@@ -7,4 +7,5 @@
     <include file="db/changelog/001-initial-schema.xml"/>
     <include file="db/changelog/002-phrases-size.xml"/>
     <include file="db/changelog/003-change-exercise-state-representation.xml"/>
+    <include file="db/changelog/004-add-tags-to-questions.xml"/>
 </databaseChangeLog>
