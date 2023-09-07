@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.stream.Stream;
 
+import static com.reallylastone.quiz.exercise.core.ExerciseState.*;
 import static com.reallylastone.quiz.integration.EndpointPaths.QuizGame.*;
 import static com.reallylastone.quiz.integration.EndpointPaths.TranslationGame.STOP_GAME_PATH;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -117,7 +118,7 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
 
         QuizGameSession active = (QuizGameSession) gameSessionRepository.findAll().get(0);
         Assertions.assertEquals(1, active.getQuestionsAndStatus().size());
-        Assertions.assertNull(active.getQuestionsAndStatus().values().iterator().next());
+        Assertions.assertEquals(NO_ANSWER, active.getQuestionsAndStatus().values().iterator().next());
     }
 
     @Test
@@ -166,7 +167,7 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
         QuestionAnswerRequest request = new QuestionAnswerRequest("answer");
         quizUtils.answer(request, accessToken);
 
-        ((QuizGameSession) gameSessionRepository.findAll().get(0)).getQuestionsAndStatus().values().forEach(e -> Assertions.assertEquals(Boolean.FALSE, e));
+        ((QuizGameSession) gameSessionRepository.findAll().get(0)).getQuestionsAndStatus().values().forEach(e -> Assertions.assertEquals(WRONG, e));
     }
 
     @Test
@@ -182,7 +183,7 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
         QuestionAnswerRequest request = new QuestionAnswerRequest("correct");
         quizUtils.answer(request, accessToken);
 
-        ((QuizGameSession) gameSessionRepository.findAll().get(0)).getQuestionsAndStatus().values().forEach(e -> Assertions.assertEquals(Boolean.TRUE, e));
+        ((QuizGameSession) gameSessionRepository.findAll().get(0)).getQuestionsAndStatus().values().forEach(e -> Assertions.assertEquals(CORRECT, e));
     }
 
     @Test

@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.Locale;
 import java.util.stream.Stream;
 
+import static com.reallylastone.quiz.exercise.core.ExerciseState.*;
 import static com.reallylastone.quiz.integration.EndpointPaths.TranslationGame.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -117,7 +118,7 @@ class TranslationGameControllerTest extends AbstractIntegrationTest {
 
         TranslationGameSession active = (TranslationGameSession) gameSessionRepository.findAll().get(0);
         Assertions.assertEquals(1, active.getTranslationsAndStatus().size());
-        Assertions.assertNull(active.getTranslationsAndStatus().values().iterator().next());
+        Assertions.assertEquals(NO_ANSWER, active.getTranslationsAndStatus().values().iterator().next());
     }
 
     @Test
@@ -162,7 +163,7 @@ class TranslationGameControllerTest extends AbstractIntegrationTest {
         PhraseAnswerRequest request = new PhraseAnswerRequest("answer");
         translationUtils.answer(request, accessToken);
 
-        ((TranslationGameSession) gameSessionRepository.findAll().get(0)).getTranslationsAndStatus().values().forEach(e -> Assertions.assertEquals(Boolean.FALSE, e));
+        ((TranslationGameSession) gameSessionRepository.findAll().get(0)).getTranslationsAndStatus().values().forEach(e -> Assertions.assertEquals(WRONG, e));
     }
 
     @Test
@@ -177,7 +178,7 @@ class TranslationGameControllerTest extends AbstractIntegrationTest {
         PhraseAnswerRequest request = new PhraseAnswerRequest("cud");
         translationUtils.answer(request, accessToken);
 
-        ((TranslationGameSession) gameSessionRepository.findAll().get(0)).getTranslationsAndStatus().values().forEach(e -> Assertions.assertEquals(Boolean.TRUE, e));
+        ((TranslationGameSession) gameSessionRepository.findAll().get(0)).getTranslationsAndStatus().values().forEach(e -> Assertions.assertEquals(CORRECT, e));
     }
 
     @Test
