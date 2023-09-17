@@ -8,6 +8,7 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @ControllerAdvice
+@Slf4j
 // based on https://github.com/VictorKrapivin/jsr-vs-spring-validation
 public class GlobalExceptionHandler {
     @ExceptionHandler({ConstraintViolationException.class})
@@ -42,7 +44,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({Exception.class})
     public ResponseEntity<ErrorMessage> handle(final Exception e, HttpServletRequest request) {
-        e.printStackTrace();
+        log.error("Unexpected error occurred: ", e);
         return createErrorMessage(request, List.of(e.getMessage()));
     }
 

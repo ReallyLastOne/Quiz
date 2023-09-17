@@ -7,6 +7,7 @@ import com.opencsv.CSVReaderBuilder;
 import com.reallylastone.quiz.exercise.phrase.model.CSVFileParser;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,6 +19,7 @@ import java.io.Reader;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Slf4j
 public class CSVUtils {
     public static final CSVParserBuilder BASE_BUILDER = new CSVParserBuilder();
     public static final List<Character> COMMON_DELIMITERS = List.of(',', ';', '\t', ' ', '|', ':');
@@ -34,8 +36,10 @@ public class CSVUtils {
         byte[] bytes = multipartFile.getBytes();
 
         if (parser == null) {
+            log.info("Provided parser is null, creating default one");
             parser = CSVFileParser.fromSeparator(determineSeparator(grabFirstLine(bytes)));
         }
+
         return new CSVReaderBuilder(toReader(bytes)).withCSVParser(toCSVParser(parser)).build();
     }
 

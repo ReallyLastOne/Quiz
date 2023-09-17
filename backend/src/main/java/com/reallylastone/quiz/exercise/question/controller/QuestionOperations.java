@@ -1,5 +1,6 @@
 package com.reallylastone.quiz.exercise.question.controller;
 
+import com.reallylastone.quiz.exercise.question.model.QuestionAddResponse;
 import com.reallylastone.quiz.exercise.question.model.QuestionCreateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

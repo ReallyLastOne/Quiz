@@ -16,5 +16,5 @@ public abstract class Exercise {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exercise_generator")
     @SequenceGenerator(name = "exercise_generator", sequenceName = "exercise_seq", allocationSize = 1)
-    public Long id;
+    protected Long id;
 }
