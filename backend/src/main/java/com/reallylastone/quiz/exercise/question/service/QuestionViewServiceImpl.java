@@ -1,7 +1,9 @@
 package com.reallylastone.quiz.exercise.question.service;
 
+import com.reallylastone.quiz.exercise.question.controller.QuestionAddResponse;
 import com.reallylastone.quiz.exercise.question.mapper.QuestionMapper;
 import com.reallylastone.quiz.exercise.question.model.Question;
+import com.reallylastone.quiz.exercise.question.model.QuestionCreateRequest;
 import com.reallylastone.quiz.exercise.question.model.QuestionView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -38,5 +40,12 @@ public class QuestionViewServiceImpl implements QuestionViewService {
         Question question = questionService.findRandomQuestion();
 
         return ResponseEntity.ok(questionMapper.mapToView(question));
+    }
+
+    @Override
+    public ResponseEntity<QuestionAddResponse> create(QuestionCreateRequest request) {
+        Question question = questionService.create(questionMapper.mapToEntity(request));
+
+        return ResponseEntity.ok(questionMapper.mapToResponse(question));
     }
 }

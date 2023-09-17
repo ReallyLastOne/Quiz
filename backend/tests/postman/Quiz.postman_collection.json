@@ -237,7 +237,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"correct\": {\n    \"in5\": {\n      \"nostrud76\": \"<string>\"\n    },\n    \"magna_1\": {\n      \"reprehenderit_c\": \"<string>\",\n      \"nulla_dc7\": \"<string>\",\n      \"laboris_fe2\": \"<string>\"\n    }\n  },\n  \"incorrect\": {\n    \"velitca\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"reprehenderitebb\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"in0\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"labore_9\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
+              "body": "{\n  \"correct\": {\n    \"eiusmod_ed\": {\n      \"Utd\": \"<string>\",\n      \"quis_981\": \"<string>\"\n    }\n  },\n  \"incorrect\": {\n    \"minim4\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
@@ -307,6 +307,80 @@
       "description": "Provides operations to entirely handle a translation game",
       "item": [
         {
+          "name": "Stops currently active translation game session and thus allowing to start a new one",
+          "request": {
+            "name": "Stops currently active translation game session and thus allowing to start a new one",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "game",
+                "translation",
+                "stop"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {},
+            "auth": null
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "game",
+                    "translation",
+                    "stop"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"<string>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
           "name": "Starts a translation game for a user",
           "request": {
             "name": "Starts a translation game for a user",
@@ -316,7 +390,8 @@
                 "api",
                 "v1",
                 "game",
-                "translation"
+                "translation",
+                "start"
               ],
               "host": [
                 "{{baseUrl}}"
@@ -339,6 +414,15 @@
                   },
                   "key": "destinationLanguage",
                   "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "phrases",
+                  "value": "5"
                 }
               ],
               "variable": []
@@ -362,7 +446,8 @@
                     "api",
                     "v1",
                     "game",
-                    "translation"
+                    "translation",
+                    "start"
                   ],
                   "host": [
                     "{{baseUrl}}"
@@ -385,6 +470,15 @@
                       },
                       "key": "destinationLanguage",
                       "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "phrases",
+                      "value": "5"
                     }
                   ],
                   "variable": []
@@ -418,7 +512,8 @@
                     "api",
                     "v1",
                     "game",
-                    "translation"
+                    "translation",
+                    "start"
                   ],
                   "host": [
                     "{{baseUrl}}"
@@ -441,12 +536,262 @@
                       },
                       "key": "destinationLanguage",
                       "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "phrases",
+                      "value": "5"
                     }
                   ],
                   "variable": []
                 },
                 "method": "POST",
                 "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [],
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "Draws a random phrase for user's currently active game",
+          "request": {
+            "name": "Draws a random phrase for user's currently active game",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "game",
+                "translation",
+                "next"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {},
+            "auth": null
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "game",
+                    "translation",
+                    "next"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"phrase\": \"<string>\",\n  \"sourceLanguage\": {\n    \"language\": \"<string>\",\n    \"script\": \"<string>\",\n    \"country\": \"<string>\",\n    \"variant\": \"<string>\",\n    \"unicodeLocaleAttributes\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"unicodeLocaleKeys\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"displayLanguage\": \"<string>\",\n    \"displayScript\": \"<string>\",\n    \"displayCountry\": \"<string>\",\n    \"displayVariant\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"extensionKeys\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"iso3Language\": \"<string>\",\n    \"iso3Country\": \"<string>\"\n  },\n  \"destinationLanguage\": {\n    \"language\": \"<string>\",\n    \"script\": \"<string>\",\n    \"country\": \"<string>\",\n    \"variant\": \"<string>\",\n    \"unicodeLocaleAttributes\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"unicodeLocaleKeys\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"displayLanguage\": \"<string>\",\n    \"displayScript\": \"<string>\",\n    \"displayCountry\": \"<string>\",\n    \"displayVariant\": \"<string>\",\n    \"displayName\": \"<string>\",\n    \"extensionKeys\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"iso3Language\": \"<string>\",\n    \"iso3Country\": \"<string>\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "If user is not in quiz game or user does have already active question",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "game",
+                    "translation",
+                    "next"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [],
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "Translates a phrase associated with active translation game session",
+          "request": {
+            "name": "Translates a phrase associated with active translation game session",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "game",
+                "translation",
+                "answer"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"translation\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "auth": null
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "game",
+                    "translation",
+                    "answer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"translation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"correct\": \"<boolean>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "If user is not in quiz game or user does not have active question",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "game",
+                    "translation",
+                    "answer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"translation\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                }
               },
               "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
               "code": 422,
@@ -901,7 +1246,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"<long>\",\n  \"username\": \"<string>\",\n  \"roles\": [\n    \"ADMIN\",\n    \"USER\"\n  ]\n}",
+              "body": "{\n  \"id\": \"<long>\",\n  \"username\": \"<string>\",\n  \"roles\": [\n    \"ADMIN\",\n    \"ADMIN\"\n  ]\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -1417,6 +1762,150 @@
           }
         }
       ]
+    },
+    {
+      "name": "Question Operations",
+      "description": "Provides operations to work on Question objects",
+      "item": [
+        {
+          "name": "Creates new question",
+          "request": {
+            "name": "Creates new question",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "exercises",
+                "questions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"<string>\",\n  \"correctAnswers\": [\n    \"<string>\"\n  ],\n  \"wrongAnswers\": [\n    \"<string>\"\n  ],\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "auth": null
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "exercises",
+                    "questions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"<string>\",\n  \"correctAnswers\": [\n    \"<string>\"\n  ],\n  \"wrongAnswers\": [\n    \"<string>\"\n  ],\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"content\": \"<string>\",\n  \"correctAnswers\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"wrongAnswers\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "name": "If some of provided request fields are wrong",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "exercises",
+                    "questions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"content\": \"<string>\",\n  \"correctAnswers\": [\n    \"<string>\"\n  ],\n  \"wrongAnswers\": [\n    \"<string>\"\n  ],\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [],
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ]
     }
   ],
   "event": [
@@ -1425,7 +1914,7 @@
       "script": {
         "type": "text/javascript",
         "exec": [
-          "// fetch csrf token from cookie and set as environmental variable\r\npm.environment.set(\"csrfToken\", pm.cookies.get(\"XSRF-TOKEN\"));\r\n\r\n// fetch access/refresh token from response if present and set as environmental variables\r\nif (pm.response != null) {\r\n    var response = pm.response.json();\r\n    if (response.accessToken != null) {\r\n        pm.environment.set(\"accessToken\", response.accessToken);\r\n    }\r\n\r\n    if (response.refreshToken != null) {\r\n        pm.environment.set(\"refreshToken\", response.refreshToken);\r\n    }\r\n}"
+          "// fetch csrf token from cookie and set as environmental variable\r\npm.environment.set(\"csrfToken\", pm.cookies.get(\"XSRF-TOKEN\"));\r\n\r\n// fetch access/refresh token from response if present and set as environmental variables\r\nif (pm.response != null) {\r\n    var response = pm.response.toJSON();\r\n    if (response.accessToken != null) {\r\n        pm.environment.set(\"accessToken\", response.accessToken);\r\n    }\r\n\r\n    if (response.refreshToken != null) {\r\n        pm.environment.set(\"refreshToken\", response.refreshToken);\r\n    }\r\n}"
         ]
       }
     },
