@@ -5,7 +5,6 @@ import com.reallylastone.quiz.exercise.question.model.Question;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerRequest;
 import com.reallylastone.quiz.exercise.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MockMvc;
@@ -58,7 +57,7 @@ public class QuizGameControllerTestUtils {
         Question question = new Question();
         question.setContent("question?");
         question.setCorrectAnswer("correct");
-        question.setWrongAnswers(Arrays.asList("first", "second", "third"));
+        question.setCorrectAnswers(Arrays.asList("first", "second", "third"));
 
         questionRepository.save(question);
     }

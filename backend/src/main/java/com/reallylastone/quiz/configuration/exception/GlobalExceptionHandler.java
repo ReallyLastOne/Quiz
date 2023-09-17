@@ -42,6 +42,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({Exception.class})
     public ResponseEntity<ErrorMessage> handle(final Exception e, HttpServletRequest request) {
+        e.printStackTrace();
         return createErrorMessage(request, List.of(e.getMessage()));
     }
 

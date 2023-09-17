@@ -12,4 +12,6 @@ public interface QuestionService {
     Page<Question> findAll(Pageable pageable);
 
     Question findRandomQuestion();
+
+    Question create(Question request);
 }

@@ -2,8 +2,10 @@ package com.reallylastone.quiz.unit.exercise;
 
 import com.reallylastone.quiz.exercise.question.model.Question;
 import com.reallylastone.quiz.exercise.question.repository.QuestionRepository;
+import com.reallylastone.quiz.exercise.question.repository.TagRepository;
 import com.reallylastone.quiz.exercise.question.service.QuestionService;
 import com.reallylastone.quiz.exercise.question.service.QuestionServiceImpl;
+import com.reallylastone.quiz.exercise.question.validation.QuestionValidator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,13 +21,17 @@ import static org.mockito.Mockito.when;
 class QuestionServiceTest {
     private QuestionService questionService;
     private QuestionRepository questionRepository;
+    private QuestionValidator questionValidator;
+    private TagRepository tagRepository;
 
     @BeforeEach
     public void setUp() {
         questionRepository = mock(QuestionRepository.class);
+        questionValidator = mock(QuestionValidator.class);
+        tagRepository = mock(TagRepository.class);
 
         questionService = new QuestionServiceImpl(
-                questionRepository
+                questionRepository, questionValidator, tagRepository
         );
     }
 
