@@ -11,6 +11,7 @@ import com.reallylastone.quiz.exercise.phrase.model.PhraseCreateRequest;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseView;
 import com.reallylastone.quiz.util.csv.CSVUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.IteratorUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PhraseViewServiceImpl implements PhraseViewService {
     private final PhraseService phraseService;
     private final PhraseMapper phraseMapper;
@@ -40,14 +42,16 @@ public class PhraseViewServiceImpl implements PhraseViewService {
 
     @Override
     public ResponseEntity<PhraseCreateBatchResponse> createPhrases(MultipartFile multipartFile, CSVFileParser parser) {
-        CsvToBean<PhraseCSVEntry> entries = null;
+        CsvToBean<PhraseCSVEntry> entries;
         try {
             entries = new CsvToBeanBuilder<PhraseCSVEntry>(CSVUtils.toCSVReader(multipartFile, parser))
                     .withMappingStrategy(new PhraseCSVEntryMappingStrategy())
                     .withType(PhraseCSVEntry.class)
                     .build();
         } catch (IOException e) {
-            throw new IllegalStateException("Could not access file " + multipartFile.getName(), e);
+            String message = "Could not access file " + multipartFile.getName();
+            log.error(message);
+            throw new IllegalStateException(message, e);
         }
 
         List<PhraseCSVEntry> phrases = IteratorUtils.toList(entries.iterator());

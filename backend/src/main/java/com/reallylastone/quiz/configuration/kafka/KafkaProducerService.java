@@ -2,12 +2,12 @@ package com.reallylastone.quiz.configuration.kafka;
 
 import com.reallylastone.quiz.auth.model.UserInformation;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-@Log
+@Slf4j
 @RequiredArgsConstructor
 public class KafkaProducerService {
 
@@ -22,7 +22,7 @@ public class KafkaProducerService {
             } else {
                 future.complete(sendResult);
             }
-            log.info("User send to Kafka topic: " + value);
+            log.info("User send to Kafka topic: %s".formatted(value));
         });
     }
 }

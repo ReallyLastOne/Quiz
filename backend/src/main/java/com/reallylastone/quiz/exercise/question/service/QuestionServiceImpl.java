@@ -7,6 +7,7 @@ import com.reallylastone.quiz.exercise.question.repository.TagRepository;
 import com.reallylastone.quiz.exercise.question.validation.QuestionValidator;
 import com.reallylastone.quiz.util.validation.ValidationErrorsException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,7 @@ import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class QuestionServiceImpl implements QuestionService {
     private final QuestionRepository questionRepository;
     private final QuestionValidator questionValidator;
@@ -40,7 +42,11 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public Question findRandomQuestion() {
         long count = questionRepository.count();
-        if (count == 0) throw new IllegalStateException("no questions in database, can not draw one");
+        if (count == 0) {
+            String message = "No questions in database, can not draw one";
+            log.info(message);
+            throw new IllegalStateException(message);
+        }
         int toPick = new Random().nextInt((int) count);
         Page<Question> questionPage = questionRepository.findAll(PageRequest.of(toPick, 1));
         Question question = null;

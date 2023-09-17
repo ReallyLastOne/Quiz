@@ -1,5 +1,6 @@
 package com.reallylastone.quiz.exercise.question.controller;
 
+import com.reallylastone.quiz.exercise.question.model.QuestionAddResponse;
 import com.reallylastone.quiz.exercise.question.model.QuestionCreateRequest;
 import com.reallylastone.quiz.exercise.question.service.QuestionViewService;
 import lombok.RequiredArgsConstructor;

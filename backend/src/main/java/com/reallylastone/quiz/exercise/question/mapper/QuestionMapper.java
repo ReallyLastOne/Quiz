@@ -1,6 +1,6 @@
 package com.reallylastone.quiz.exercise.question.mapper;
 
-import com.reallylastone.quiz.exercise.question.controller.QuestionAddResponse;
+import com.reallylastone.quiz.exercise.question.model.QuestionAddResponse;
 import com.reallylastone.quiz.exercise.question.model.Question;
 import com.reallylastone.quiz.exercise.question.model.QuestionCreateRequest;
 import com.reallylastone.quiz.exercise.question.model.QuestionView;

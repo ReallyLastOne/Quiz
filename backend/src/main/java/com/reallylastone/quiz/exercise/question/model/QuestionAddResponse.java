@@ -1,4 +1,4 @@
-package com.reallylastone.quiz.exercise.question.controller;
+package com.reallylastone.quiz.exercise.question.model;
 
 import java.util.List;
 
