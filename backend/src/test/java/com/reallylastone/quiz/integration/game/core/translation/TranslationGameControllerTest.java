@@ -139,7 +139,8 @@ class TranslationGameControllerTest extends AbstractIntegrationTest {
         translationUtils.next(accessToken).andExpect(status().is2xxSuccessful());
 
         PhraseAnswerRequest request = new PhraseAnswerRequest("answer");
-        translationUtils.answer(request, accessToken).andExpect(status().is2xxSuccessful());
+        translationUtils.answer(request, accessToken).andExpectAll(status().is2xxSuccessful(),
+                jsonPath("$.phrasesLeft").value(4));
     }
 
     @Test
@@ -191,7 +192,7 @@ class TranslationGameControllerTest extends AbstractIntegrationTest {
         translationUtils.next(accessToken);
 
         PhraseAnswerRequest request = new PhraseAnswerRequest("correct");
-        translationUtils.answer(request, accessToken);
+        translationUtils.answer(request, accessToken).andExpectAll(jsonPath("$.phrasesLeft").value(0));
 
         Assertions.assertEquals(GameState.COMPLETED, gameSessionRepository.findAll().get(0).getState());
     }

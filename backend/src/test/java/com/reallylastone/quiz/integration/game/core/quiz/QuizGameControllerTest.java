@@ -141,7 +141,8 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
         quizUtils.next(accessToken).andExpect(status().is2xxSuccessful());
 
         QuestionAnswerRequest request = new QuestionAnswerRequest("answer");
-        quizUtils.answer(request, accessToken).andExpect(status().is2xxSuccessful());
+        quizUtils.answer(request, accessToken).andExpectAll(status().is2xxSuccessful(),
+                jsonPath("$.questionsLeft").value(4));
     }
 
     @Test
@@ -198,7 +199,7 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
         quizUtils.next(accessToken);
 
         QuestionAnswerRequest request = new QuestionAnswerRequest("correct");
-        quizUtils.answer(request, accessToken);
+        quizUtils.answer(request, accessToken).andExpectAll(jsonPath("$.questionsLeft").value(0));
 
         Assertions.assertEquals(GameState.COMPLETED, gameSessionRepository.findAll().get(0).getState());
     }
