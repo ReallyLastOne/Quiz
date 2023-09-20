@@ -5,6 +5,7 @@ import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
 import com.reallylastone.quiz.game.core.translation.model.ActiveTranslationGameSessionView;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerResponse;
+import com.reallylastone.quiz.game.core.translation.model.TranslationGameSession;
 import com.reallylastone.quiz.user.model.UserEntity;
 import com.reallylastone.quiz.util.validation.GenericResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Locale;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +36,12 @@ public class TranslationGameViewServiceImpl implements TranslationGameViewServic
 
     @Override
     public ResponseEntity<PhraseAnswerResponse> answer(PhraseAnswerRequest phraseAnswer) {
-        return ResponseEntity.ok(new PhraseAnswerResponse(translationGameService.processAnswer(phraseAnswer)));
+        boolean correctAnswer = translationGameService.processAnswer(phraseAnswer);
+        Optional<TranslationGameSession> current = translationGameService.findActive();
+
+        int phrasesLeft = current.map(c -> c.getPhrasesSize() - c.getTranslationsAndStatus().size()).orElse(0);
+
+        return ResponseEntity.ok(new PhraseAnswerResponse(correctAnswer, phrasesLeft));
     }
 
     @Override
