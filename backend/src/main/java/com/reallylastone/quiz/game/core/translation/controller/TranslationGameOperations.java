@@ -3,6 +3,7 @@ package com.reallylastone.quiz.game.core.translation.controller;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerResponse;
+import com.reallylastone.quiz.game.core.translation.model.ActiveTranslationGameSessionView;
 import com.reallylastone.quiz.util.validation.GenericResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -43,4 +44,9 @@ public interface TranslationGameOperations {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     @PostMapping(value = "/stop")
     ResponseEntity<GenericResponse> stopGame();
+
+    @Operation(summary = "Fetches information about currently active translation session")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
+    @PostMapping(value = "/active")
+    ResponseEntity<ActiveTranslationGameSessionView> findActive();
 }

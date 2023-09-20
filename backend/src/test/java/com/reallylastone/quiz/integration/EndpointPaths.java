@@ -16,6 +16,7 @@ public class EndpointPaths {
         public static final String NEXT_QUESTION_PATH = BASE + "/next";
         public static final String ANSWER_QUESTION_PATH = BASE + "/answer";
         public static final String STOP_GAME_PATH = BASE + "/stop";
+        public static final String FIND_ACTIVE_GAME_PATH = BASE + "/active";
     }
 
     public static class TranslationGame {
@@ -24,6 +25,7 @@ public class EndpointPaths {
         public static final String NEXT_PHRASE_PATH = BASE + "/next";
         public static final String ANSWER_PHRASE_PATH = BASE + "/answer";
         public static final String STOP_GAME_PATH = BASE + "/stop";
+        public static final String FIND_ACTIVE_GAME_PATH = BASE + "/active";
     }
 
     public static class Phrase {

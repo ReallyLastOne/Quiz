@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Locale;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -39,5 +40,10 @@ public class TranslationGameServiceImpl implements TranslationGameService {
     @Override
     public void stopGame() {
         gameSessionService.stopGame();
+    }
+
+    @Override
+    public Optional<TranslationGameSession> findActive() {
+        return gameSessionService.findActive(TranslationGameSession.class);
     }
 }

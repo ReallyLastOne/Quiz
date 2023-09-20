@@ -3,6 +3,7 @@ package com.reallylastone.quiz.game.core.quiz.controller;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerRequest;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerResponse;
 import com.reallylastone.quiz.exercise.question.model.QuestionView;
+import com.reallylastone.quiz.game.core.quiz.model.ActiveQuizGameSessionView;
 import com.reallylastone.quiz.game.core.quiz.service.QuizGameViewService;
 import com.reallylastone.quiz.util.validation.GenericResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,5 +36,10 @@ public class QuizGameController implements QuizGameOperations {
     @Override
     public ResponseEntity<GenericResponse> stopGame() {
         return quizGameViewService.stopGame();
+    }
+
+    @Override
+    public ResponseEntity<ActiveQuizGameSessionView> findActive() {
+        return quizGameViewService.findActive();
     }
 }
