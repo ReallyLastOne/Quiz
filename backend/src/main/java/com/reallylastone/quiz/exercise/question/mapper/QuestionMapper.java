@@ -41,7 +41,6 @@ public interface QuestionMapper {
         }).toList();
     }
 
-
     @Mapping(target = "correctAnswer", expression = "java(request.correctAnswers().get(0))")
     @Mapping(target = "correctAnswers", expression = "java(request.correctAnswers().subList(1, request.correctAnswers().size()))")
     @Mapping(target = "multipleCorrectAnswers", expression = "java(request.correctAnswers().size() > 1)")
@@ -52,7 +51,6 @@ public interface QuestionMapper {
             "Stream.of(question.getCorrectAnswer())).toList())")
     @Mapping(target = "tags", expression = "java(mapToNames(question.getTags()))")
     QuestionAddResponse mapToResponse(Question question);
-
 
     default List<String> mapToNames(List<Tag> tags) {
         return tags.stream().map(Tag::getName).toList();

@@ -2,6 +2,7 @@ package com.reallylastone.quiz.game.core.translation.service;
 
 import com.reallylastone.quiz.exercise.phrase.mapper.PhraseMapper;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
+import com.reallylastone.quiz.game.core.translation.model.ActiveTranslationGameSessionView;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerResponse;
 import com.reallylastone.quiz.user.model.UserEntity;
@@ -40,5 +41,13 @@ public class TranslationGameViewServiceImpl implements TranslationGameViewServic
     public ResponseEntity<GenericResponse> stopGame() {
         translationGameService.stopGame();
         return ResponseEntity.ok(new GenericResponse("Successfully stopped phrase game"));
+    }
+
+    @Override
+    public ResponseEntity<ActiveTranslationGameSessionView> findActive() {
+        return translationGameService.findActive()
+                .map(session -> new ActiveTranslationGameSessionView(session, phraseMapper::mapToView))
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new IllegalStateException("User has no active session"));
     }
 }

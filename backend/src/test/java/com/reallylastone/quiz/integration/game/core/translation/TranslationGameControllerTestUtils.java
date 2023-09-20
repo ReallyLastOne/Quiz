@@ -56,6 +56,12 @@ public class TranslationGameControllerTestUtils {
                 .header("Authorization", "Bearer " + accessToken));
     }
 
+    public ResultActions findActive(String accessToken) throws Exception {
+        return mockMvc.perform(post(FIND_ACTIVE_GAME_PATH)
+                .with(csrf().asHeader())
+                .header("Authorization", "Bearer " + accessToken));
+    }
+
     public void populatePhrasesFor(Long ownerId) {
         Map<Locale, String> map = Map.of(new Locale("en"), "miracle", Locale.forLanguageTag("PL"), "cud");
         Phrase phrase = new Phrase();

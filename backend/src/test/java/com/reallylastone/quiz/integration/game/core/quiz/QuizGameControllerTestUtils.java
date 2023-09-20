@@ -53,6 +53,12 @@ public class QuizGameControllerTestUtils {
                 .header("Authorization", "Bearer " + accessToken));
     }
 
+    public ResultActions findActive(String accessToken) throws Exception {
+        return mockMvc.perform(post(FIND_ACTIVE_GAME_PATH)
+                .with(csrf().asHeader())
+                .header("Authorization", "Bearer " + accessToken));
+    }
+
     public void populateQuestions() {
         Question question = new Question();
         question.setContent("question?");

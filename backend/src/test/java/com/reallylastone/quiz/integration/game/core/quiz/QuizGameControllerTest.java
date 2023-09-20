@@ -26,6 +26,7 @@ import static com.reallylastone.quiz.integration.EndpointPaths.QuizGame.*;
 import static com.reallylastone.quiz.integration.EndpointPaths.TranslationGame.STOP_GAME_PATH;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc(print = MockMvcPrint.NONE)
@@ -239,5 +240,46 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
         MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
         String accessToken = utils.extract(mvcResult, "accessToken");
         quizUtils.stop(accessToken).andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    void shouldReturnActiveSessionWithNoActiveQuestion() throws Exception {
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        String accessToken = utils.extract(mvcResult, "accessToken");
+
+        quizUtils.start(5, accessToken);
+
+        quizUtils.findActive(accessToken).andExpectAll(
+                status().is2xxSuccessful(),
+                jsonPath("$.correctAnswers").value(0),
+                jsonPath("$.questionsLeft").value(5),
+                jsonPath("$.currentActive").isEmpty()
+        );
+    }
+
+    @Test
+    void shouldReturnActiveSessionWithActiveQuestion() throws Exception {
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        String accessToken = utils.extract(mvcResult, "accessToken");
+        quizUtils.populateQuestions();
+        quizUtils.start(5, accessToken);
+        quizUtils.next(accessToken);
+
+        quizUtils.findActive(accessToken).andExpectAll(
+                status().is2xxSuccessful(),
+                jsonPath("$.correctAnswers").value(0),
+                jsonPath("$.questionsLeft").value(4),
+                jsonPath("$.currentActive").exists()
+        );
+    }
+
+    @Test
+    void shouldReturn4xxWhenNoSession() throws Exception {
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        String accessToken = utils.extract(mvcResult, "accessToken");
+
+        quizUtils.findActive(accessToken).andExpectAll(
+                status().is4xxClientError()
+        );
     }
 }

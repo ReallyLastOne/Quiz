@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.LongFunction;
 
 import static com.reallylastone.quiz.exercise.core.ExerciseState.NO_ANSWER;
 
@@ -77,7 +78,7 @@ public class GameSessionServiceImpl implements GameSessionService {
         gameSessionStateValidator.validateNextQuestionRequest(currentUser, errors);
         if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
 
-        QuizGameSession activeSession = gameSessionRepository.findActiveQuizGameSession(currentUser.getId());
+        QuizGameSession activeSession = findActive(QuizGameSession.class).get();
         Question randomQuestion = questionService.findRandomQuestion();
         activeSession.answer(randomQuestion, NO_ANSWER);
         activeSession.setState(GameState.IN_PROGRESS);
@@ -95,7 +96,7 @@ public class GameSessionServiceImpl implements GameSessionService {
         gameSessionStateValidator.validateNextPhraseRequest(currentUser, errors);
         if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
 
-        TranslationGameSession activeSession = gameSessionRepository.findActiveTranslationGameSession(currentUser.getId());
+        TranslationGameSession activeSession = findActive(TranslationGameSession.class).get();
         Locale sourceLanguage = activeSession.getSourceLanguage();
         Phrase randomPhrase = phraseService.findRandomPhrase(sourceLanguage, activeSession.getDestinationLanguage(), currentUser.getId());
         activeSession.answer(randomPhrase, NO_ANSWER);
@@ -114,7 +115,7 @@ public class GameSessionServiceImpl implements GameSessionService {
         gameSessionStateValidator.validateQuestionAnswerRequest(currentUser, errors);
         if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
 
-        QuizGameSession activeSession = gameSessionRepository.findActiveQuizGameSession(currentUser.getId());
+        QuizGameSession activeSession = findActive(QuizGameSession.class).get();
         Optional<Map.Entry<Question, ExerciseState>> currentOptional = activeSession.findCurrent();
 
         if (currentOptional.isEmpty()) {
@@ -145,7 +146,7 @@ public class GameSessionServiceImpl implements GameSessionService {
         gameSessionStateValidator.validatePhraseAnswerRequest(currentUser, errors);
         if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
 
-        TranslationGameSession activeSession = gameSessionRepository.findActiveTranslationGameSession(currentUser.getId());
+        TranslationGameSession activeSession = findActive(TranslationGameSession.class).get();
         Optional<Map.Entry<Phrase, ExerciseState>> currentOptional = activeSession.findCurrent();
 
         if (currentOptional.isEmpty()) {
@@ -175,6 +176,30 @@ public class GameSessionServiceImpl implements GameSessionService {
         if (activeSession != null) {
             activeSession.finish();
         }
+    }
+
+    @Override
+    public <T extends GameSession> Optional<T> findActive(Class<T> gameSessionType) {
+        Long id = UserService.getCurrentUser().getId();
+
+        return Optional.ofNullable(determineMethod(gameSessionType))
+                .map(method -> (Optional<T>) Optional.ofNullable(method.apply(id)))
+                .orElseGet(() -> {
+                    log.error("Unknown game session type");
+                    return Optional.empty();
+                });
+    }
+
+    private <T extends GameSession> LongFunction<? extends GameSession> determineMethod(Class<T> gameSessionType) {
+        LongFunction<? extends GameSession> method = null;
+
+        if (gameSessionType == QuizGameSession.class) {
+            method = gameSessionRepository::findActiveQuizGameSession;
+        } else if (gameSessionType == TranslationGameSession.class) {
+            method = gameSessionRepository::findActiveTranslationGameSession;
+        }
+
+        return method;
     }
 
     private void validate(GameSessionCreateRequest request) {
