@@ -1,0 +1,27 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="ReallyLastOne (generated)" id="1691315207874-1">
+        <createView viewName="v_question_compact" replaceIfExists="true">
+            SELECT
+            q.id,
+            q.content,
+            CONCAT(
+            q.correct_answer,
+            case when COUNT(distinct qca.correct_answer) > 0 then ', ' else '' end,
+            STRING_AGG(
+            distinct qca.correct_answer, ', '
+            )
+            ) as correct_answers,
+            STRING_AGG(distinct qwa.wrong_answer, ', ') as wrong_answers
+            from
+            question q
+            left join question_wrong_answers qwa on q.id = qwa.question_id
+            left join question_correct_answers qca on q.id = qca.question_id
+            group by
+            q.id,
+            q.content;
+        </createView>
+    </changeSet>
+</databaseChangeLog>
