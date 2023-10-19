@@ -1,4 +1,4 @@
-<mat-card class="container">
+<mat-card *ngIf="!isEndOfQuiz; else scorePage" class="container">
   <mat-card-header>
     <mat-card-title>{{ question }}</mat-card-title>
   </mat-card-header>
@@ -27,3 +27,6 @@
     </button>
   </mat-card-actions>
 </mat-card>
+<ng-template #scorePage>
+  <app-score (newGame)="startNewGame()"></app-score>
+</ng-template>

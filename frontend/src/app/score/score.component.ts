@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ScoreService } from './score.service';
 
 @Component({
@@ -8,13 +7,13 @@ import { ScoreService } from './score.service';
   styleUrls: ['./score.component.scss'],
 })
 export class ScoreComponent implements OnInit {
-  constructor(
-    private readonly _router: Router,
-    private readonly _scoreService: ScoreService
-  ) {}
-
   private _score = 0;
   private _scoreString = '';
+
+  @Output('newGame')
+  newGame = new EventEmitter<void>();
+
+  constructor(private readonly _scoreService: ScoreService) {}
 
   get score(): number {
     return this._score;
@@ -39,7 +38,7 @@ export class ScoreComponent implements OnInit {
   }
 
   startAgain() {
-    this._router.navigate([`/exercise`]);
+    this.newGame.next();
   }
 
   dataSource() {}

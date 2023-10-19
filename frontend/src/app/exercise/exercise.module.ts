@@ -6,8 +6,12 @@ import { ExerciseRoutingModule } from './exercise-routing.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms';
+import { ScoreModule } from '../score/score.module';
 
 @NgModule({
+  declarations: [ExerciseComponent],
+  exports: [ExerciseComponent],
+  providers: [],
   imports: [
     CommonModule,
     ExerciseRoutingModule,
@@ -15,9 +19,7 @@ import { FormsModule } from '@angular/forms';
     MatButtonModule,
     MatRadioModule,
     FormsModule,
+    ScoreModule,
   ],
-  declarations: [ExerciseComponent],
-  exports: [ExerciseComponent],
-  providers: [],
 })
 export class ExerciseModule {}
