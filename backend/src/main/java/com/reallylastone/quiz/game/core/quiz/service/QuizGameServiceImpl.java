@@ -8,6 +8,8 @@ import com.reallylastone.quiz.game.session.service.GameSessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class QuizGameServiceImpl implements QuizGameService {
@@ -34,5 +36,10 @@ public class QuizGameServiceImpl implements QuizGameService {
     @Override
     public void stopGame() {
         gameSessionService.stopGame();
+    }
+
+    @Override
+    public Optional<QuizGameSession> findActive() {
+        return gameSessionService.findActive(QuizGameSession.class);
     }
 }

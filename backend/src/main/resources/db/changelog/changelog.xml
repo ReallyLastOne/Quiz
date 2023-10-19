@@ -8,4 +8,6 @@
     <include file="db/changelog/002-phrases-size.xml"/>
     <include file="db/changelog/003-change-exercise-state-representation.xml"/>
     <include file="db/changelog/004-add-tags-to-questions.xml"/>
+    <include file="db/changelog/005-multiple-correct-answers.xml"/>
+    <include file="db/changelog/006-questions-view.xml"/>
 </databaseChangeLog>

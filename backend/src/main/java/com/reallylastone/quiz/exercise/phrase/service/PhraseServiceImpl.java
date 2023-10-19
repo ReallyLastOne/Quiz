@@ -10,6 +10,7 @@ import com.reallylastone.quiz.user.service.UserService;
 import com.reallylastone.quiz.util.validation.ValidationErrorsException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +30,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PhraseServiceImpl implements PhraseService {
     private final PhraseRepository phraseRepository;
     private final PhraseValidator phraseValidator;
@@ -43,7 +45,6 @@ public class PhraseServiceImpl implements PhraseService {
     @Transactional
     public Phrase createPhrase(PhraseCreateRequest request) {
         validate(request);
-
         // TODO: refactor, as it unnecessarily fetches all user/global phrases instead of filtering in on database level
         // TODO: also it would be nice to avoid code duplication as there is same lines in PhraseValidator
         Long ownerId = BooleanUtils.isTrue(request.userPhrase()) ? UserService.getCurrentUser().getId() : null;
@@ -53,6 +54,7 @@ public class PhraseServiceImpl implements PhraseService {
         if (phrases.size() == 1) {
             Phrase toMerge = phrases.get(0);
             toMerge.getTranslationMap().putAll(request.translationMap());
+            log.info("Repeated entries from different phrase. Resulting merged phrase: %s".formatted(toMerge));
 
             return toMerge;
         }
@@ -64,7 +66,10 @@ public class PhraseServiceImpl implements PhraseService {
     public List<Phrase> getAllPhrases(PageRequest page, String[] languages) {
         Long id = UserService.getCurrentUser().getId();
 
-        if (id == null) throw new IllegalStateException("no authenticated user in the context");
+        if (id == null) {
+            log.error("Tried to get get all phrases for user but no user present in context");
+            throw new IllegalStateException("No authenticated user in the context");
+        }
 
 
         if (languages == null) {
@@ -90,6 +95,7 @@ public class PhraseServiceImpl implements PhraseService {
                 incorrect.put((long) i + 1, e.getErrors().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList());
             }
         }
+
         return new PhraseCreateBatchResponse(correct, incorrect);
     }
 
