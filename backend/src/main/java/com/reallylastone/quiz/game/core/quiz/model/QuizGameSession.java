@@ -44,4 +44,12 @@ public class QuizGameSession extends GameSession {
     public boolean isLastQuestion() {
         return questionSize == questionsAndStatus.size();
     }
+
+    public long countOf(ExerciseState state) {
+        return questionsAndStatus.values().stream().filter(state::equals).count();
+    }
+
+    public int leftQuestions() {
+        return questionSize - questionsAndStatus.size();
+    }
 }

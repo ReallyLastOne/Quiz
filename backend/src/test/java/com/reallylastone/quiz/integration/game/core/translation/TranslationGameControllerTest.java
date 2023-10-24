@@ -55,11 +55,11 @@ class TranslationGameControllerTest extends AbstractIntegrationTest {
     }
 
     private static Stream<Integer> validPhrasesSize() {
-        return Stream.of(1, 50, 99, 111);
+        return Stream.of(1, 15);
     }
 
     private static Stream<Integer> invalidPhrasesSize() {
-        return Stream.of(0, -1, -20);
+        return Stream.of(0, -1, -20, 16, 100);
     }
 
     @ParameterizedTest

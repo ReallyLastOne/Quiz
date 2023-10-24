@@ -1,5 +1,6 @@
 package com.reallylastone.quiz.game.core.quiz.service;
 
+import com.reallylastone.quiz.exercise.core.ExerciseState;
 import com.reallylastone.quiz.exercise.question.mapper.QuestionMapper;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerRequest;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerResponse;
@@ -33,12 +34,15 @@ public class QuizGameViewServiceImpl implements QuizGameViewService {
 
     @Override
     public ResponseEntity<QuestionAnswerResponse> answer(QuestionAnswerRequest questionAnswer, HttpServletRequest request) {
-        boolean correctAnswer = quizGameService.processAnswer(questionAnswer);
+        // if no active session, then processAnswer method will throw exception, so after there is guarantee that 'current' is present
         Optional<QuizGameSession> current = quizGameService.findActive();
+
+        boolean correctAnswer = quizGameService.processAnswer(questionAnswer);
 
         int questionsLeft = current.map(c -> c.getQuestionSize() - c.getQuestionsAndStatus().size()).orElse(0);
 
-        return ResponseEntity.ok(new QuestionAnswerResponse(correctAnswer, questionsLeft));
+        return ResponseEntity.ok(new QuestionAnswerResponse(correctAnswer, questionsLeft,
+                current.get().countOf(ExerciseState.CORRECT)));
     }
 
     @Override

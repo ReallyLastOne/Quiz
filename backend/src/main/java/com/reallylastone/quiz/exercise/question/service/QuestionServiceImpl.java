@@ -17,7 +17,7 @@ import org.springframework.validation.Errors;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +47,7 @@ public class QuestionServiceImpl implements QuestionService {
             log.info(message);
             throw new IllegalStateException(message);
         }
-        int toPick = new Random().nextInt((int) count);
+        int toPick = ThreadLocalRandom.current().nextInt((int) count);
         Page<Question> questionPage = questionRepository.findAll(PageRequest.of(toPick, 1));
         Question question = null;
         if (questionPage.hasContent()) {
@@ -55,6 +55,15 @@ public class QuestionServiceImpl implements QuestionService {
         }
 
         return question;
+    }
+
+    @Override
+    public Question findRandomQuestion(List<Long> idsExcluded) {
+        if (idsExcluded.isEmpty()) return findRandomQuestion();
+
+        return questionRepository.findByIdNotIn(idsExcluded)
+                .orElseThrow(() -> new IllegalStateException("No questions in database that do not have ids %s "
+                        .formatted(idsExcluded)));
     }
 
     @Override

@@ -51,4 +51,8 @@ public class TranslationGameSession extends GameSession {
     public boolean isLastPhrase() {
         return phrasesSize == translationsAndStatus.size();
     }
+
+    public long countOf(ExerciseState state) {
+        return translationsAndStatus.values().stream().filter(state::equals).count();
+    }
 }

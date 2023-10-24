@@ -11,8 +11,8 @@ import java.util.function.Function;
 public record ActiveQuizGameSessionView(int correctAnswers, int questionsLeft, QuestionView currentActive) {
 
     public ActiveQuizGameSessionView(QuizGameSession session, Function<Question, QuestionView> mapper) {
-        this((int) session.getQuestionsAndStatus().values().stream().filter(ExerciseState.CORRECT::equals).count(),
-                session.getQuestionSize() - session.getQuestionsAndStatus().size(),
+        this((int) session.countOf(ExerciseState.CORRECT),
+                session.leftQuestions(),
                 getView(session, mapper));
     }
 

@@ -1,5 +1,6 @@
 package com.reallylastone.quiz.game.core.translation.service;
 
+import com.reallylastone.quiz.exercise.core.ExerciseState;
 import com.reallylastone.quiz.exercise.phrase.mapper.PhraseMapper;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
 import com.reallylastone.quiz.game.core.translation.model.ActiveTranslationGameSessionView;
@@ -36,12 +37,14 @@ public class TranslationGameViewServiceImpl implements TranslationGameViewServic
 
     @Override
     public ResponseEntity<PhraseAnswerResponse> answer(PhraseAnswerRequest phraseAnswer) {
-        boolean correctAnswer = translationGameService.processAnswer(phraseAnswer);
         Optional<TranslationGameSession> current = translationGameService.findActive();
+
+        boolean correctAnswer = translationGameService.processAnswer(phraseAnswer);
 
         int phrasesLeft = current.map(c -> c.getPhrasesSize() - c.getTranslationsAndStatus().size()).orElse(0);
 
-        return ResponseEntity.ok(new PhraseAnswerResponse(correctAnswer, phrasesLeft));
+        return ResponseEntity.ok(new PhraseAnswerResponse(correctAnswer, phrasesLeft,
+                current.get().countOf(ExerciseState.CORRECT)));
     }
 
     @Override
