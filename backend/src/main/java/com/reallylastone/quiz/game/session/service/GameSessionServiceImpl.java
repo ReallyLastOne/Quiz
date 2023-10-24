@@ -1,5 +1,6 @@
 package com.reallylastone.quiz.game.session.service;
 
+import com.reallylastone.quiz.exercise.core.Exercise;
 import com.reallylastone.quiz.exercise.core.ExerciseState;
 import com.reallylastone.quiz.exercise.phrase.model.Phrase;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
@@ -79,7 +80,8 @@ public class GameSessionServiceImpl implements GameSessionService {
         if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
 
         QuizGameSession activeSession = findActive(QuizGameSession.class).get();
-        Question randomQuestion = questionService.findRandomQuestion();
+        Question randomQuestion = questionService.findRandomQuestion(activeSession
+                .getQuestionsAndStatus().keySet().stream().map(Exercise::getId).toList());
         activeSession.answer(randomQuestion, NO_ANSWER);
         activeSession.setState(GameState.IN_PROGRESS);
         log.info("Question with id: %s drawn for session with id: %s".formatted(randomQuestion.getId(), activeSession.getId()));

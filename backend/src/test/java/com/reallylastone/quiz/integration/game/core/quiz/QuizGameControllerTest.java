@@ -54,11 +54,11 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
     }
 
     private static Stream<Integer> validQuestionSize() {
-        return Stream.of(1, 50, 99, 111);
+        return Stream.of(1, 5, 10, 15);
     }
 
     private static Stream<Integer> invalidQuestionSize() {
-        return Stream.of(0, -1, -20);
+        return Stream.of(0, -1, -20, 16, 100);
     }
 
 
@@ -142,7 +142,8 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
 
         QuestionAnswerRequest request = new QuestionAnswerRequest("answer");
         quizUtils.answer(request, accessToken).andExpectAll(status().is2xxSuccessful(),
-                jsonPath("$.questionsLeft").value(4));
+                jsonPath("$.questionsLeft").value(4),
+                jsonPath("$.totalCorrect").value(0));
     }
 
     @Test
@@ -183,7 +184,8 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
         quizUtils.next(accessToken);
 
         QuestionAnswerRequest request = new QuestionAnswerRequest("correct");
-        quizUtils.answer(request, accessToken);
+        quizUtils.answer(request, accessToken).andExpectAll(
+                jsonPath("$.totalCorrect").value(1));
 
         ((QuizGameSession) gameSessionRepository.findAll().get(0)).getQuestionsAndStatus().values().forEach(e -> Assertions.assertEquals(CORRECT, e));
     }
@@ -199,7 +201,8 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
         quizUtils.next(accessToken);
 
         QuestionAnswerRequest request = new QuestionAnswerRequest("correct");
-        quizUtils.answer(request, accessToken).andExpectAll(jsonPath("$.questionsLeft").value(0));
+        quizUtils.answer(request, accessToken).andExpectAll(jsonPath("$.questionsLeft").value(0),
+                jsonPath("$.totalCorrect").value( 1));
 
         Assertions.assertEquals(GameState.COMPLETED, gameSessionRepository.findAll().get(0).getState());
     }

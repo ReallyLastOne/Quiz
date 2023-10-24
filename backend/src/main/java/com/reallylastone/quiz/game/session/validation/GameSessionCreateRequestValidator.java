@@ -47,12 +47,16 @@ public class GameSessionCreateRequestValidator implements Validator {
 
             if (s.getPhrasesSize() <= 0)
                 errors.rejectValue("session.phrasesSize", "invalid.phrasesSize.value", "phrasesSize must be positive value");
+            if (s.getPhrasesSize() > 15)
+                errors.rejectValue("session.phrasesSize", "invalid.phrasesSize.value", "phrasesSize must not be greater than 15");
         }
 
 
         if (session instanceof QuizGameSession s) {
             if (s.getQuestionSize() <= 0)
                 errors.rejectValue("session.questionSize", "invalid.questionSize.value", "questionSize must be positive value");
+            if (s.getQuestionSize() > 15)
+                errors.rejectValue("session.questionSize", "invalid.questionSize.value", "questionSize must not be greater than 15");
         }
     }
 }
