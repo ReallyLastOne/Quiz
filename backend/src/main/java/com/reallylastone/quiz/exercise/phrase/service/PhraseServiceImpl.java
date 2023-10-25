@@ -48,8 +48,9 @@ public class PhraseServiceImpl implements PhraseService {
         // TODO: refactor, as it unnecessarily fetches all user/global phrases instead of filtering in on database level
         // TODO: also it would be nice to avoid code duplication as there is same lines in PhraseValidator
         Long ownerId = BooleanUtils.isTrue(request.userPhrase()) ? UserService.getCurrentUser().getId() : null;
-        List<Phrase> phrases = phraseRepository.findByOwnerId(ownerId).stream()
-                .filter(e -> !Collections.disjoint(e.getTranslationMap().entrySet(), request.translationMap().entrySet())).toList();
+        List<Phrase> phrases = phraseRepository.findByOwnerId(ownerId).stream().filter(
+                e -> !Collections.disjoint(e.getTranslationMap().entrySet(), request.translationMap().entrySet()))
+                .toList();
 
         if (phrases.size() == 1) {
             Phrase toMerge = phrases.get(0);
@@ -71,13 +72,14 @@ public class PhraseServiceImpl implements PhraseService {
             throw new IllegalStateException("No authenticated user in the context");
         }
 
-
         if (languages == null) {
             return phraseRepository.findByOwnerId(id, page);
         }
 
         return phraseRepository.findByOwnerId(id, page).stream()
-                .filter(e -> new HashSet<>(e.getTranslationMap().keySet().stream().map(Locale::toLanguageTag).toList()).containsAll(List.of(languages))).toList();
+                .filter(e -> new HashSet<>(e.getTranslationMap().keySet().stream().map(Locale::toLanguageTag).toList())
+                        .containsAll(List.of(languages)))
+                .toList();
     }
 
     @Override
@@ -92,7 +94,8 @@ public class PhraseServiceImpl implements PhraseService {
                 Phrase p = createPhrase(new PhraseCreateRequest(phrase.getTranslationMap(), true));
                 correct.put((long) i + 1, p.getTranslationMap());
             } catch (ValidationErrorsException e) {
-                incorrect.put((long) i + 1, e.getErrors().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList());
+                incorrect.put((long) i + 1, e.getErrors().getAllErrors().stream()
+                        .map(DefaultMessageSourceResolvable::getDefaultMessage).toList());
             }
         }
 
@@ -102,7 +105,8 @@ public class PhraseServiceImpl implements PhraseService {
     @Override
     public Phrase findRandomPhrase(Locale sourceLanguage, Locale destinationLanguage, Long userId) {
         List<Phrase> phrases = phraseRepository.findByOwnerId(userId).stream()
-                .filter(e -> e.getTranslationMap().keySet().containsAll(Set.of(sourceLanguage, destinationLanguage))).toList();
+                .filter(e -> e.getTranslationMap().keySet().containsAll(Set.of(sourceLanguage, destinationLanguage)))
+                .toList();
         int toPick = new Random().nextInt(phrases.size());
 
         return phrases.get(toPick);

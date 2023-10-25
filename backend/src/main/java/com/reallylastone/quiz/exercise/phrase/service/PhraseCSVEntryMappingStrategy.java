@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class PhraseCSVEntryMappingStrategy implements MappingStrategy<PhraseCSVEntry> {
-    private String[] headers = new String[]{};
+    private String[] headers = new String[] {};
     private Class<? extends PhraseCSVEntry> type;
 
     @Override
@@ -32,7 +32,8 @@ public class PhraseCSVEntryMappingStrategy implements MappingStrategy<PhraseCSVE
     }
 
     @Override
-    public PhraseCSVEntry populateNewBean(String[] line) throws CsvBeanIntrospectionException, CsvFieldAssignmentException, CsvChainedException {
+    public PhraseCSVEntry populateNewBean(String[] line)
+            throws CsvBeanIntrospectionException, CsvFieldAssignmentException, CsvChainedException {
         return new PhraseCSVEntry(Arrays.asList(headers), Arrays.stream(line).map(String::trim).toList());
     }
 
@@ -43,6 +44,6 @@ public class PhraseCSVEntryMappingStrategy implements MappingStrategy<PhraseCSVE
 
     @Override
     public String[] transmuteBean(PhraseCSVEntry bean) throws CsvFieldAssignmentException, CsvChainedException {
-        return bean.words().toArray(new String[]{});
+        return bean.words().toArray(new String[] {});
     }
 }

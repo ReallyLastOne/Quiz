@@ -39,9 +39,7 @@ public class AuthenticationViewServiceImpl implements AuthenticationViewService 
     public ResponseEntity<RefreshTokenResponse> refresh(HttpServletRequest request) {
         Cookie refreshToken = WebUtils.getCookie(request, "refresh_token");
 
-        return Optional.ofNullable(refreshToken)
-                .map(Cookie::getValue)
-                .map(authenticationService::refresh)
+        return Optional.ofNullable(refreshToken).map(Cookie::getValue).map(authenticationService::refresh)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new IllegalArgumentException("no refresh_token cookie provided"));
     }
@@ -52,18 +50,17 @@ public class AuthenticationViewServiceImpl implements AuthenticationViewService 
     }
 
     private ResponseEntity<AuthenticationResponse> buildAuthenticationResponse(AuthenticationServiceResponse response) {
-        return ResponseEntity.ok().headers(buildRefreshTokenCookie(response.refreshToken().getUuid().toString(), response.refreshToken().getExpirationDate())).body(toAuthenticationResponse(response));
+        return ResponseEntity.ok().headers(buildRefreshTokenCookie(response.refreshToken().getUuid().toString(),
+                response.refreshToken().getExpirationDate())).body(toAuthenticationResponse(response));
     }
 
     private AuthenticationResponse toAuthenticationResponse(AuthenticationServiceResponse response) {
-        return new AuthenticationResponse(response.jwtToken(), response.refreshToken().getUuid().toString(), response.tokenType());
+        return new AuthenticationResponse(response.jwtToken(), response.refreshToken().getUuid().toString(),
+                response.tokenType());
     }
 
     private HttpHeaders buildRefreshTokenCookie(String refreshToken, LocalDateTime expirationDate) {
-        ResponseCookie cookie = ResponseCookie.from("refresh_token", refreshToken)
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
+        ResponseCookie cookie = ResponseCookie.from("refresh_token", refreshToken).httpOnly(true).secure(true).path("/")
                 .maxAge(ChronoUnit.SECONDS.between(LocalDateTime.now(), expirationDate)).build(); // may not be precise
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.SET_COOKIE, cookie.toString());

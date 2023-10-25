@@ -33,8 +33,9 @@ public class PhraseValidator implements Validator {
         // TODO: refactor, as it unnecessarily fetches all user/global phrases instead of filtering in on database level
         // TODO: also it would be nice to avoid code duplication as there is same lines in PhraseValidator
         Long ownerId = BooleanUtils.isTrue(request.userPhrase()) ? UserService.getCurrentUser().getId() : null;
-        List<Phrase> phrases = phraseRepository.findByOwnerId(ownerId).stream()
-                .filter(e -> !Collections.disjoint(e.getTranslationMap().entrySet(), request.translationMap().entrySet())).toList();
+        List<Phrase> phrases = phraseRepository.findByOwnerId(ownerId).stream().filter(
+                e -> !Collections.disjoint(e.getTranslationMap().entrySet(), request.translationMap().entrySet()))
+                .toList();
 
         if (validatorAdapter != null) {
             validatorAdapter.validate(request, errors);
@@ -42,7 +43,7 @@ public class PhraseValidator implements Validator {
 
         if (phrases.size() >= 2)
             errors.rejectValue("translationMap", "invalid.translationMap",
-                    "translationMap must have unique entries, repeated entries from Phrases of id: " +
-                            phrases.stream().map(Phrase::getId).collect(Collectors.toSet()));
+                    "translationMap must have unique entries, repeated entries from Phrases of id: "
+                            + phrases.stream().map(Phrase::getId).collect(Collectors.toSet()));
     }
 }

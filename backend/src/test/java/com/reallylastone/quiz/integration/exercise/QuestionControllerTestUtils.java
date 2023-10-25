@@ -19,10 +19,8 @@ public class QuestionControllerTestUtils {
     private final ObjectMapper mapper = new ObjectMapper();
 
     public ResultActions createQuestion(QuestionCreateRequest request, String accessToken) throws Exception {
-        return mockMvc.perform(post(EndpointPaths.Question.BASE)
-                .with(csrf().asHeader())
-                .content(mapper.writeValueAsString(request))
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + accessToken));
+        return mockMvc.perform(
+                post(EndpointPaths.Question.BASE).with(csrf().asHeader()).content(mapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON).header("Authorization", "Bearer " + accessToken));
     }
 }

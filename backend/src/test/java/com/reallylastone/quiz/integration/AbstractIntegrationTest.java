@@ -26,14 +26,12 @@ import java.util.function.Consumer;
 public abstract class AbstractIntegrationTest {
     static int hostPort = 58494;
     static int containerExposedPort = 5432;
-    static Consumer<CreateContainerCmd> cmd = e -> e.withPortBindings(new PortBinding(Ports.Binding.bindPort(hostPort), new ExposedPort(containerExposedPort)));
+    static Consumer<CreateContainerCmd> cmd = e -> e
+            .withPortBindings(new PortBinding(Ports.Binding.bindPort(hostPort), new ExposedPort(containerExposedPort)));
     @Container
     static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:14.1")
-            .withDatabaseName("quiz")
-            .withUsername("postgres")
-            .withPassword("postgres")
-            .withExposedPorts(containerExposedPort)
-            .withCreateContainerCmdModifier(cmd);
+            .withDatabaseName("quiz").withUsername("postgres").withPassword("postgres")
+            .withExposedPorts(containerExposedPort).withCreateContainerCmdModifier(cmd);
 
     @Container
     static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.5.0"));

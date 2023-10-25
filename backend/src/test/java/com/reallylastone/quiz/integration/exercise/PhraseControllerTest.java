@@ -30,7 +30,6 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @AutoConfigureMockMvc(print = MockMvcPrint.NONE)
 class PhraseControllerTest extends AbstractIntegrationTest {
     private final ObjectMapper mapper = new ObjectMapper();
@@ -48,26 +47,36 @@ class PhraseControllerTest extends AbstractIntegrationTest {
     private PhraseControllerTestUtils phraseControllerTestUtils;
 
     private static Stream<PhraseCreateRequest> correctCreatePhraseRequests() {
-        return Stream.of(new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko"), null), new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko"), true), new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko", Locale.GERMAN, "apfel"), false));
+        return Stream.of(new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko"), null),
+                new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko"), true),
+                new PhraseCreateRequest(
+                        Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko", Locale.GERMAN, "apfel"), false));
     }
 
     private static Stream<PhraseCreateRequest> wrongCreatePhraseRequests() {
-        return Stream.of(new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple"), null), new PhraseCreateRequest(Map.of(), true), new PhraseCreateRequest(null, false));
+        return Stream.of(new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple"), null),
+                new PhraseCreateRequest(Map.of(), true), new PhraseCreateRequest(null, false));
     }
 
     private static Stream<Arguments> phrasesToMergeData() {
-        return Stream.of(Arguments.of((Object) new PhraseCreateRequest[]{new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple"), false), new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko"), false)}), Arguments.of((Object) new PhraseCreateRequest[]{new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", Locale.GERMAN, "apfel"), false), new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko"), false)}));
+        return Stream.of(
+                Arguments.of((Object) new PhraseCreateRequest[] {
+                        new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple"), false),
+                        new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko"), false) }),
+                Arguments.of((Object) new PhraseCreateRequest[] {
+                        new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", Locale.GERMAN, "apfel"), false),
+                        new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko"), false) }));
     }
 
     private static Stream<PhraseControllerTestUtils.BatchPhraseCreateCase> createPhrasesData() {
         Stream<PhraseControllerTestUtils.BatchPhraseCreateCase> stream = Stream.of(
-                        new PhraseControllerTestUtils
-                                .BatchPhraseCreateCase("pl,en\ndrzwi,door", 1, 0, 1),
-                        new PhraseControllerTestUtils.BatchPhraseCreateCase("pl,en\ndrzwi,door\njabłko,apple", 2, 0, 2),
-                        new PhraseControllerTestUtils.BatchPhraseCreateCase("pl,en\ndrzwi,door\ndrzwi,door", 2, 0, 1),
-                        new PhraseControllerTestUtils.BatchPhraseCreateCase("pl,en\ndrzwi,door\njabłko,apple\njabłko,door", 2, 1, 2),
-                        new PhraseControllerTestUtils.BatchPhraseCreateCase("pl,en\ndrzwi,door\njabłko,apple\njabłko,door\ntrait,cecha", 3, 1, 3)
-        );
+                new PhraseControllerTestUtils.BatchPhraseCreateCase("pl,en\ndrzwi,door", 1, 0, 1),
+                new PhraseControllerTestUtils.BatchPhraseCreateCase("pl,en\ndrzwi,door\njabłko,apple", 2, 0, 2),
+                new PhraseControllerTestUtils.BatchPhraseCreateCase("pl,en\ndrzwi,door\ndrzwi,door", 2, 0, 1),
+                new PhraseControllerTestUtils.BatchPhraseCreateCase("pl,en\ndrzwi,door\njabłko,apple\njabłko,door", 2,
+                        1, 2),
+                new PhraseControllerTestUtils.BatchPhraseCreateCase(
+                        "pl,en\ndrzwi,door\njabłko,apple\njabłko,door\ntrait,cecha", 3, 1, 3));
 
         return stream;
     }
@@ -110,9 +119,11 @@ class PhraseControllerTest extends AbstractIntegrationTest {
     @Test
     void shouldCreateSamePhraseBecauseDifferentUsers() throws Exception {
         MvcResult firstUserRegister = authenticationUtils.register().andReturn();
-        MvcResult secondUserRegister = authenticationUtils.register(new RegisterRequest("e", "ee@mail.com", "eee")).andReturn();
+        MvcResult secondUserRegister = authenticationUtils.register(new RegisterRequest("e", "ee@mail.com", "eee"))
+                .andReturn();
 
-        PhraseCreateRequest request = new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko"), true);
+        PhraseCreateRequest request = new PhraseCreateRequest(
+                Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko"), true);
 
         phraseControllerTestUtils.createPhrase(request, generalUtils.extract(firstUserRegister, "accessToken"));
 
@@ -126,9 +137,12 @@ class PhraseControllerTest extends AbstractIntegrationTest {
     void shouldNotCreatePhraseNorMerge() throws Exception {
         MvcResult mvcResult = authenticationUtils.register().andReturn();
 
-        PhraseCreateRequest first = new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko"), true);
-        PhraseCreateRequest second = new PhraseCreateRequest(Map.of(Locale.ENGLISH, "unambiguous", new Locale("pl"), "jednoznaczny"), true);
-        PhraseCreateRequest repeated = new PhraseCreateRequest(Map.of(Locale.ENGLISH, "unambiguous", new Locale("pl"), "jabłko"), true);
+        PhraseCreateRequest first = new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko"),
+                true);
+        PhraseCreateRequest second = new PhraseCreateRequest(
+                Map.of(Locale.ENGLISH, "unambiguous", new Locale("pl"), "jednoznaczny"), true);
+        PhraseCreateRequest repeated = new PhraseCreateRequest(
+                Map.of(Locale.ENGLISH, "unambiguous", new Locale("pl"), "jabłko"), true);
 
         phraseControllerTestUtils.createPhrase(first, generalUtils.extract(mvcResult, "accessToken"))
                 .andExpect(status().is2xxSuccessful());
@@ -145,7 +159,8 @@ class PhraseControllerTest extends AbstractIntegrationTest {
         MvcResult mvcResult = authenticationUtils.register().andReturn();
 
         Phrase ownEntity = new Phrase();
-        // TODO: it looks like @Transactional annotation on test methods does not clean sequences value, so we pick user id this way
+        // TODO: it looks like @Transactional annotation on test methods does not clean sequences value, so we pick user
+        // id this way
         // TODO: see if we can achieve sequences cleanup also
         Long userId = userRepository.findAll().get(0).getId();
         ownEntity.setOwnerId(userId);
@@ -156,8 +171,7 @@ class PhraseControllerTest extends AbstractIntegrationTest {
         phraseRepository.save(other);
 
         phraseControllerTestUtils.getAllPhrases(generalUtils.extract(mvcResult, "accessToken"))
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$", hasSize(1)));
+                .andExpect(status().is2xxSuccessful()).andExpect(jsonPath("$", hasSize(1)));
     }
 
     @Test
@@ -188,8 +202,7 @@ class PhraseControllerTest extends AbstractIntegrationTest {
         phraseRepository.save(other);
 
         phraseControllerTestUtils.getAllPhrases(generalUtils.extract(mvcResult, "accessToken"), "it", "en")
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$", hasSize(2)));
+                .andExpect(status().is2xxSuccessful()).andExpect(jsonPath("$", hasSize(2)));
     }
 
     @Test
@@ -198,17 +211,11 @@ class PhraseControllerTest extends AbstractIntegrationTest {
 
         MockMultipartFile file = new MockMultipartFile("name", "pl,en\ndrzwi,door".getBytes());
 
-        ResultActions result = phraseControllerTestUtils.createPhrases(null, generalUtils.extract(mvcResult, "accessToken"), file);
-        result
-                .andExpectAll(
-                        jsonPath("$.incorrect", is(aMapWithSize(0))),
-                        jsonPath("$.correct", is(aMapWithSize(1))),
-                        jsonPath("$.correct.1", allOf(
-                                is(aMapWithSize(2)),
-                                hasEntry(is("pl"), is("drzwi")),
-                                hasEntry(is("en"), is("door")))
-                        )
-                );
+        ResultActions result = phraseControllerTestUtils.createPhrases(null,
+                generalUtils.extract(mvcResult, "accessToken"), file);
+        result.andExpectAll(jsonPath("$.incorrect", is(aMapWithSize(0))), jsonPath("$.correct", is(aMapWithSize(1))),
+                jsonPath("$.correct.1",
+                        allOf(is(aMapWithSize(2)), hasEntry(is("pl"), is("drzwi")), hasEntry(is("en"), is("door")))));
     }
 
     @ParameterizedTest
@@ -218,12 +225,10 @@ class PhraseControllerTest extends AbstractIntegrationTest {
 
         MockMultipartFile file = new MockMultipartFile("name", testCase.getData().getBytes());
 
-        ResultActions result = phraseControllerTestUtils.createPhrases(null, generalUtils.extract(mvcResult, "accessToken"), file);
-        result
-                .andExpectAll(
-                        jsonPath("$.correct", is(aMapWithSize(testCase.getCorrectPhrases()))),
-                        jsonPath("$.incorrect", is(aMapWithSize(testCase.getWrongPhrases())))
-                );
+        ResultActions result = phraseControllerTestUtils.createPhrases(null,
+                generalUtils.extract(mvcResult, "accessToken"), file);
+        result.andExpectAll(jsonPath("$.correct", is(aMapWithSize(testCase.getCorrectPhrases()))),
+                jsonPath("$.incorrect", is(aMapWithSize(testCase.getWrongPhrases()))));
 
         Assertions.assertEquals(phraseRepository.findAll().size(), testCase.getResultativePhrasesCount());
     }

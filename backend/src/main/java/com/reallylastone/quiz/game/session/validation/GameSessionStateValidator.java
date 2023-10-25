@@ -19,8 +19,10 @@ public class GameSessionStateValidator {
     /**
      * Method validates if given user has correct properties to start a new game session
      *
-     * @param user   user to be checked
-     * @param errors errors to be optionally filled
+     * @param user
+     *            user to be checked
+     * @param errors
+     *            errors to be optionally filled
      */
     public void validateCreateSessionRequest(UserEntity user, List<StateValidationError> errors) {
         if (gameSessionRepository.hasActiveSession(user.getId())) {
@@ -31,8 +33,10 @@ public class GameSessionStateValidator {
     /**
      * Method validates if given user has correct properties to be given next question
      *
-     * @param user   user to be checked
-     * @param errors errors to be optionally filled
+     * @param user
+     *            user to be checked
+     * @param errors
+     *            errors to be optionally filled
      */
     public void validateNextQuestionRequest(UserEntity user, List<StateValidationError> errors) {
         if (!gameSessionRepository.hasActiveQuizSession(user.getId())) {
@@ -45,8 +49,10 @@ public class GameSessionStateValidator {
     /**
      * Method validates if given user has correct properties to be given next phrase
      *
-     * @param user   user to be checked
-     * @param errors errors to be optionally filled
+     * @param user
+     *            user to be checked
+     * @param errors
+     *            errors to be optionally filled
      */
     public void validateNextPhraseRequest(UserEntity user, List<StateValidationError> errors) {
         if (!gameSessionRepository.hasActiveTranslationSession(user.getId())) {
@@ -59,8 +65,10 @@ public class GameSessionStateValidator {
     /**
      * Method validates if given user has correct properties to answer the question
      *
-     * @param user   user to be checked
-     * @param errors errors to be optionally filled
+     * @param user
+     *            user to be checked
+     * @param errors
+     *            errors to be optionally filled
      */
     public void validateQuestionAnswerRequest(UserEntity user, List<StateValidationError> errors) {
         if (!gameSessionRepository.hasActiveQuizSession(user.getId())) {
@@ -73,8 +81,10 @@ public class GameSessionStateValidator {
     /**
      * Method validates if given user has correct properties to answer the phrase
      *
-     * @param user   user to be checked
-     * @param errors errors to be optionally filled
+     * @param user
+     *            user to be checked
+     * @param errors
+     *            errors to be optionally filled
      */
     public void validatePhraseAnswerRequest(UserEntity user, List<StateValidationError> errors) {
         if (!gameSessionRepository.hasActiveTranslationSession(user.getId())) {

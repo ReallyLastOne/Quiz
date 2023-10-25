@@ -11,10 +11,15 @@ public class IntegrationTestUtils {
     /**
      * Extracts field value from JSON of given response of a request
      *
-     * @param mvcResult response
-     * @param field     field to get value of
+     * @param mvcResult
+     *            response
+     * @param field
+     *            field to get value of
+     *
      * @return extracted value
-     * @throws UnsupportedEncodingException if the character encoding is not supported
+     *
+     * @throws UnsupportedEncodingException
+     *             if the character encoding is not supported
      */
     public String extract(MvcResult mvcResult, String field) throws UnsupportedEncodingException {
         return JsonPath.read(mvcResult.getResponse().getContentAsString(), "$." + field);

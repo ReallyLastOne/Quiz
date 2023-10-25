@@ -25,12 +25,18 @@ public class CSVUtils {
     public static final List<Character> COMMON_DELIMITERS = List.of(',', ';', '\t', ' ', '|', ':');
 
     /**
-     * Creates a CSVReader from a MultipartFile and provided CSVFileParser. If provided parser is null, then separator is determined and remaining properties are defaults.
+     * Creates a CSVReader from a MultipartFile and provided CSVFileParser. If provided parser is null, then separator
+     * is determined and remaining properties are defaults.
      *
-     * @param multipartFile the MultipartFile to create the CSVReader from
-     * @param parser        parser to build reader from
+     * @param multipartFile
+     *            the MultipartFile to create the CSVReader from
+     * @param parser
+     *            parser to build reader from
+     *
      * @return a CSVReader that reads from the given MultipartFile
-     * @throws IOException if an I/O error occurs while reading from the MultipartFile
+     *
+     * @throws IOException
+     *             if an I/O error occurs while reading from the MultipartFile
      */
     public static CSVReader toCSVReader(MultipartFile multipartFile, CSVFileParser parser) throws IOException {
         byte[] bytes = multipartFile.getBytes();
@@ -44,10 +50,12 @@ public class CSVUtils {
     }
 
     /**
-     * Extracts the first line of text from a byte array.
-     * If no end of line byte is provided then String built from all bytes is returned.
+     * Extracts the first line of text from a byte array. If no end of line byte is provided then String built from all
+     * bytes is returned.
      *
-     * @param bytes bytes to be interpreted as in UTF-8 encoding
+     * @param bytes
+     *            bytes to be interpreted as in UTF-8 encoding
+     *
      * @return first line of a text
      */
     public static String grabFirstLine(byte[] bytes) {
@@ -66,7 +74,9 @@ public class CSVUtils {
     /**
      * Determines the most common separator character in a given string.
      *
-     * @param firstLine the string to analyze
+     * @param firstLine
+     *            the string to analyze
+     *
      * @return the most common separator character in the string
      */
     public static char determineSeparator(String firstLine) {
@@ -85,25 +95,29 @@ public class CSVUtils {
         return maxDelimiter;
     }
 
-
     /**
      * Converts a byte array into a Reader by wrapping it in a BufferedReader and an InputStreamReader.
      *
-     * @param bytes The byte array to be converted into a Reader.
+     * @param bytes
+     *            The byte array to be converted into a Reader.
+     *
      * @return A Reader object that allows reading character data from the provided byte array.
      */
     public static Reader toReader(byte[] bytes) {
         return new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes)));
     }
 
-
     /**
      * Creates a CSVParser from a CSVFileParser.
      *
-     * @param parser the CSVFileParser to create the CSVParser from
+     * @param parser
+     *            the CSVFileParser to create the CSVParser from
+     *
      * @return a CSVParser that is configured according to the given CSVFileParser
      */
     private static CSVParser toCSVParser(CSVFileParser parser) {
-        return BASE_BUILDER.withSeparator(parser.separator()).withQuoteChar(parser.quoteChar()).withIgnoreLeadingWhiteSpace(parser.ignoreLeadingWhiteSpace()).withEscapeChar(parser.escapeChar()).withIgnoreQuotations(parser.ignoreQuotations()).withStrictQuotes(parser.strictQuotes()).build();
+        return BASE_BUILDER.withSeparator(parser.separator()).withQuoteChar(parser.quoteChar())
+                .withIgnoreLeadingWhiteSpace(parser.ignoreLeadingWhiteSpace()).withEscapeChar(parser.escapeChar())
+                .withIgnoreQuotations(parser.ignoreQuotations()).withStrictQuotes(parser.strictQuotes()).build();
     }
 }

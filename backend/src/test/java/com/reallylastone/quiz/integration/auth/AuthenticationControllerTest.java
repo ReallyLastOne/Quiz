@@ -50,19 +50,13 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
     private IntegrationTestUtils generalUtils;
 
     private static Stream<RegisterRequest> wrongRegisterRequests() {
-        return Stream.of(
-                new RegisterRequest("", "email@gmail.com", "password"),
-                new RegisterRequest("nickname", "", "password"),
-                new RegisterRequest("nickname", "email@gmail.com", ""),
-                new RegisterRequest("nickname", "email", "password"),
-                new RegisterRequest("nickname", "2", "password")
-        );
+        return Stream.of(new RegisterRequest("", "email@gmail.com", "password"),
+                new RegisterRequest("nickname", "", "password"), new RegisterRequest("nickname", "email@gmail.com", ""),
+                new RegisterRequest("nickname", "email", "password"), new RegisterRequest("nickname", "2", "password"));
     }
 
     private static Stream<RegisterRequest> correctRegisterRequests() {
-        return Stream.of(
-                new RegisterRequest("nickname", "email@gmail.com", "password")
-        );
+        return Stream.of(new RegisterRequest("nickname", "email@gmail.com", "password"));
     }
 
     @ParameterizedTest
@@ -77,7 +71,8 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
     @ParameterizedTest
     @MethodSource("wrongRegisterRequests")
     void shouldNotRegisterUser(RegisterRequest request) throws Exception {
-        controllerUtils.register(request).andExpect(status().isUnprocessableEntity()).andExpect(header().doesNotExist("Set-Cookie"));
+        controllerUtils.register(request).andExpect(status().isUnprocessableEntity())
+                .andExpect(header().doesNotExist("Set-Cookie"));
 
         Assertions.assertEquals(0, userRepository.findAll().size());
         Assertions.assertEquals(0, refreshTokenRepository.findAll().size());
@@ -137,16 +132,13 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     void shouldReturnCsrfToken() throws Exception {
         // TODO: remove @DirtiesContext annotation - context need to be deleted to pass the test, don't know why
-        mockMvc.perform(MockMvcRequestBuilders.
-                get(CSRF_PATH)).andExpectAll(status().is2xxSuccessful(),
+        mockMvc.perform(MockMvcRequestBuilders.get(CSRF_PATH)).andExpectAll(status().is2xxSuccessful(),
                 cookie().exists("XSRF-TOKEN"));
     }
 
     @Test
     void shouldBeForbidden() throws Exception {
-        mockMvc.perform(post(ME_PATH)
-                .with(csrf().asHeader())
-        ).andExpect(status().isForbidden());
+        mockMvc.perform(post(ME_PATH).with(csrf().asHeader())).andExpect(status().isForbidden());
     }
 
     @Test
@@ -154,14 +146,8 @@ class AuthenticationControllerTest extends AbstractIntegrationTest {
         RegisterRequest request = new RegisterRequest("existingUser", "email@gmail.com", "password");
         MvcResult mvcResult = controllerUtils.register(request).andReturn();
 
-        mockMvc.perform(get(ME_PATH)
-                        .header("Authorization", "Bearer " + generalUtils.extract(mvcResult, "accessToken"))
-                        .contentType(MediaType.ALL)
-                        .with(csrf().asHeader()))
-                .andExpectAll(
-                        status().is2xxSuccessful(),
-                        jsonPath("$.username").value("existingUser"),
-                        jsonPath("$.roles", hasSize(1))
-                );
+        mockMvc.perform(get(ME_PATH).header("Authorization", "Bearer " + generalUtils.extract(mvcResult, "accessToken"))
+                .contentType(MediaType.ALL).with(csrf().asHeader())).andExpectAll(status().is2xxSuccessful(),
+                        jsonPath("$.username").value("existingUser"), jsonPath("$.roles", hasSize(1)));
     }
 }

@@ -30,9 +30,7 @@ class QuestionServiceTest {
         questionValidator = mock(QuestionValidator.class);
         tagRepository = mock(TagRepository.class);
 
-        questionService = new QuestionServiceImpl(
-                questionRepository, questionValidator, tagRepository
-        );
+        questionService = new QuestionServiceImpl(questionRepository, questionValidator, tagRepository);
     }
 
     @Test

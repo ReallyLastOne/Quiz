@@ -15,23 +15,22 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@Mapper(imports = {UserService.class, BooleanUtils.class, LocalDateTime.class})
+@Mapper(imports = { UserService.class, BooleanUtils.class, LocalDateTime.class })
 public interface PhraseMapper {
     PhraseView mapToView(Phrase exercise);
 
-    @Mapping(target = "ownerId",
-            expression = "java(BooleanUtils.isTrue(createRequest.userPhrase()) ? UserService.getCurrentUser().getId() : null)")
+    @Mapping(target = "ownerId", expression = "java(BooleanUtils.isTrue(createRequest.userPhrase()) ? UserService.getCurrentUser().getId() : null)")
     @Mapping(target = "addDate", expression = "java(LocalDateTime.now())")
     Phrase mapToEntity(PhraseCreateRequest createRequest);
 
     default List<Phrase> mapToEntities(List<PhraseCSVEntry> entries) {
         return entries.stream().map(phraseCSVEntry -> {
-                    Phrase phrase = new Phrase();
-                    phrase.setTranslationMap(IntStream.range(0, phraseCSVEntry.languageHeaders().size()).boxed()
-                            .collect(Collectors.toMap(i -> new Locale(phraseCSVEntry.languageHeaders().get(i)), phraseCSVEntry.words()::get)));
-                    return phrase;
-                }
-        ).toList();
+            Phrase phrase = new Phrase();
+            phrase.setTranslationMap(
+                    IntStream.range(0, phraseCSVEntry.languageHeaders().size()).boxed().collect(Collectors.toMap(
+                            i -> new Locale(phraseCSVEntry.languageHeaders().get(i)), phraseCSVEntry.words()::get)));
+            return phrase;
+        }).toList();
 
     }
 }

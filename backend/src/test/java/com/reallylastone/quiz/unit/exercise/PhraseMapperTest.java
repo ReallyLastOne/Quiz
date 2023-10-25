@@ -39,10 +39,11 @@ class PhraseMapperTest {
         withGlobalOwner.setTranslationMap(map);
 
         return Stream.of(
-                org.junit.jupiter.params.provider.Arguments.arguments(new PhraseCreateRequest(map, null), withNullOwner),
+                org.junit.jupiter.params.provider.Arguments.arguments(new PhraseCreateRequest(map, null),
+                        withNullOwner),
                 org.junit.jupiter.params.provider.Arguments.arguments(new PhraseCreateRequest(map, true), withOwner),
-                org.junit.jupiter.params.provider.Arguments.arguments(new PhraseCreateRequest(map, false), withGlobalOwner)
-        );
+                org.junit.jupiter.params.provider.Arguments.arguments(new PhraseCreateRequest(map, false),
+                        withGlobalOwner));
     }
 
     static Stream<Arguments> provideEntities() {
@@ -65,11 +66,9 @@ class PhraseMapperTest {
         third.setId(3L);
         third.setAddDate(LocalDateTime.MAX);
 
-        return Stream.of(
-                org.junit.jupiter.params.provider.Arguments.arguments(first, new PhraseView(1L, map)),
+        return Stream.of(org.junit.jupiter.params.provider.Arguments.arguments(first, new PhraseView(1L, map)),
                 org.junit.jupiter.params.provider.Arguments.arguments(second, new PhraseView(2L, map)),
-                org.junit.jupiter.params.provider.Arguments.arguments(third, new PhraseView(3L, map))
-        );
+                org.junit.jupiter.params.provider.Arguments.arguments(third, new PhraseView(3L, map)));
     }
 
     @ParameterizedTest

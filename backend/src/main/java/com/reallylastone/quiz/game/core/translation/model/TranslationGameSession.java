@@ -24,8 +24,7 @@ import static com.reallylastone.quiz.exercise.core.ExerciseState.NO_ANSWER;
 @ToString(callSuper = true)
 public class TranslationGameSession extends GameSession {
     @ElementCollection
-    @CollectionTable(name = "translation_game_session_phrases",
-            joinColumns = @JoinColumn(name = "game_session"))
+    @CollectionTable(name = "translation_game_session_phrases", joinColumns = @JoinColumn(name = "game_session"))
     @Column(name = "status")
     @MapKeyJoinColumn(name = "phrase_id", referencedColumnName = "id")
     private Map<Phrase, ExerciseState> translationsAndStatus = new HashMap<>();
@@ -44,8 +43,7 @@ public class TranslationGameSession extends GameSession {
     }
 
     public Optional<Map.Entry<Phrase, ExerciseState>> findCurrent() {
-        return translationsAndStatus.entrySet().stream().
-                filter(e -> NO_ANSWER.equals(e.getValue())).findFirst();
+        return translationsAndStatus.entrySet().stream().filter(e -> NO_ANSWER.equals(e.getValue())).findFirst();
     }
 
     public boolean isLastPhrase() {

@@ -26,14 +26,15 @@ public class PhraseController implements PhraseOperations {
     }
 
     @Override
-    public ResponseEntity<PhraseCreateBatchResponse> createPhrases(@RequestPart(value = "file") MultipartFile file, @RequestPart(value = "body", required = false) CSVFileParser parser) {
+    public ResponseEntity<PhraseCreateBatchResponse> createPhrases(@RequestPart(value = "file") MultipartFile file,
+            @RequestPart(value = "body", required = false) CSVFileParser parser) {
         return phraseViewService.createPhrases(file, parser);
     }
 
     @Override
     public ResponseEntity<List<PhraseView>> getAllPhrases(@RequestParam(defaultValue = "0") int page,
-                                                          @RequestParam(defaultValue = "100") int size,
-                                                          @RequestParam(value = "languages", required = false) String[] languages) {
+            @RequestParam(defaultValue = "100") int size,
+            @RequestParam(value = "languages", required = false) String[] languages) {
         return phraseViewService.getAllPhrases(page, size, languages);
     }
 }

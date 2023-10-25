@@ -23,8 +23,7 @@ import static com.reallylastone.quiz.exercise.core.ExerciseState.NO_ANSWER;
 @Entity
 public class QuizGameSession extends GameSession {
     @ElementCollection
-    @CollectionTable(name = "quiz_game_session_questions",
-            joinColumns = @JoinColumn(name = "game_session"))
+    @CollectionTable(name = "quiz_game_session_questions", joinColumns = @JoinColumn(name = "game_session"))
     @Column(name = "status")
     @MapKeyJoinColumn(name = "question_id", referencedColumnName = "id")
     private Map<Question, ExerciseState> questionsAndStatus = new HashMap<>();
@@ -37,8 +36,7 @@ public class QuizGameSession extends GameSession {
     }
 
     public Optional<Map.Entry<Question, ExerciseState>> findCurrent() {
-        return questionsAndStatus.entrySet().stream().
-                filter(e -> NO_ANSWER.equals(e.getValue())).findFirst();
+        return questionsAndStatus.entrySet().stream().filter(e -> NO_ANSWER.equals(e.getValue())).findFirst();
     }
 
     public boolean isLastQuestion() {

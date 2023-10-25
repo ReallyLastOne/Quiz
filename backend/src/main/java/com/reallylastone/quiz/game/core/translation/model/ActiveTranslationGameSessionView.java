@@ -12,12 +12,12 @@ public record ActiveTranslationGameSessionView(int correctAnswers, int phrasesLe
 
     public ActiveTranslationGameSessionView(TranslationGameSession session, Function<Phrase, PhraseView> mapper) {
         this((int) session.getTranslationsAndStatus().values().stream().filter(ExerciseState.CORRECT::equals).count(),
-                session.getPhrasesSize() - session.getTranslationsAndStatus().size(),
-                getView(session, mapper));
+                session.getPhrasesSize() - session.getTranslationsAndStatus().size(), getView(session, mapper));
     }
 
     private static PhraseView getView(TranslationGameSession session, Function<Phrase, PhraseView> mapper) {
         Optional<Map.Entry<Phrase, ExerciseState>> current = session.findCurrent();
-        return current.map(questionExerciseStateEntry -> mapper.apply(questionExerciseStateEntry.getKey())).orElse(null);
+        return current.map(questionExerciseStateEntry -> mapper.apply(questionExerciseStateEntry.getKey()))
+                .orElse(null);
     }
 }

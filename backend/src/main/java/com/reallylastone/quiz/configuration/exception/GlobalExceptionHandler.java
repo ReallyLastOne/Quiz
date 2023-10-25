@@ -25,34 +25,33 @@ import java.util.Map;
 @Slf4j
 // based on https://github.com/VictorKrapivin/jsr-vs-spring-validation
 public class GlobalExceptionHandler {
-    @ExceptionHandler({ConstraintViolationException.class})
+    @ExceptionHandler({ ConstraintViolationException.class })
     public ResponseEntity<ErrorMessage> handle(final ConstraintViolationException e, HttpServletRequest request) {
         List<InvalidInputDataErrors.FieldError> errors = InvalidInputDataErrors.from(e).getErrors();
         return createErrorMessage(request, errors);
     }
 
-    @ExceptionHandler({ValidationErrorsException.class})
+    @ExceptionHandler({ ValidationErrorsException.class })
     public ResponseEntity<ErrorMessage> handle(final ValidationErrorsException e, HttpServletRequest request) {
         List<InvalidInputDataErrors.FieldError> errors = InvalidInputDataErrors.from(e).getErrors();
         return createErrorMessage(request, errors);
     }
 
-    @ExceptionHandler({StateValidationErrorsException.class})
+    @ExceptionHandler({ StateValidationErrorsException.class })
     public ResponseEntity<ErrorMessage> handle(final StateValidationErrorsException e, HttpServletRequest request) {
         return createErrorMessage(request, e.getErrors());
     }
 
-    @ExceptionHandler({Exception.class})
+    @ExceptionHandler({ Exception.class })
     public ResponseEntity<ErrorMessage> handle(final Exception e, HttpServletRequest request) {
         log.error("Unexpected error occurred: ", e);
         return createErrorMessage(request, List.of(e.getMessage()));
     }
 
     private ResponseEntity<ErrorMessage> createErrorMessage(HttpServletRequest request, List<?> errors) {
-        ErrorMessage message = ErrorMessage.builder().parameters(buildParams(errors)).
-                instance(URI.create(request.getRequestURI())).
-                status(HttpStatus.UNPROCESSABLE_ENTITY).title("Invalid input data").
-                build();
+        ErrorMessage message = ErrorMessage.builder().parameters(buildParams(errors))
+                .instance(URI.create(request.getRequestURI())).status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .title("Invalid input data").build();
 
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(message);
     }
@@ -73,7 +72,10 @@ public class GlobalExceptionHandler {
         }
 
         static InvalidInputDataErrors from(ConstraintViolationException e) {
-            return new InvalidInputDataErrors(e.getConstraintViolations().stream().map(constraintViolation -> new FieldError(cutOffMethodAndParameterName(constraintViolation), constraintViolation.getMessage())).toList());
+            return new InvalidInputDataErrors(e.getConstraintViolations().stream()
+                    .map(constraintViolation -> new FieldError(cutOffMethodAndParameterName(constraintViolation),
+                            constraintViolation.getMessage()))
+                    .toList());
         }
 
         private static String cutOffMethodAndParameterName(ConstraintViolation<?> violation) {

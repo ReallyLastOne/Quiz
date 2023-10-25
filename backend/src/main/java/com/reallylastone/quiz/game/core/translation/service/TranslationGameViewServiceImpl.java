@@ -43,8 +43,8 @@ public class TranslationGameViewServiceImpl implements TranslationGameViewServic
 
         int phrasesLeft = current.map(c -> c.getPhrasesSize() - c.getTranslationsAndStatus().size()).orElse(0);
 
-        return ResponseEntity.ok(new PhraseAnswerResponse(correctAnswer, phrasesLeft,
-                current.get().countOf(ExerciseState.CORRECT)));
+        return ResponseEntity
+                .ok(new PhraseAnswerResponse(correctAnswer, phrasesLeft, current.get().countOf(ExerciseState.CORRECT)));
     }
 
     @Override
@@ -57,7 +57,6 @@ public class TranslationGameViewServiceImpl implements TranslationGameViewServic
     public ResponseEntity<ActiveTranslationGameSessionView> findActive() {
         return translationGameService.findActive()
                 .map(session -> new ActiveTranslationGameSessionView(session, phraseMapper::mapToView))
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> new IllegalStateException("User has no active session"));
+                .map(ResponseEntity::ok).orElseThrow(() -> new IllegalStateException("User has no active session"));
     }
 }

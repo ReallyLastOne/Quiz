@@ -23,17 +23,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface AuthenticationOperations {
 
     @Operation(summary = "Register given user")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "422", description = "If provided credentials are taken by another user or if credentials are semantically wrong", content = @Content)})
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "422", description = "If provided credentials are taken by another user or if credentials are semantically wrong", content = @Content) })
     @PostMapping("/register")
     ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request);
 
     @Operation(summary = "Authenticates given user")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "422", description = "If provided credentials are semantically wrong", content = @Content)})
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "422", description = "If provided credentials are semantically wrong", content = @Content) })
     @PostMapping("/authenticate")
     ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request);
 
     @Operation(summary = "Extends the lifespan of the access token based on given refresh token in cookie")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "422", description = "If provided credentials are semantically wrong or no refresh_token cookie provided", content = @Content)})
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "422", description = "If provided credentials are semantically wrong or no refresh_token cookie provided", content = @Content) })
     @PostMapping(value = "/refresh", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.ALL_VALUE)
     ResponseEntity<RefreshTokenResponse> refresh(HttpServletRequest request);
 
