@@ -8,5 +8,5 @@ import java.util.Map;
 
 @Builder
 record ErrorMessage(URI type, String title, HttpStatus status, String detail, URI instance,
-                    Map<String, Object> parameters) {
+        Map<String, Object> parameters) {
 }

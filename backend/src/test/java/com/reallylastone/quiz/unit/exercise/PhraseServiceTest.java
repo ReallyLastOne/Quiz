@@ -30,11 +30,7 @@ class PhraseServiceTest {
         phraseValidator = mock(PhraseValidator.class);
         phraseMapper = mock(PhraseMapper.class);
 
-        phraseService = new PhraseServiceImpl(
-                phraseRepository,
-                phraseValidator,
-                phraseMapper
-        );
+        phraseService = new PhraseServiceImpl(phraseRepository, phraseValidator, phraseMapper);
     }
 
     @Test

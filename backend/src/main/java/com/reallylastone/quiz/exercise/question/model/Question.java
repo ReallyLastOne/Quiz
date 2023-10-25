@@ -30,10 +30,7 @@ public class Question extends Exercise {
     @Column(name = "wrong_answer")
     private List<String> wrongAnswers = new ArrayList<>();
 
-    @JoinTable(name = "question_tags",
-            joinColumns = @JoinColumn(name = "question_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id")
-    )
+    @JoinTable(name = "question_tags", joinColumns = @JoinColumn(name = "question_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
     @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Tag> tags = new ArrayList<>();
 

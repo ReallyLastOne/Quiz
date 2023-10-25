@@ -40,23 +40,28 @@ public class GameSessionCreateRequestValidator implements Validator {
     private void validateSubclass(GameSession session, Errors errors) {
         if (session instanceof TranslationGameSession s) {
             if (s.getSourceLanguage() == null)
-                errors.rejectValue("session.sourceLanguage", "invalid.sourceLanguage.value", "sourceLanguage must not be null");
+                errors.rejectValue("session.sourceLanguage", "invalid.sourceLanguage.value",
+                        "sourceLanguage must not be null");
 
             if (s.getDestinationLanguage() == null)
-                errors.rejectValue("session.destinationLanguage", "invalid.destinationLanguage.value", "destinationLanguage must not be null");
+                errors.rejectValue("session.destinationLanguage", "invalid.destinationLanguage.value",
+                        "destinationLanguage must not be null");
 
             if (s.getPhrasesSize() <= 0)
-                errors.rejectValue("session.phrasesSize", "invalid.phrasesSize.value", "phrasesSize must be positive value");
+                errors.rejectValue("session.phrasesSize", "invalid.phrasesSize.value",
+                        "phrasesSize must be positive value");
             if (s.getPhrasesSize() > 15)
-                errors.rejectValue("session.phrasesSize", "invalid.phrasesSize.value", "phrasesSize must not be greater than 15");
+                errors.rejectValue("session.phrasesSize", "invalid.phrasesSize.value",
+                        "phrasesSize must not be greater than 15");
         }
-
 
         if (session instanceof QuizGameSession s) {
             if (s.getQuestionSize() <= 0)
-                errors.rejectValue("session.questionSize", "invalid.questionSize.value", "questionSize must be positive value");
+                errors.rejectValue("session.questionSize", "invalid.questionSize.value",
+                        "questionSize must be positive value");
             if (s.getQuestionSize() > 15)
-                errors.rejectValue("session.questionSize", "invalid.questionSize.value", "questionSize must not be greater than 15");
+                errors.rejectValue("session.questionSize", "invalid.questionSize.value",
+                        "questionSize must not be greater than 15");
         }
     }
 }

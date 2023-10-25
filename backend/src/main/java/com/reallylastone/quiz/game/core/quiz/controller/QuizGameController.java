@@ -19,7 +19,8 @@ public class QuizGameController implements QuizGameOperations {
     private final QuizGameViewService quizGameViewService;
 
     @Override
-    public ResponseEntity<GenericResponse> startGame(@RequestParam(defaultValue = "5") int questions, HttpServletRequest request) {
+    public ResponseEntity<GenericResponse> startGame(@RequestParam(defaultValue = "5") int questions,
+            HttpServletRequest request) {
         return quizGameViewService.startGame(questions, request);
     }
 
@@ -29,7 +30,8 @@ public class QuizGameController implements QuizGameOperations {
     }
 
     @Override
-    public ResponseEntity<QuestionAnswerResponse> answer(@RequestBody QuestionAnswerRequest questionAnswer, HttpServletRequest request) {
+    public ResponseEntity<QuestionAnswerResponse> answer(@RequestBody QuestionAnswerRequest questionAnswer,
+            HttpServletRequest request) {
         return quizGameViewService.answer(questionAnswer, request);
     }
 

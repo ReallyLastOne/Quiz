@@ -61,19 +61,17 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
         return Stream.of(0, -1, -20, 16, 100);
     }
 
-
     @ParameterizedTest
     @MethodSource("forbiddenPaths")
     void shouldBeForbidden(String path) throws Exception {
-        mockMvc.perform(post(path)
-                .with(csrf().asHeader())
-        ).andExpect(status().isForbidden());
+        mockMvc.perform(post(path).with(csrf().asHeader())).andExpect(status().isForbidden());
     }
 
     @ParameterizedTest
     @MethodSource("validQuestionSize")
     void shouldStartGameWhenQuestionSizeProvided(Integer questionSize) throws Exception {
-        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password"))
+                .andReturn();
         String accessToken = utils.extract(mvcResult, "accessToken");
 
         quizUtils.start(questionSize, accessToken).andExpect(status().is2xxSuccessful());
@@ -85,7 +83,8 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
     @ParameterizedTest
     @MethodSource("invalidQuestionSize")
     void shouldNotStartGameBecauseQuestionSizeInvalid(Integer questionSize) throws Exception {
-        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password"))
+                .andReturn();
         String accessToken = utils.extract(mvcResult, "accessToken");
 
         quizUtils.start(questionSize, accessToken).andExpect(status().isUnprocessableEntity());
@@ -94,7 +93,8 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
 
     @Test
     void shouldNotBeAbleToStartSecondGame() throws Exception {
-        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password"))
+                .andReturn();
         String accessToken = utils.extract(mvcResult, "accessToken");
 
         quizUtils.start(5, accessToken);
@@ -109,7 +109,8 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
     void shouldGetQuestion() throws Exception {
         quizUtils.populateQuestions();
 
-        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password"))
+                .andReturn();
         String accessToken = utils.extract(mvcResult, "accessToken");
 
         quizUtils.start(5, accessToken);
@@ -124,7 +125,8 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
 
     @Test
     void shouldNotGetQuestionBecauseNotInGame() throws Exception {
-        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password"))
+                .andReturn();
         String accessToken = utils.extract(mvcResult, "accessToken");
 
         quizUtils.next(accessToken).andExpect(status().is4xxClientError());
@@ -134,7 +136,8 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
     void shouldProcessAnswer() throws Exception {
         quizUtils.populateQuestions();
 
-        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password"))
+                .andReturn();
         String accessToken = utils.extract(mvcResult, "accessToken");
 
         quizUtils.start(5, accessToken);
@@ -142,15 +145,15 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
 
         QuestionAnswerRequest request = new QuestionAnswerRequest("answer");
         quizUtils.answer(request, accessToken).andExpectAll(status().is2xxSuccessful(),
-                jsonPath("$.questionsLeft").value(4),
-                jsonPath("$.totalCorrect").value(0));
+                jsonPath("$.questionsLeft").value(4), jsonPath("$.totalCorrect").value(0));
     }
 
     @Test
     void shouldNotProcessAnswer() throws Exception {
         quizUtils.populateQuestions();
 
-        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password"))
+                .andReturn();
         String accessToken = utils.extract(mvcResult, "accessToken");
 
         QuestionAnswerRequest request = new QuestionAnswerRequest("answer");
@@ -161,7 +164,8 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
     void shouldHaveWronglyAnsweredQuestion() throws Exception {
         quizUtils.populateQuestions();
 
-        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password"))
+                .andReturn();
         String accessToken = utils.extract(mvcResult, "accessToken");
 
         quizUtils.start(5, accessToken);
@@ -170,31 +174,34 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
         QuestionAnswerRequest request = new QuestionAnswerRequest("answer");
         quizUtils.answer(request, accessToken);
 
-        ((QuizGameSession) gameSessionRepository.findAll().get(0)).getQuestionsAndStatus().values().forEach(e -> Assertions.assertEquals(WRONG, e));
+        ((QuizGameSession) gameSessionRepository.findAll().get(0)).getQuestionsAndStatus().values()
+                .forEach(e -> Assertions.assertEquals(WRONG, e));
     }
 
     @Test
     void shouldHaveCorrectlyAnsweredQuestion() throws Exception {
         quizUtils.populateQuestions();
 
-        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password"))
+                .andReturn();
         String accessToken = utils.extract(mvcResult, "accessToken");
 
         quizUtils.start(5, accessToken);
         quizUtils.next(accessToken);
 
         QuestionAnswerRequest request = new QuestionAnswerRequest("correct");
-        quizUtils.answer(request, accessToken).andExpectAll(
-                jsonPath("$.totalCorrect").value(1));
+        quizUtils.answer(request, accessToken).andExpectAll(jsonPath("$.totalCorrect").value(1));
 
-        ((QuizGameSession) gameSessionRepository.findAll().get(0)).getQuestionsAndStatus().values().forEach(e -> Assertions.assertEquals(CORRECT, e));
+        ((QuizGameSession) gameSessionRepository.findAll().get(0)).getQuestionsAndStatus().values()
+                .forEach(e -> Assertions.assertEquals(CORRECT, e));
     }
 
     @Test
     void shouldCompleteGame() throws Exception {
         quizUtils.populateQuestions();
 
-        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password"))
+                .andReturn();
         String accessToken = utils.extract(mvcResult, "accessToken");
 
         quizUtils.start(1, accessToken);
@@ -202,7 +209,7 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
 
         QuestionAnswerRequest request = new QuestionAnswerRequest("correct");
         quizUtils.answer(request, accessToken).andExpectAll(jsonPath("$.questionsLeft").value(0),
-                jsonPath("$.totalCorrect").value( 1));
+                jsonPath("$.totalCorrect").value(1));
 
         Assertions.assertEquals(GameState.COMPLETED, gameSessionRepository.findAll().get(0).getState());
     }
@@ -211,7 +218,8 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
     void shouldBeAbleToStartGameAfterCompletion() throws Exception {
         quizUtils.populateQuestions();
 
-        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password"))
+                .andReturn();
         String accessToken = utils.extract(mvcResult, "accessToken");
 
         quizUtils.start(1, accessToken);
@@ -227,7 +235,8 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
     void shouldStopGameWhenInOne() throws Exception {
         quizUtils.populateQuestions();
 
-        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password"))
+                .andReturn();
         String accessToken = utils.extract(mvcResult, "accessToken");
 
         quizUtils.start(1, accessToken);
@@ -241,49 +250,45 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
     void shouldBeOkWhenStoppingNotExistingGame() throws Exception {
         quizUtils.populateQuestions();
 
-        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password"))
+                .andReturn();
         String accessToken = utils.extract(mvcResult, "accessToken");
         quizUtils.stop(accessToken).andExpect(status().is2xxSuccessful());
     }
 
     @Test
     void shouldReturnActiveSessionWithNoActiveQuestion() throws Exception {
-        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password"))
+                .andReturn();
         String accessToken = utils.extract(mvcResult, "accessToken");
 
         quizUtils.start(5, accessToken);
 
-        quizUtils.findActive(accessToken).andExpectAll(
-                status().is2xxSuccessful(),
-                jsonPath("$.correctAnswers").value(0),
-                jsonPath("$.questionsLeft").value(5),
-                jsonPath("$.currentActive").isEmpty()
-        );
+        quizUtils.findActive(accessToken).andExpectAll(status().is2xxSuccessful(),
+                jsonPath("$.correctAnswers").value(0), jsonPath("$.questionsLeft").value(5),
+                jsonPath("$.currentActive").isEmpty());
     }
 
     @Test
     void shouldReturnActiveSessionWithActiveQuestion() throws Exception {
-        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password"))
+                .andReturn();
         String accessToken = utils.extract(mvcResult, "accessToken");
         quizUtils.populateQuestions();
         quizUtils.start(5, accessToken);
         quizUtils.next(accessToken);
 
-        quizUtils.findActive(accessToken).andExpectAll(
-                status().is2xxSuccessful(),
-                jsonPath("$.correctAnswers").value(0),
-                jsonPath("$.questionsLeft").value(4),
-                jsonPath("$.currentActive").exists()
-        );
+        quizUtils.findActive(accessToken).andExpectAll(status().is2xxSuccessful(),
+                jsonPath("$.correctAnswers").value(0), jsonPath("$.questionsLeft").value(4),
+                jsonPath("$.currentActive").exists());
     }
 
     @Test
     void shouldReturn4xxWhenNoSession() throws Exception {
-        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password")).andReturn();
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password"))
+                .andReturn();
         String accessToken = utils.extract(mvcResult, "accessToken");
 
-        quizUtils.findActive(accessToken).andExpectAll(
-                status().is4xxClientError()
-        );
+        quizUtils.findActive(accessToken).andExpectAll(status().is4xxClientError());
     }
 }

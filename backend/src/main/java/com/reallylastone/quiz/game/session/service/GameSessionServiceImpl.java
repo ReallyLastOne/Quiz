@@ -57,7 +57,8 @@ public class GameSessionServiceImpl implements GameSessionService {
         List<StateValidationError> errors = new ArrayList<>();
 
         gameSessionStateValidator.validateCreateSessionRequest(UserService.getCurrentUser(), errors);
-        if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
+        if (!errors.isEmpty())
+            throw new StateValidationErrorsException(errors);
 
         validate(request);
 
@@ -77,14 +78,16 @@ public class GameSessionServiceImpl implements GameSessionService {
         UserEntity currentUser = UserService.getCurrentUser();
 
         gameSessionStateValidator.validateNextQuestionRequest(currentUser, errors);
-        if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
+        if (!errors.isEmpty())
+            throw new StateValidationErrorsException(errors);
 
         QuizGameSession activeSession = findActive(QuizGameSession.class).get();
-        Question randomQuestion = questionService.findRandomQuestion(activeSession
-                .getQuestionsAndStatus().keySet().stream().map(Exercise::getId).toList());
+        Question randomQuestion = questionService.findRandomQuestion(
+                activeSession.getQuestionsAndStatus().keySet().stream().map(Exercise::getId).toList());
         activeSession.answer(randomQuestion, NO_ANSWER);
         activeSession.setState(GameState.IN_PROGRESS);
-        log.info("Question with id: %s drawn for session with id: %s".formatted(randomQuestion.getId(), activeSession.getId()));
+        log.info("Question with id: %s drawn for session with id: %s".formatted(randomQuestion.getId(),
+                activeSession.getId()));
 
         return randomQuestion;
     }
@@ -96,16 +99,20 @@ public class GameSessionServiceImpl implements GameSessionService {
         UserEntity currentUser = UserService.getCurrentUser();
 
         gameSessionStateValidator.validateNextPhraseRequest(currentUser, errors);
-        if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
+        if (!errors.isEmpty())
+            throw new StateValidationErrorsException(errors);
 
         TranslationGameSession activeSession = findActive(TranslationGameSession.class).get();
         Locale sourceLanguage = activeSession.getSourceLanguage();
-        Phrase randomPhrase = phraseService.findRandomPhrase(sourceLanguage, activeSession.getDestinationLanguage(), currentUser.getId());
+        Phrase randomPhrase = phraseService.findRandomPhrase(sourceLanguage, activeSession.getDestinationLanguage(),
+                currentUser.getId());
         activeSession.answer(randomPhrase, NO_ANSWER);
         activeSession.setState(GameState.IN_PROGRESS);
-        log.info("Phrase with id: %s drawn for session with id: %s".formatted(randomPhrase.getId(), activeSession.getId()));
+        log.info("Phrase with id: %s drawn for session with id: %s".formatted(randomPhrase.getId(),
+                activeSession.getId()));
 
-        return new PhraseToTranslate(randomPhrase.getTranslationMap().get(sourceLanguage), sourceLanguage, activeSession.getDestinationLanguage());
+        return new PhraseToTranslate(randomPhrase.getTranslationMap().get(sourceLanguage), sourceLanguage,
+                activeSession.getDestinationLanguage());
     }
 
     @Override
@@ -115,20 +122,24 @@ public class GameSessionServiceImpl implements GameSessionService {
         UserEntity currentUser = UserService.getCurrentUser();
 
         gameSessionStateValidator.validateQuestionAnswerRequest(currentUser, errors);
-        if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
+        if (!errors.isEmpty())
+            throw new StateValidationErrorsException(errors);
 
         QuizGameSession activeSession = findActive(QuizGameSession.class).get();
         Optional<Map.Entry<Question, ExerciseState>> currentOptional = activeSession.findCurrent();
 
         if (currentOptional.isEmpty()) {
-            log.error("Game session with id: %s has no question that can be answered, but somehow it got through validation!".formatted(activeSession.getId()));
-            throw new IllegalStateException("Trying to process the answer for the game session, which has no unanswered questions");
+            log.error(
+                    "Game session with id: %s has no question that can be answered, but somehow it got through validation!"
+                            .formatted(activeSession.getId()));
+            throw new IllegalStateException(
+                    "Trying to process the answer for the game session, which has no unanswered questions");
         }
 
         Question current = currentOptional.get().getKey();
         boolean isCorrectAnswer = current.isCorrect(questionAnswer.answer());
-        log.info("Question with id: %s for game session with id: %s answered %s"
-                .formatted(current.getId(), activeSession.getId(), isCorrectAnswer ? "correctly" : "wrongly"));
+        log.info("Question with id: %s for game session with id: %s answered %s".formatted(current.getId(),
+                activeSession.getId(), isCorrectAnswer ? "correctly" : "wrongly"));
         activeSession.answer(current, ExerciseState.from(isCorrectAnswer));
 
         if (activeSession.isLastQuestion()) {
@@ -146,14 +157,18 @@ public class GameSessionServiceImpl implements GameSessionService {
         UserEntity currentUser = UserService.getCurrentUser();
 
         gameSessionStateValidator.validatePhraseAnswerRequest(currentUser, errors);
-        if (!errors.isEmpty()) throw new StateValidationErrorsException(errors);
+        if (!errors.isEmpty())
+            throw new StateValidationErrorsException(errors);
 
         TranslationGameSession activeSession = findActive(TranslationGameSession.class).get();
         Optional<Map.Entry<Phrase, ExerciseState>> currentOptional = activeSession.findCurrent();
 
         if (currentOptional.isEmpty()) {
-            log.error("Game session with id: %s has no phrases that can be translated, but somehow it got through validation!".formatted(activeSession.getId()));
-            throw new IllegalStateException("Trying to process the phrase for the game session, which has no unanswered phrases");
+            log.error(
+                    "Game session with id: %s has no phrases that can be translated, but somehow it got through validation!"
+                            .formatted(activeSession.getId()));
+            throw new IllegalStateException(
+                    "Trying to process the phrase for the game session, which has no unanswered phrases");
         }
 
         Phrase current = currentOptional.get().getKey();
@@ -185,8 +200,7 @@ public class GameSessionServiceImpl implements GameSessionService {
         Long id = UserService.getCurrentUser().getId();
 
         return Optional.ofNullable(determineMethod(gameSessionType))
-                .map(method -> (Optional<T>) Optional.ofNullable(method.apply(id)))
-                .orElseGet(() -> {
+                .map(method -> (Optional<T>) Optional.ofNullable(method.apply(id))).orElseGet(() -> {
                     log.error("Unknown game session type");
                     return Optional.empty();
                 });

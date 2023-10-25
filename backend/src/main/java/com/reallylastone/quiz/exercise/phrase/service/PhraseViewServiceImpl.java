@@ -32,7 +32,8 @@ public class PhraseViewServiceImpl implements PhraseViewService {
     @Override
     public ResponseEntity<PhraseView> findById(Long id) {
         Optional<Phrase> exerciseOptional = phraseService.findById(id);
-        return exerciseOptional.map(exercise -> ResponseEntity.ok(phraseMapper.mapToView(exercise))).orElseGet(() -> ResponseEntity.notFound().build());
+        return exerciseOptional.map(exercise -> ResponseEntity.ok(phraseMapper.mapToView(exercise)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Override
@@ -45,9 +46,7 @@ public class PhraseViewServiceImpl implements PhraseViewService {
         CsvToBean<PhraseCSVEntry> entries;
         try {
             entries = new CsvToBeanBuilder<PhraseCSVEntry>(CSVUtils.toCSVReader(multipartFile, parser))
-                    .withMappingStrategy(new PhraseCSVEntryMappingStrategy())
-                    .withType(PhraseCSVEntry.class)
-                    .build();
+                    .withMappingStrategy(new PhraseCSVEntryMappingStrategy()).withType(PhraseCSVEntry.class).build();
         } catch (IOException e) {
             String message = "Could not access file " + multipartFile.getName();
             log.error(message);
@@ -61,8 +60,7 @@ public class PhraseViewServiceImpl implements PhraseViewService {
 
     @Override
     public ResponseEntity<List<PhraseView>> getAllPhrases(int page, int size, String[] languages) {
-        return ResponseEntity.ok(
-                phraseService.getAllPhrases(PageRequest.of(page, size), languages).stream().map(phraseMapper::mapToView)
-                        .toList());
+        return ResponseEntity.ok(phraseService.getAllPhrases(PageRequest.of(page, size), languages).stream()
+                .map(phraseMapper::mapToView).toList());
     }
 }

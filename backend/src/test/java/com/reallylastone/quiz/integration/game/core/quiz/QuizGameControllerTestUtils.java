@@ -26,37 +26,29 @@ public class QuizGameControllerTestUtils {
     private final ObjectMapper mapper = new ObjectMapper();
 
     public ResultActions start(int questions, String accessToken) throws Exception {
-        return mockMvc.perform(post(START_GAME_PATH)
-                .with(csrf().asHeader())
-                .header("Authorization", "Bearer " + accessToken)
-                .queryParam("questions", String.valueOf(questions)));
+        return mockMvc.perform(post(START_GAME_PATH).with(csrf().asHeader())
+                .header("Authorization", "Bearer " + accessToken).queryParam("questions", String.valueOf(questions)));
     }
 
-
     public ResultActions next(String accessToken) throws Exception {
-        return mockMvc.perform(post(NEXT_QUESTION_PATH)
-                .with(csrf().asHeader())
-                .header("Authorization", "Bearer " + accessToken));
+        return mockMvc.perform(
+                post(NEXT_QUESTION_PATH).with(csrf().asHeader()).header("Authorization", "Bearer " + accessToken));
     }
 
     public ResultActions answer(QuestionAnswerRequest request, String accessToken) throws Exception {
-        return mockMvc.perform(post(ANSWER_QUESTION_PATH)
-                .with(csrf().asHeader())
-                .header("Authorization", "Bearer " + accessToken)
-                .content(mapper.writeValueAsString(request))
-                .contentType(MediaType.APPLICATION_JSON));
+        return mockMvc.perform(
+                post(ANSWER_QUESTION_PATH).with(csrf().asHeader()).header("Authorization", "Bearer " + accessToken)
+                        .content(mapper.writeValueAsString(request)).contentType(MediaType.APPLICATION_JSON));
     }
 
     public ResultActions stop(String accessToken) throws Exception {
-        return mockMvc.perform(post(STOP_GAME_PATH)
-                .with(csrf().asHeader())
-                .header("Authorization", "Bearer " + accessToken));
+        return mockMvc
+                .perform(post(STOP_GAME_PATH).with(csrf().asHeader()).header("Authorization", "Bearer " + accessToken));
     }
 
     public ResultActions findActive(String accessToken) throws Exception {
-        return mockMvc.perform(post(FIND_ACTIVE_GAME_PATH)
-                .with(csrf().asHeader())
-                .header("Authorization", "Bearer " + accessToken));
+        return mockMvc.perform(
+                post(FIND_ACTIVE_GAME_PATH).with(csrf().asHeader()).header("Authorization", "Bearer " + accessToken));
     }
 
     public void populateQuestions() {

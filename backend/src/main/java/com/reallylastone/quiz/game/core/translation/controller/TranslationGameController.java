@@ -21,7 +21,7 @@ public class TranslationGameController implements TranslationGameOperations {
 
     @Override
     public Long startGame(@RequestParam Locale sourceLanguage, @RequestParam Locale destinationLanguage,
-                          @RequestParam(defaultValue = "5") int phrases, HttpServletRequest request) {
+            @RequestParam(defaultValue = "5") int phrases, HttpServletRequest request) {
         return translationGameViewService.startGame(sourceLanguage, destinationLanguage, phrases, request);
     }
 

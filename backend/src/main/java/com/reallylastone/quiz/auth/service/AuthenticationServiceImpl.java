@@ -41,12 +41,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthenticationServiceResponse register(RegisterRequest request) {
         validate(request);
 
-        UserEntity user = UserEntity.builder().
-                nickname(request.nickname()).
-                email(request.email()).
-                password(passwordEncoder.encode(request.password())).
-                roles(Set.of(Role.USER)).
-                build();
+        UserEntity user = UserEntity.builder().nickname(request.nickname()).email(request.email())
+                .password(passwordEncoder.encode(request.password())).roles(Set.of(Role.USER)).build();
 
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
@@ -68,8 +64,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationServiceResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.
-                authenticate(new UsernamePasswordAuthenticationToken(request.nickname(), request.password()));
+        authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(request.nickname(), request.password()));
 
         var user = userRepository.findByNickname(request.nickname()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
@@ -80,13 +76,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public RefreshTokenResponse refresh(String refreshToken) {
-        return refreshTokenService.findByToken(refreshToken)
-                .map(refreshTokenService::verifyExpiration)
-                .map(RefreshToken::getUser)
-                .map(user -> {
+        return refreshTokenService.findByToken(refreshToken).map(refreshTokenService::verifyExpiration)
+                .map(RefreshToken::getUser).map(user -> {
                     String token = jwtService.generateToken(user);
                     return new RefreshTokenResponse(token);
-                })
-                .orElseThrow(() -> new AuthenticationCredentialsNotFoundException("refresh token not found in database"));
+                }).orElseThrow(
+                        () -> new AuthenticationCredentialsNotFoundException("refresh token not found in database"));
     }
 }

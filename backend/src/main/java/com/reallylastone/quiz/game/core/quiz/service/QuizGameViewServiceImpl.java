@@ -33,16 +33,18 @@ public class QuizGameViewServiceImpl implements QuizGameViewService {
     }
 
     @Override
-    public ResponseEntity<QuestionAnswerResponse> answer(QuestionAnswerRequest questionAnswer, HttpServletRequest request) {
-        // if no active session, then processAnswer method will throw exception, so after there is guarantee that 'current' is present
+    public ResponseEntity<QuestionAnswerResponse> answer(QuestionAnswerRequest questionAnswer,
+            HttpServletRequest request) {
+        // if no active session, then processAnswer method will throw exception, so after there is guarantee that
+        // 'current' is present
         Optional<QuizGameSession> current = quizGameService.findActive();
 
         boolean correctAnswer = quizGameService.processAnswer(questionAnswer);
 
         int questionsLeft = current.map(c -> c.getQuestionSize() - c.getQuestionsAndStatus().size()).orElse(0);
 
-        return ResponseEntity.ok(new QuestionAnswerResponse(correctAnswer, questionsLeft,
-                current.get().countOf(ExerciseState.CORRECT)));
+        return ResponseEntity.ok(
+                new QuestionAnswerResponse(correctAnswer, questionsLeft, current.get().countOf(ExerciseState.CORRECT)));
     }
 
     @Override
@@ -55,7 +57,6 @@ public class QuizGameViewServiceImpl implements QuizGameViewService {
     public ResponseEntity<ActiveQuizGameSessionView> findActive() {
         return quizGameService.findActive()
                 .map(session -> new ActiveQuizGameSessionView(session, questionMapper::mapToView))
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> new IllegalStateException("User has no active session"));
+                .map(ResponseEntity::ok).orElseThrow(() -> new IllegalStateException("User has no active session"));
     }
 }

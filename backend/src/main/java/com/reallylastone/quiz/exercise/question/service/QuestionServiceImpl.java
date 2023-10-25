@@ -34,7 +34,8 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Page<Question> findAll(Pageable page) {
-        if (page.getPageSize() > 100) page = PageRequest.of(page.getPageNumber(), 100);
+        if (page.getPageSize() > 100)
+            page = PageRequest.of(page.getPageNumber(), 100);
 
         return questionRepository.findAll(page);
     }
@@ -59,11 +60,11 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Question findRandomQuestion(List<Long> idsExcluded) {
-        if (idsExcluded.isEmpty()) return findRandomQuestion();
+        if (idsExcluded.isEmpty())
+            return findRandomQuestion();
 
-        return questionRepository.findByIdNotIn(idsExcluded)
-                .orElseThrow(() -> new IllegalStateException("No questions in database that do not have ids %s "
-                        .formatted(idsExcluded)));
+        return questionRepository.findByIdNotIn(idsExcluded).orElseThrow(() -> new IllegalStateException(
+                "No questions in database that do not have ids %s ".formatted(idsExcluded)));
     }
 
     @Override
@@ -71,12 +72,8 @@ public class QuestionServiceImpl implements QuestionService {
         validate(question);
 
         // attach tag entities to current session
-        List<Tag> tags = question.getTags()
-                .stream()
-                .map(tag -> tagRepository.findByName(tag.getName()))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .toList();
+        List<Tag> tags = question.getTags().stream().map(tag -> tagRepository.findByName(tag.getName()))
+                .filter(Optional::isPresent).map(Optional::get).toList();
         question.setTags(tags);
 
         return questionRepository.save(question);

@@ -44,24 +44,20 @@ class QuestionControllerTest extends AbstractIntegrationTest {
     private TagRepository tagRepository;
 
     private static Stream<QuestionCreateRequest> correctCreateQuestionRequests() {
-        return Stream.of(
-                new QuestionCreateRequest(List.of(""), List.of(""), "question?", List.of()),
+        return Stream.of(new QuestionCreateRequest(List.of(""), List.of(""), "question?", List.of()),
                 new QuestionCreateRequest(List.of("", ""), List.of(""), "question?", List.of()),
                 new QuestionCreateRequest(List.of(""), List.of("", ""), "question?", List.of()),
-                new QuestionCreateRequest(List.of("", ""), List.of("", ""), "question?", List.of())
-        );
+                new QuestionCreateRequest(List.of("", ""), List.of("", ""), "question?", List.of()));
     }
 
     private static Stream<QuestionCreateRequest> wrongCreateQuestionRequests() {
-        return Stream.of(
-                new QuestionCreateRequest(null, null, null, null),
+        return Stream.of(new QuestionCreateRequest(null, null, null, null),
                 new QuestionCreateRequest(new ArrayList<>(), null, null, null),
                 new QuestionCreateRequest(null, new ArrayList<>(), null, null),
                 new QuestionCreateRequest(List.of(""), List.of(""), "", null),
                 new QuestionCreateRequest(List.of(), null, null, null),
                 new QuestionCreateRequest(List.of(), null, null, null),
-                new QuestionCreateRequest(List.of(""), List.of(""), "question?", List.of("not existing tag"))
-        );
+                new QuestionCreateRequest(List.of(""), List.of(""), "question?", List.of("not existing tag")));
     }
 
     @ParameterizedTest
@@ -94,9 +90,9 @@ class QuestionControllerTest extends AbstractIntegrationTest {
         tagRepository.save(tag);
         MvcResult mvcResult = authenticationUtils.register().andReturn();
 
-        questionControllerTestUtils.createQuestion(new QuestionCreateRequest(List.of("", ""), List.of("", ""), "question?", List.of("Linux")),
-                        generalUtils.extract(mvcResult, "accessToken"))
-                .andExpect(status().is2xxSuccessful());
+        questionControllerTestUtils.createQuestion(
+                new QuestionCreateRequest(List.of("", ""), List.of("", ""), "question?", List.of("Linux")),
+                generalUtils.extract(mvcResult, "accessToken")).andExpect(status().is2xxSuccessful());
         Assertions.assertEquals(1, questionRepository.findAll().size());
     }
 }

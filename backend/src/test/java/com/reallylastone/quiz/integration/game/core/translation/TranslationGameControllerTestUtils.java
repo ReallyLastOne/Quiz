@@ -26,40 +26,33 @@ public class TranslationGameControllerTestUtils {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public ResultActions start(Locale sourceLanguage, Locale destinationLanguage, int phrases, String accessToken) throws Exception {
-        return mockMvc.perform(post(START_GAME_PATH)
-                .with(csrf().asHeader())
-                .header("Authorization", "Bearer " + accessToken)
-                .queryParam("phrases", String.valueOf(phrases))
+    public ResultActions start(Locale sourceLanguage, Locale destinationLanguage, int phrases, String accessToken)
+            throws Exception {
+        return mockMvc.perform(post(START_GAME_PATH).with(csrf().asHeader())
+                .header("Authorization", "Bearer " + accessToken).queryParam("phrases", String.valueOf(phrases))
                 .queryParam("sourceLanguage", sourceLanguage.toLanguageTag())
                 .queryParam("destinationLanguage", destinationLanguage.toLanguageTag()));
     }
 
-
     public ResultActions next(String accessToken) throws Exception {
-        return mockMvc.perform(post(NEXT_PHRASE_PATH)
-                .with(csrf().asHeader())
-                .header("Authorization", "Bearer " + accessToken));
+        return mockMvc.perform(
+                post(NEXT_PHRASE_PATH).with(csrf().asHeader()).header("Authorization", "Bearer " + accessToken));
     }
 
     public ResultActions answer(PhraseAnswerRequest request, String accessToken) throws Exception {
-        return mockMvc.perform(post(ANSWER_PHRASE_PATH)
-                .with(csrf().asHeader())
-                .header("Authorization", "Bearer " + accessToken)
-                .content(mapper.writeValueAsString(request))
-                .contentType(MediaType.APPLICATION_JSON));
+        return mockMvc.perform(
+                post(ANSWER_PHRASE_PATH).with(csrf().asHeader()).header("Authorization", "Bearer " + accessToken)
+                        .content(mapper.writeValueAsString(request)).contentType(MediaType.APPLICATION_JSON));
     }
 
     public ResultActions stop(String accessToken) throws Exception {
-        return mockMvc.perform(post(STOP_GAME_PATH)
-                .with(csrf().asHeader())
-                .header("Authorization", "Bearer " + accessToken));
+        return mockMvc
+                .perform(post(STOP_GAME_PATH).with(csrf().asHeader()).header("Authorization", "Bearer " + accessToken));
     }
 
     public ResultActions findActive(String accessToken) throws Exception {
-        return mockMvc.perform(post(FIND_ACTIVE_GAME_PATH)
-                .with(csrf().asHeader())
-                .header("Authorization", "Bearer " + accessToken));
+        return mockMvc.perform(
+                post(FIND_ACTIVE_GAME_PATH).with(csrf().asHeader()).header("Authorization", "Bearer " + accessToken));
     }
 
     public void populatePhrasesFor(Long ownerId) {

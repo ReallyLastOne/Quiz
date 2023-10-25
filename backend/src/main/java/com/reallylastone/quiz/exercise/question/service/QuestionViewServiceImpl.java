@@ -24,8 +24,8 @@ public class QuestionViewServiceImpl implements QuestionViewService {
     public ResponseEntity<QuestionView> findById(Long id) {
         Optional<Question> exerciseOptional = questionService.findById(id);
 
-        return exerciseOptional.map(exercise -> ResponseEntity.ok(questionMapper.mapToView(exercise))).
-                orElseGet(() -> ResponseEntity.notFound().build());
+        return exerciseOptional.map(exercise -> ResponseEntity.ok(questionMapper.mapToView(exercise)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Override

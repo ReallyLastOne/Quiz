@@ -17,31 +17,17 @@ import java.util.stream.Stream;
 class CSVUtilsTest {
     @Parameterized.Parameters
     static Stream<String> firstLineData() {
-        return Stream.of(
-                "firstLine",
-                "firstLine\rasfd\n",
-                "firstLine\nasfd\n",
-                "firstLine\r\nasfd\n",
-                "firstLine\n\rasfd\n",
-                "firstLine\n\nasfd\n"
-        );
+        return Stream.of("firstLine", "firstLine\rasfd\n", "firstLine\nasfd\n", "firstLine\r\nasfd\n",
+                "firstLine\n\rasfd\n", "firstLine\n\nasfd\n");
     }
 
     @Parameterized.Parameters
     static Stream<Arguments> detectSeparatorData() {
-        return Stream.of(
-                Arguments.of((Object)
-                        new String[]{
-                                "pl;en;it", ";"}),
-                Arguments.of((Object)
-                        new String[]{"pl;en,it;es", ";"}),
-                Arguments.of((Object)
-                        new String[]{";;;", ";"}),
-                Arguments.of((Object)
-                        new String[]{"\"pl\";\"en\";\"it\";es", ";"}),
-                Arguments.of((Object)
-                        new String[]{"\tpl\ten\t", "\t"})
-        );
+        return Stream.of(Arguments.of((Object) new String[] { "pl;en;it", ";" }),
+                Arguments.of((Object) new String[] { "pl;en,it;es", ";" }),
+                Arguments.of((Object) new String[] { ";;;", ";" }),
+                Arguments.of((Object) new String[] { "\"pl\";\"en\";\"it\";es", ";" }),
+                Arguments.of((Object) new String[] { "\tpl\ten\t", "\t" }));
     }
 
     @ParameterizedTest

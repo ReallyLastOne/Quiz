@@ -24,29 +24,25 @@ public class PhraseControllerTestUtils {
     private final ObjectMapper mapper = new ObjectMapper();
 
     public ResultActions createPhrase(PhraseCreateRequest request, String accessToken) throws Exception {
-        return mockMvc.perform(post(EndpointPaths.Phrase.BASE)
-                .with(csrf().asHeader())
-                .content(mapper.writeValueAsString(request))
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + accessToken));
+        return mockMvc.perform(
+                post(EndpointPaths.Phrase.BASE).with(csrf().asHeader()).content(mapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON).header("Authorization", "Bearer " + accessToken));
     }
 
     public ResultActions getAllPhrases(String accessToken, String... languages) throws Exception {
-        MockHttpServletRequestBuilder builder = get(EndpointPaths.Phrase.BASE)
-                .with(csrf().asHeader())
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + accessToken);
+        MockHttpServletRequestBuilder builder = get(EndpointPaths.Phrase.BASE).with(csrf().asHeader())
+                .contentType(MediaType.APPLICATION_JSON).header("Authorization", "Bearer " + accessToken);
 
-        if (languages != null && languages.length != 0) builder.queryParam("languages", languages);
+        if (languages != null && languages.length != 0)
+            builder.queryParam("languages", languages);
 
         return mockMvc.perform(builder);
     }
 
-    public ResultActions createPhrases(CSVFileParser parser, String accessToken, MockMultipartFile file) throws Exception {
-        MockHttpServletRequestBuilder builder = multipart(EndpointPaths.Phrase.BASE)
-                .file("file", file.getBytes())
-                .with(csrf().asHeader())
-                .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResultActions createPhrases(CSVFileParser parser, String accessToken, MockMultipartFile file)
+            throws Exception {
+        MockHttpServletRequestBuilder builder = multipart(EndpointPaths.Phrase.BASE).file("file", file.getBytes())
+                .with(csrf().asHeader()).contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .header("Authorization", "Bearer " + accessToken);
 
         if (parser != null) {
@@ -55,7 +51,6 @@ public class PhraseControllerTestUtils {
 
         return mockMvc.perform(builder);
     }
-
 
     @AllArgsConstructor
     @Getter

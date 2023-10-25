@@ -18,22 +18,16 @@ public interface GameSessionRepository extends JpaRepository<GameSession, Long> 
     @Query("SELECT COUNT(*) >= 1 FROM GameSession gs WHERE gs.user.id = :userId AND gs.state <> 2 and TYPE(gs) = TranslationGameSession")
     boolean hasActiveTranslationSession(Long userId);
 
-    @Query(value =
-            "SELECT COUNT(*) >= 1 FROM QUIZ_GAME_SESSION_QUESTIONS q " +
-                    "INNER JOIN QUIZ_GAME_SESSION qgs ON qgs.ID = q.GAME_SESSION " +
-                    "INNER JOIN USER_ENTITY u ON U.ID = qgs.USER_ID " +
-                    "WHERE q.STATUS = 0 " +
-                    "AND qgs.state <> 2",
-            nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) >= 1 FROM QUIZ_GAME_SESSION_QUESTIONS q "
+            + "INNER JOIN QUIZ_GAME_SESSION qgs ON qgs.ID = q.GAME_SESSION "
+            + "INNER JOIN USER_ENTITY u ON U.ID = qgs.USER_ID " + "WHERE q.STATUS = 0 "
+            + "AND qgs.state <> 2", nativeQuery = true)
     boolean hasUnansweredQuestion(Long userId);
 
-    @Query(value =
-            "SELECT COUNT(*) >= 1 FROM TRANSLATION_GAME_SESSION_PHRASES q " +
-                    "INNER JOIN TRANSLATION_GAME_SESSION qgs ON qgs.ID = q.GAME_SESSION " +
-                    "INNER JOIN USER_ENTITY u ON U.ID = qgs.USER_ID " +
-                    "WHERE q.STATUS = 0 " +
-                    "AND qgs.state <> 2",
-            nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) >= 1 FROM TRANSLATION_GAME_SESSION_PHRASES q "
+            + "INNER JOIN TRANSLATION_GAME_SESSION qgs ON qgs.ID = q.GAME_SESSION "
+            + "INNER JOIN USER_ENTITY u ON U.ID = qgs.USER_ID " + "WHERE q.STATUS = 0 "
+            + "AND qgs.state <> 2", nativeQuery = true)
     boolean hasUnansweredPhrases(Long id);
 
     @Query("SELECT gs FROM GameSession gs WHERE gs.user.id = :userId AND gs.state <> 2")
