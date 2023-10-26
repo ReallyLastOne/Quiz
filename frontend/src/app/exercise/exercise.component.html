@@ -28,5 +28,8 @@
   </mat-card-actions>
 </mat-card>
 <ng-template #scorePage>
-  <app-score (newGame)="startNewGame()"></app-score>
+  <app-score
+    [achievedScore]="achievedScore"
+    (newGame)="startNewGame()"
+  ></app-score>
 </ng-template>
