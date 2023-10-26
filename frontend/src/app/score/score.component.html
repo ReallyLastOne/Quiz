@@ -1,6 +1,8 @@
-<div class="container">
+<div class="container score">
   <div>
-    <p>{{scoreString}}</p>
-    <button class="next-question-button" (click)="startAgain()">Try again</button>
+    <p>{{ scoreString }}</p>
+    <div class="score-btn">
+      <button mat-raised-button (click)="startAgain()">Try again</button>
+    </div>
   </div>
 </div>

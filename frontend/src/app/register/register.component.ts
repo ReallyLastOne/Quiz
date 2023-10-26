@@ -1,19 +1,33 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  DestroyRef,
+  inject,
+} from '@angular/core';
 import { UserAuthenticationService } from '../services/user-authentication.service';
 import { RegistrationRequest } from '../model/registration-request.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css'],
+  styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
+  private _destroyRef = inject(DestroyRef);
   private _regForm: FormGroup;
   private _submitted = false;
-  constructor(private _userAuthenticationService: UserAuthenticationService) {}
+
+  @Output() backToLogin = new EventEmitter<boolean>();
+
+  constructor(
+    private readonly _userAuthenticationService: UserAuthenticationService
+  ) {}
 
   get regForm(): FormGroup {
     return this._regForm;
@@ -25,6 +39,10 @@ export class RegisterComponent implements OnInit {
 
   set submitted(value: boolean) {
     this._submitted = value;
+  }
+
+  get registerForm() {
+    return this.regForm.controls;
   }
 
   ngOnInit(): void {
@@ -41,13 +59,11 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  @Output() backToLogin = new EventEmitter<boolean>();
-
-  backToLoginClick() {
+  backToLoginClick(): void {
     this.backToLogin.emit(false);
   }
 
-  onRegister() {
+  onRegister(): void {
     this.submitted = true;
     if (this._regForm.invalid) {
       return;
@@ -61,19 +77,15 @@ export class RegisterComponent implements OnInit {
       this._userAuthenticationService
         .registration(registrationRequest)
         .pipe(
-          tap((response) => {
-            console.log(response);
-          }),
           catchError((error) => {
-            console.log(error);
+            console.error(error);
             return of([]);
-          })
+          }),
+          takeUntilDestroyed(this._destroyRef)
         )
-        .subscribe();
+        .subscribe({
+          next: () => this.backToLogin.emit(false),
+        });
     }
-  }
-
-  get registerForm() {
-    return this.regForm.controls;
   }
 }

@@ -1,20 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { tap, catchError } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { LoginRequest } from '../model/login-request.model';
 import { UserAuthenticationService } from '../services/user-authentication.service';
 import { of } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
+  private _destroyRef = inject(DestroyRef);
   private _logForm: FormGroup;
   private _submitted = false;
   login = true;
 
-  constructor(private _userAuthenticationService: UserAuthenticationService) {}
+  get loginForm() {
+    return this._logForm.controls;
+  }
 
   get submitted(): boolean {
     return this._submitted;
@@ -27,6 +31,10 @@ export class LoginComponent implements OnInit {
   get logForm(): FormGroup {
     return this._logForm;
   }
+
+  constructor(
+    private readonly _userAuthenticationService: UserAuthenticationService
+  ) {}
 
   ngOnInit(): void {
     this._logForm = new FormGroup({
@@ -41,11 +49,11 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  registerMeClick(register: boolean) {
+  registerMeClick(register: boolean): void {
     this.login = register;
   }
 
-  onLogin() {
+  onLogin(): void {
     this.submitted = true;
     if (this._logForm.invalid) {
       return;
@@ -58,18 +66,12 @@ export class LoginComponent implements OnInit {
       this._userAuthenticationService
         .signIn(loginRequest)
         .pipe(
-          tap((response) => {
-            console.log(response);
-          }),
           catchError(() => {
             return of([]);
-          })
+          }),
+          takeUntilDestroyed(this._destroyRef)
         )
         .subscribe();
     }
-  }
-
-  get loginForm() {
-    return this._logForm.controls;
   }
 }

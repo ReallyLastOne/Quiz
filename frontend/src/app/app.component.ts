@@ -4,15 +4,14 @@ import { UserAuthenticationService } from './services/user-authentication.servic
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'frontend';
   constructor(
-    private readonly userAuthenticationService: UserAuthenticationService
+    private readonly _userAuthenticationService: UserAuthenticationService
   ) {}
 
-  get userAuthService() {
-    return this.userAuthenticationService;
+  get userAuthService(): UserAuthenticationService {
+    return this._userAuthenticationService;
   }
 }

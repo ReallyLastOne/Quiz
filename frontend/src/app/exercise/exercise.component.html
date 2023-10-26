@@ -1,15 +1,32 @@
-<div class="container">
-  <div *ngIf="!exerciseEnd" class="question-holder">
-    <div class="question">{{question}}<p class="question-count">{{questionCount}}</p>
-    </div>
-    <div class="place-answers" *ngFor="let answer of answers; let i=index">
-      <button class="button-answers" (click)="markAnswer(i+1, $event)"
-        [ngClass]="marked[i] ? 'marked' : 'button-answers'">{{answer}}</button>
-    </div>
+<mat-card *ngIf="!isEndOfQuiz; else scorePage" class="container">
+  <mat-card-header>
+    <mat-card-title>{{ question }}</mat-card-title>
+  </mat-card-header>
 
-    <div *ngIf="clicked">
-      <button class="next-question-button" (click)="nextQuestion()">Next</button>
-    </div>
-  </div>
-
-</div>
+  <mat-card-content>
+    <mat-radio-group class="exercise-content-answers">
+      <mat-radio-button
+        *ngFor="let answer of answers"
+        [value]="answer"
+        [(ngModel)]="checkedAnswer"
+        ngDefaultControl
+      >
+        {{ answer }}
+      </mat-radio-button>
+    </mat-radio-group>
+  </mat-card-content>
+  <mat-card-actions>
+    <button
+      color="primary"
+      mat-raised-button
+      class="exercise-btn"
+      [disabled]="checkedAnswer == undefined"
+      (click)="onConfirm()"
+    >
+      Zatwierdź
+    </button>
+  </mat-card-actions>
+</mat-card>
+<ng-template #scorePage>
+  <app-score (newGame)="startNewGame()"></app-score>
+</ng-template>

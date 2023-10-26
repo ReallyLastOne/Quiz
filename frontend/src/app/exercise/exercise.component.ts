@@ -1,112 +1,126 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription, of } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import {
+  Component,
+  OnInit,
+  inject,
+  DestroyRef,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+} from '@angular/core';
+import { of } from 'rxjs';
+import { catchError, finalize, switchMap } from 'rxjs/operators';
 import { AppService } from '../services/app.service';
-import { Exercise } from '../model/Exercise.model';
-import { Router } from '@angular/router';
-import { ScoreService } from '../score/score.service';
+import { Exercise } from '../model/exercise.model';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ExerciseService } from './exercise.service';
 
 @Component({
   selector: 'app-exercise',
   templateUrl: './exercise.component.html',
-  styleUrls: ['./exercise.component.css'],
+  styleUrls: ['./exercise.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [ExerciseService],
 })
-export class ExerciseComponent implements OnDestroy, OnInit {
-  private subscriptions = new Subscription();
-  private newParsedData: Exercise;
-  private nextExercise: number = 1;
-  private exerciseCount: number;
-  private points: number = 0;
-  private allPoints: number = 0;
-  answers: string[] = [];
-  marked: boolean[] = [false, false, false, false];
-  correctAnswer: string;
-  question: string;
-  clicked = false;
-  exerciseEnd = false;
-  questionCount = '';
+export class ExerciseComponent implements OnInit {
+  private _destroyRef = inject(DestroyRef);
+  private _question: string;
+  private _answers: string[];
+  private _checkedAnswer!: string;
+  private _isEndOfQuiz = false;
+
+  public get question(): string {
+    return this._question;
+  }
+
+  public get answers(): string[] {
+    return this._answers;
+  }
+
+  public get checkedAnswer(): string {
+    return this._checkedAnswer;
+  }
+
+  public set checkedAnswer(value: string) {
+    this._checkedAnswer = value;
+  }
+
+  public get isEndOfQuiz(): boolean {
+    return this._isEndOfQuiz;
+  }
+
   constructor(
-    private _appService: AppService,
-    private router: Router,
-    private _scoreService: ScoreService
+    private readonly _appService: AppService,
+    private readonly _changeDetector: ChangeDetectorRef,
+    private readonly _exerciseService: ExerciseService
   ) {}
 
   ngOnInit(): void {
-    this.exerciseCount = 3;
-    this._scoreService.resetScore();
-    this.nextApi();
+    this.initializeGame();
   }
 
-  private initializeExercise(exercise: Exercise): void {
-    this.questionCount = `${this.nextExercise}/${this.exerciseCount}`;
-    this.question = exercise.question;
-    this.correctAnswer = exercise.correctAnswer;
-    this.answers.push(...exercise.wrongAnswers);
-    this.answers.push(exercise.correctAnswer);
-    this.answers.sort((a, b) => 0.5 - Math.random());
+  private initializeGame(): void {
+    this._appService
+      .startGame()
+      .pipe(
+        switchMap(() => this._exerciseService.nextQuestion()),
+        catchError((error) => {
+          console.error(error);
+          return of([]);
+        }),
+        takeUntilDestroyed(this._destroyRef),
+        finalize(() => {
+          this._changeDetector.detectChanges();
+        })
+      )
+      .subscribe({
+        next: (response: Exercise) => {
+          this._question = response.content;
+          this._answers = response.answers;
+        },
+      });
   }
 
-  getAnswer(event: any) {
-    if (event.target.innerText.innerText == this.correctAnswer)
-      event.target.classList.add('button-correct');
-    else event.target.classList.add('button-wrong');
-    this.clicked = true;
+  private nextQuestion(): void {
+    this._exerciseService
+      .nextQuestion()
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe({
+        next: (response) => {
+          this._question = response.content;
+          this._answers = response.answers;
+          this._changeDetector.detectChanges();
+        },
+      });
   }
 
-  markAnswer(button: number, event: any) {
-    for (let i = 0; i < this.marked.length; i++) {
-      this.marked[i] = i + 1 == button ? true : false;
+  onConfirm(): void {
+    if (this._checkedAnswer != undefined) {
+      this._exerciseService
+        .answerQuestion(this._checkedAnswer)
+        .pipe(takeUntilDestroyed(this._destroyRef))
+        .subscribe({
+          next: (res) => {
+            if (res.questionsLeft != 0) {
+              this.nextQuestion();
+            } else {
+              this._appService
+                .stopGame()
+                .pipe(takeUntilDestroyed(this._destroyRef))
+                .subscribe();
+              this._isEndOfQuiz = true;
+              this._question = '';
+              this._answers = [];
+            }
+          },
+          complete: () => {
+            this.checkedAnswer = null;
+            this._changeDetector.detectChanges();
+          },
+        });
     }
-    if (event.target.innerText == this.correctAnswer) this.points = 1;
-    else this.points = 0;
-    this.clicked = true;
   }
 
-  nextApi() {
-    this.subscriptions.add(
-      this._appService
-        .getAnswer()
-        .pipe(
-          tap((data) => {
-            this.newParsedData = JSON.parse(JSON.stringify(data));
-            this.initializeExercise(this.newParsedData);
-            this.exerciseEnd = false;
-          }),
-          catchError(() => {
-            this.router.navigate([`/error`]);
-            return of([]);
-          })
-        )
-        .subscribe()
-    );
-  }
-
-  nextQuestion() {
-    this.prepareNextQuestion();
-    this.summarizePoints();
-    this.nextExercise++;
-    if (this.nextExercise < 4) {
-      this.nextApi();
-    } else {
-      this.exerciseEnd = true;
-      this._scoreService.addScore(this.allPoints);
-      this.router.navigate([`/score`], { skipLocationChange: true });
-    }
-  }
-
-  summarizePoints() {
-    this.allPoints += this.points;
-    this.points = 0;
-  }
-  prepareNextQuestion() {
-    this.exerciseEnd = true;
-    this.marked = [false, false, false, false];
-    this.answers.length = 0;
-    this.question = '';
-    this.clicked = false;
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.unsubscribe();
+  startNewGame(): void {
+    this._isEndOfQuiz = false;
+    this.initializeGame();
   }
 }

@@ -14,28 +14,27 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class UserAuthenticationService {
   constructor(
-    private http: HttpClient,
-    private router: Router,
+    private readonly _http: HttpClient,
+    private readonly _router: Router,
     private readonly _cookieService: CookieService
   ) {}
 
   registration(registrationRequest: RegistrationRequest) {
-    return this.http.post(
+    return this._http.post(
       environment.apiUrl + `/auth/register`,
       JSON.parse(JSON.stringify(registrationRequest))
     );
   }
   signIn(loginRequest: LoginRequest) {
-    return this.http
+    return this._http
       .post(
         environment.apiUrl + '/auth/authenticate',
         JSON.parse(JSON.stringify(loginRequest))
       )
       .pipe(
-        tap((res) => this.setSession(res)),
         tap((res) => {
-          console.log(res);
-          this.router.navigate(['/home']);
+          this.setSession(res);
+          this._router.navigate(['/home']);
         }),
         catchError(() => {
           return of([]);
@@ -45,12 +44,11 @@ export class UserAuthenticationService {
   }
 
   refreshToken() {
-    return this.http.post(environment.apiUrl + '/auth/refresh', null);
+    return this._http.post(environment.apiUrl + '/auth/refresh', null);
   }
 
   private setSession(authResult) {
     const expiresAt = moment().add(authResult.expiresIn, 'second');
-    console.log(authResult);
     this.saveAccessToken(authResult.accessToken);
     this.saveExpirationTokenTime(JSON.stringify(expiresAt.valueOf()));
     this.saveRefreshToken(authResult.refreshToken);
@@ -82,7 +80,7 @@ export class UserAuthenticationService {
   logout() {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('expires_at');
-    this.router.navigate(['/login']);
+    this._router.navigate(['/login']);
   }
 
   public isLoggedIn() {
