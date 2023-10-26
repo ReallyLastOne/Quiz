@@ -26,6 +26,7 @@ export class ExerciseComponent implements OnInit {
   private _answers: string[];
   private _checkedAnswer!: string;
   private _isEndOfQuiz = false;
+  private _achievedScore!: number;
 
   public get question(): string {
     return this._question;
@@ -45,6 +46,10 @@ export class ExerciseComponent implements OnInit {
 
   public get isEndOfQuiz(): boolean {
     return this._isEndOfQuiz;
+  }
+
+  public get achievedScore(): number {
+    return this._achievedScore;
   }
 
   constructor(
@@ -106,9 +111,8 @@ export class ExerciseComponent implements OnInit {
                 .stopGame()
                 .pipe(takeUntilDestroyed(this._destroyRef))
                 .subscribe();
-              this._isEndOfQuiz = true;
-              this._question = '';
-              this._answers = [];
+              this.endGame();
+              this._achievedScore = res.totalCorrect;
             }
           },
           complete: () => {
@@ -122,5 +126,11 @@ export class ExerciseComponent implements OnInit {
   startNewGame(): void {
     this._isEndOfQuiz = false;
     this.initializeGame();
+  }
+
+  private endGame(): void {
+    this._isEndOfQuiz = true;
+    this._question = '';
+    this._answers = [];
   }
 }

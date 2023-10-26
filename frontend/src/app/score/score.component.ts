@@ -1,5 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { ScoreService } from './score.service';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-score',
@@ -7,20 +6,15 @@ import { ScoreService } from './score.service';
   styleUrls: ['./score.component.scss'],
 })
 export class ScoreComponent implements OnInit {
-  private _score = 0;
   private _scoreString = '';
+
+  @Input({ required: true })
+  achievedScore: number;
 
   @Output('newGame')
   newGame = new EventEmitter<void>();
 
-  constructor(private readonly _scoreService: ScoreService) {}
-
-  get score(): number {
-    return this._score;
-  }
-  set score(score: number) {
-    this._score = score;
-  }
+  constructor() {}
 
   get scoreString(): string {
     return this._scoreString;
@@ -30,16 +24,12 @@ export class ScoreComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.score = this._scoreService.scorePoints;
-    this.scoreString = this.scoreText();
-  }
-  scoreText(): string {
-    return `You have ${this.score} ${this.score == 1 ? 'point' : 'points'}`;
+    this.scoreString = `You achieved ${this.achievedScore} ${
+      this.achievedScore == 1 ? 'point' : 'points'
+    }`;
   }
 
   startAgain() {
     this.newGame.next();
   }
-
-  dataSource() {}
 }
