@@ -1,24 +1,49 @@
-<form class="container" autocomplete="off" novalidate [formGroup]="regForm">
-  <div>
-    <div class="form-element-container">
-      <label>Nazwa użytkownika</label>
-      <input class="register-input" formControlName="nickname" placeholder="Nazwa użytkownika"
-        [ngClass]="{ 'is-valid': registerForm.nickname.errors && submitted}">
-    </div>
+<form class="register-form" autocomplete="off" novalidate [formGroup]="regForm">
+  <div class="register-form-container">
+    <mat-form-field>
+      <mat-label>Nazwa użytkownika</mat-label>
+      <input
+        matInput
+        formControlName="nickname"
+        placeholder="Nazwa użytkownika"
+      />
+    </mat-form-field>
 
-    <div class="form-element-container">
-      <label>E-Mail</label>
-      <input class="register-input" type="email" formControlName="email" placeholder="E-Mail"
-        [ngClass]="{ 'is-valid': registerForm.email.errors && submitted}">
-    </div>
+    <mat-form-field>
+      <mat-label>E-Mail</mat-label>
+      <input
+        matInput
+        type="email"
+        formControlName="email"
+        placeholder="E-Mail"
+      />
+    </mat-form-field>
 
-    <div class="form-element-container">
-      <label>Hasło</label>
-      <input class="register-input" type="password" formControlName="password" placeholder="Hasło"
-        [ngClass]="{ 'is-valid': registerForm.password.errors && submitted}">
-    </div>
+    <mat-form-field>
+      <mat-label>Hasło</mat-label>
+      <input
+        matInput
+        [type]="hidePassword ? 'password' : 'text'"
+        formControlName="password"
+        placeholder="Hasło"
+      />
+
+      <mat-icon
+        class="register-password-icon"
+        matSuffix
+        [matTooltip]="!hidePassword ? 'Ukryj Hasło' : 'Pokaż hasło'"
+        (click)="changePasswordVisibility()"
+        >{{ !hidePassword ? "visibility" : "visibility_off" }}</mat-icon
+      >
+    </mat-form-field>
+
     <div class="back-button">
-      <button class="submit-button" type="submit" (click)="onRegister()">Zarejestruj się</button>
-      <button class="submit-button" type="button" (click)="backToLoginClick()">Wróc</button></div>
+      <button class="submit-button" type="submit" (click)="onRegister()">
+        Zarejestruj się
+      </button>
+      <button class="submit-button" type="button" (click)="backToLoginClick()">
+        Wróc
+      </button>
+    </div>
   </div>
 </form>

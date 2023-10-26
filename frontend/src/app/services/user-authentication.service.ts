@@ -4,9 +4,8 @@ import { Router } from '@angular/router';
 import { RegistrationRequest } from '../model/registration-request.model';
 import { environment } from '../../environments/environment';
 import { LoginRequest } from '../model/login-request.model';
-import { tap, shareReplay, catchError } from 'rxjs/operators';
+import { tap, shareReplay } from 'rxjs/operators';
 import * as moment from 'moment';
-import { of } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
@@ -35,9 +34,6 @@ export class UserAuthenticationService {
         tap((res) => {
           this.setSession(res);
           this._router.navigate(['/home']);
-        }),
-        catchError(() => {
-          return of([]);
         }),
         shareReplay()
       );

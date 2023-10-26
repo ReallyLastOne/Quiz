@@ -1,24 +1,52 @@
-<div *ngIf="login; else register">
-  <form class="container" autocomplete="off" novalidate [formGroup]="logForm">
-    <div>
-      <div class="form-element-container">
-        <label>Nazwa użytkownika</label>
-        <input class="login-input" formControlName="nickname" placeholder="Nazwa użytkownika"
-          [ngClass]="{ 'is-valid': loginForm.nickname.errors && submitted}">
+<div class="container login">
+  <div *ngIf="login; else register">
+    <form
+      class="login-form"
+      autocomplete="off"
+      novalidate
+      [formGroup]="logForm"
+    >
+      <div class="login-form-container">
+        <mat-form-field>
+          <mat-label>Nazwa użytkownika</mat-label>
+          <input
+            matInput
+            formControlName="nickname"
+            placeholder="Nazwa użytkownika"
+          />
+        </mat-form-field>
 
+        <mat-form-field>
+          <mat-label>Hasło</mat-label>
+          <input
+            matInput
+            formControlName="password"
+            [type]="hidePassword ? 'password' : 'text'"
+            placeholder="Hasło"
+          />
+          <mat-icon
+            class="login-password-icon"
+            matSuffix
+            [matTooltip]="!hidePassword ? 'Ukryj Hasło' : 'Pokaż hasło'"
+            (click)="changePasswordVisibility()"
+            >{{ !hidePassword ? "visibility" : "visibility_off" }}</mat-icon
+          >
+        </mat-form-field>
+        <mat-error *ngIf="error"> {{ error }}</mat-error>
+        <div class="submit-button-container">
+          <button class="submit-button" type="submit" (click)="onLogin()">
+            Zaloguj się
+          </button>
+          <p>
+            Nie masz konta?
+            <a class="register-text" (click)="registerMeClick(false)"
+              >Zarejestruj się!</a
+            >
+          </p>
+        </div>
       </div>
-
-      <div class="form-element-container">
-        <label>Hasło</label>
-        <input class="login-input" formControlName="password" type="password" placeholder="Hasło"
-          [ngClass]="{ 'is-valid': loginForm.password.errors && submitted}">
-      </div>
-      <div>
-        <button class="submit-button" type="submit" (click)="onLogin()">Zaloguj się</button>
-        <p>Nie masz konta? <a class="register-text" (click)="registerMeClick(false)">Zarejestruj się!</a>
-      </div>
-    </div>
-  </form>
+    </form>
+  </div>
 </div>
 <ng-template #register>
   <app-register (backToLogin)="registerMeClick(true)"></app-register>

@@ -14,6 +14,9 @@ export class LoginComponent implements OnInit {
   private _destroyRef = inject(DestroyRef);
   private _logForm: FormGroup;
   private _submitted = false;
+  private _hidePassword = true;
+  private _error = '';
+
   login = true;
 
   get loginForm() {
@@ -30,6 +33,14 @@ export class LoginComponent implements OnInit {
 
   get logForm(): FormGroup {
     return this._logForm;
+  }
+
+  get hidePassword(): boolean {
+    return this._hidePassword;
+  }
+
+  get error(): string {
+    return this._error;
   }
 
   constructor(
@@ -49,13 +60,23 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  private setError(error: string): void {
+    this._error = error;
+  }
+
+  private clearError(): void {
+    this._error = '';
+  }
+
   registerMeClick(register: boolean): void {
     this.login = register;
+    this.clearError();
   }
 
   onLogin(): void {
     this.submitted = true;
     if (this._logForm.invalid) {
+      this.setError('Wypełnij login i hasło');
       return;
     } else {
       let loginRequest: LoginRequest;
@@ -66,12 +87,19 @@ export class LoginComponent implements OnInit {
       this._userAuthenticationService
         .signIn(loginRequest)
         .pipe(
-          catchError(() => {
+          catchError((error) => {
+            if (error.status == 422) {
+              this.setError('Niepoprawny login lub hasło');
+            }
             return of([]);
           }),
           takeUntilDestroyed(this._destroyRef)
         )
         .subscribe();
     }
+  }
+
+  changePasswordVisibility(): void {
+    this._hidePassword = !this._hidePassword;
   }
 }
