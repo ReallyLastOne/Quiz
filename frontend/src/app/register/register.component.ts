@@ -22,12 +22,9 @@ export class RegisterComponent implements OnInit {
   private _destroyRef = inject(DestroyRef);
   private _regForm: FormGroup;
   private _submitted = false;
+  private _hidePassword = true;
 
   @Output() backToLogin = new EventEmitter<boolean>();
-
-  constructor(
-    private readonly _userAuthenticationService: UserAuthenticationService
-  ) {}
 
   get regForm(): FormGroup {
     return this._regForm;
@@ -44,6 +41,13 @@ export class RegisterComponent implements OnInit {
   get registerForm() {
     return this.regForm.controls;
   }
+  get hidePassword(): boolean {
+    return this._hidePassword;
+  }
+
+  constructor(
+    private readonly _userAuthenticationService: UserAuthenticationService
+  ) {}
 
   ngOnInit(): void {
     this._regForm = new FormGroup({
@@ -87,5 +91,9 @@ export class RegisterComponent implements OnInit {
           next: () => this.backToLogin.emit(false),
         });
     }
+  }
+
+  changePasswordVisibility() {
+    this._hidePassword = !this._hidePassword;
   }
 }
