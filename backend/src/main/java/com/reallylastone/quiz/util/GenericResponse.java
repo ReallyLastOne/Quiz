@@ -1,4 +1,4 @@
-package com.reallylastone.quiz.util.validation;
+package com.reallylastone.quiz.util;
 
 public record GenericResponse(String message) {
 }

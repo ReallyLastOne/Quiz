@@ -8,15 +8,19 @@ import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerResponse;
 import com.reallylastone.quiz.game.core.translation.model.TranslationGameSession;
 import com.reallylastone.quiz.user.model.UserEntity;
-import com.reallylastone.quiz.util.validation.GenericResponse;
+import com.reallylastone.quiz.util.GenericResponse;
+import com.reallylastone.quiz.util.validation.StateValidationErrorsException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Locale;
 import java.util.Optional;
+
+import static com.reallylastone.quiz.util.validation.StateValidationError.USER_INACTIVE_SESSION;
 
 @Service
 @RequiredArgsConstructor
@@ -57,6 +61,6 @@ public class TranslationGameViewServiceImpl implements TranslationGameViewServic
     public ResponseEntity<ActiveTranslationGameSessionView> findActive() {
         return translationGameService.findActive()
                 .map(session -> new ActiveTranslationGameSessionView(session, phraseMapper::mapToView))
-                .map(ResponseEntity::ok).orElseThrow(() -> new IllegalStateException("User has no active session"));
+                .map(ResponseEntity::ok).orElseThrow(() -> new StateValidationErrorsException(Collections.singletonList(USER_INACTIVE_SESSION)));
     }
 }

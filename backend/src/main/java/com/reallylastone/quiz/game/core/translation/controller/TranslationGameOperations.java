@@ -1,10 +1,10 @@
 package com.reallylastone.quiz.game.core.translation.controller;
 
 import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
+import com.reallylastone.quiz.game.core.translation.model.ActiveTranslationGameSessionView;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerResponse;
-import com.reallylastone.quiz.game.core.translation.model.ActiveTranslationGameSessionView;
-import com.reallylastone.quiz.util.validation.GenericResponse;
+import com.reallylastone.quiz.util.GenericResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

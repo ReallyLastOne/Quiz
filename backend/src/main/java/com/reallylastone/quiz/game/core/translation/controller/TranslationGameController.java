@@ -1,11 +1,11 @@
 package com.reallylastone.quiz.game.core.translation.controller;
 
 import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
+import com.reallylastone.quiz.game.core.translation.model.ActiveTranslationGameSessionView;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerResponse;
-import com.reallylastone.quiz.game.core.translation.model.ActiveTranslationGameSessionView;
 import com.reallylastone.quiz.game.core.translation.service.TranslationGameViewService;
-import com.reallylastone.quiz.util.validation.GenericResponse;
+import com.reallylastone.quiz.util.GenericResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
