@@ -7,7 +7,8 @@ import com.reallylastone.quiz.exercise.question.model.QuestionAnswerResponse;
 import com.reallylastone.quiz.exercise.question.model.QuestionView;
 import com.reallylastone.quiz.game.core.quiz.model.ActiveQuizGameSessionView;
 import com.reallylastone.quiz.game.core.quiz.model.QuizGameSession;
-import com.reallylastone.quiz.util.validation.GenericResponse;
+import com.reallylastone.quiz.util.GenericResponse;
+import com.reallylastone.quiz.util.Messages;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import java.util.Optional;
 public class QuizGameViewServiceImpl implements QuizGameViewService {
     private final QuizGameService quizGameService;
     private final QuestionMapper questionMapper;
+    private final Messages messages;
 
     @Override
     public ResponseEntity<GenericResponse> startGame(int questions, HttpServletRequest request) {
@@ -34,7 +36,7 @@ public class QuizGameViewServiceImpl implements QuizGameViewService {
 
     @Override
     public ResponseEntity<QuestionAnswerResponse> answer(QuestionAnswerRequest questionAnswer,
-            HttpServletRequest request) {
+                                                         HttpServletRequest request) {
         // if no active session, then processAnswer method will throw exception, so after there is guarantee that
         // 'current' is present
         Optional<QuizGameSession> current = quizGameService.findActive();
@@ -57,6 +59,6 @@ public class QuizGameViewServiceImpl implements QuizGameViewService {
     public ResponseEntity<ActiveQuizGameSessionView> findActive() {
         return quizGameService.findActive()
                 .map(session -> new ActiveQuizGameSessionView(session, questionMapper::mapToView))
-                .map(ResponseEntity::ok).orElseThrow(() -> new IllegalStateException("User has no active session"));
+                .map(ResponseEntity::ok).orElseThrow(() -> new IllegalArgumentException(messages.getMessage("user.session.inactive", null)));
     }
 }

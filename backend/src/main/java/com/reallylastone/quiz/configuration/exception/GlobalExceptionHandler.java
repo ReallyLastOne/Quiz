@@ -1,59 +1,82 @@
 package com.reallylastone.quiz.configuration.exception;
 
+import com.reallylastone.quiz.util.Messages;
 import com.reallylastone.quiz.util.validation.StateValidationErrorsException;
 import com.reallylastone.quiz.util.validation.ValidationErrorsException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @ControllerAdvice
+@RequiredArgsConstructor
 @Slf4j
 // based on https://github.com/VictorKrapivin/jsr-vs-spring-validation
 public class GlobalExceptionHandler {
-    @ExceptionHandler({ ConstraintViolationException.class })
-    public ResponseEntity<ErrorMessage> handle(final ConstraintViolationException e, HttpServletRequest request) {
-        List<InvalidInputDataErrors.FieldError> errors = InvalidInputDataErrors.from(e).getErrors();
-        return createErrorMessage(request, errors);
-    }
+    private final Messages messages;
 
-    @ExceptionHandler({ ValidationErrorsException.class })
+    @ExceptionHandler({ValidationErrorsException.class})
     public ResponseEntity<ErrorMessage> handle(final ValidationErrorsException e, HttpServletRequest request) {
         List<InvalidInputDataErrors.FieldError> errors = InvalidInputDataErrors.from(e).getErrors();
-        return createErrorMessage(request, errors);
+        return unprocessableEntity(request, errors);
     }
 
-    @ExceptionHandler({ StateValidationErrorsException.class })
+    @ExceptionHandler({StateValidationErrorsException.class})
     public ResponseEntity<ErrorMessage> handle(final StateValidationErrorsException e, HttpServletRequest request) {
-        return createErrorMessage(request, e.getErrors());
+        return unprocessableEntity(request,
+                e.getErrors().stream().map(error -> messages.getMessage(error.getMessageKey(), null)).toList());
     }
 
-    @ExceptionHandler({ Exception.class })
+    @ExceptionHandler({AuthenticationException.class})
+    public ResponseEntity<ErrorMessage> handle(final AuthenticationException e, HttpServletRequest request) {
+        return unprocessableEntity(request, Collections.singletonList(e.getMessage()));
+    }
+    @ExceptionHandler({MethodArgumentNotValidException.class})
+    public ResponseEntity<ErrorMessage> handle(final MethodArgumentNotValidException e, HttpServletRequest request) {
+        return unprocessableEntity(request, Collections.singletonList(e.getParameter() + ":" + e.getBody()));
+    }
+
+    @ExceptionHandler({IllegalArgumentException.class})
+    public ResponseEntity<ErrorMessage> handle(final IllegalArgumentException e, HttpServletRequest request) {
+        return unprocessableEntity(request, Collections.singletonList(e.getMessage()));
+    }
+
+    @ExceptionHandler({Exception.class})
     public ResponseEntity<ErrorMessage> handle(final Exception e, HttpServletRequest request) {
         log.error("Unexpected error occurred: ", e);
-        return createErrorMessage(request, List.of(e.getMessage()));
+        return internalServerError(request, List.of(e.getMessage()));
     }
 
-    private ResponseEntity<ErrorMessage> createErrorMessage(HttpServletRequest request, List<?> errors) {
+    private ResponseEntity<ErrorMessage> unprocessableEntity(HttpServletRequest request, List<?> errors) {
         ErrorMessage message = ErrorMessage.builder().parameters(buildParams(errors))
                 .instance(URI.create(request.getRequestURI())).status(HttpStatus.UNPROCESSABLE_ENTITY)
                 .title("Invalid input data").build();
 
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(message);
+    }
+
+    private ResponseEntity<ErrorMessage> internalServerError(HttpServletRequest request, List<?> errors) {
+        ErrorMessage message = ErrorMessage.builder().parameters(buildParams(errors))
+                .instance(URI.create(request.getRequestURI())).status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .title("Internal server error").build();
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
     }
 
     private Map<String, Object> buildParams(List<?> errors) {
@@ -69,23 +92,6 @@ public class GlobalExceptionHandler {
 
         private InvalidInputDataErrors(List<FieldError> errors) {
             this.errors = errors;
-        }
-
-        static InvalidInputDataErrors from(ConstraintViolationException e) {
-            return new InvalidInputDataErrors(e.getConstraintViolations().stream()
-                    .map(constraintViolation -> new FieldError(cutOffMethodAndParameterName(constraintViolation),
-                            constraintViolation.getMessage()))
-                    .toList());
-        }
-
-        private static String cutOffMethodAndParameterName(ConstraintViolation<?> violation) {
-            String pathAsString = violation.getPropertyPath().toString();
-            if (violation.getExecutableParameters() != null) {
-                int payloadPathStartIndex = pathAsString.indexOf('.', pathAsString.indexOf('.') + 1);
-                return pathAsString.substring(payloadPathStartIndex + 1);
-            } else {
-                return pathAsString;
-            }
         }
 
         static InvalidInputDataErrors from(ValidationErrorsException e) {

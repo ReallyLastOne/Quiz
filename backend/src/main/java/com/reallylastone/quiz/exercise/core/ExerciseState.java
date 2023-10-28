@@ -14,6 +14,6 @@ public enum ExerciseState {
 
     public static ExerciseState from(Boolean isCorrectAnswer) {
         return Stream.of(ExerciseState.values()).filter(p -> Objects.equals(p.value, isCorrectAnswer)).findFirst()
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(IllegalStateException::new);
     }
 }

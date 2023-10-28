@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.authentication.rememberme.InvalidCookieException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.WebUtils;
 
@@ -41,7 +42,7 @@ public class AuthenticationViewServiceImpl implements AuthenticationViewService 
 
         return Optional.ofNullable(refreshToken).map(Cookie::getValue).map(authenticationService::refresh)
                 .map(ResponseEntity::ok)
-                .orElseThrow(() -> new IllegalArgumentException("no refresh_token cookie provided"));
+                .orElseThrow(() -> new InvalidCookieException("no refresh_token cookie provided"));
     }
 
     @Override

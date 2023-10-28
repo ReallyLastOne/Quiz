@@ -4,7 +4,7 @@ import com.reallylastone.quiz.exercise.question.model.QuestionAnswerRequest;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerResponse;
 import com.reallylastone.quiz.exercise.question.model.QuestionView;
 import com.reallylastone.quiz.game.core.quiz.model.ActiveQuizGameSessionView;
-import com.reallylastone.quiz.util.validation.GenericResponse;
+import com.reallylastone.quiz.util.GenericResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
