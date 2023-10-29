@@ -18,4 +18,6 @@ public interface TranslationGameService {
     void stopGame();
 
     Optional<TranslationGameSession> findActive();
+
+    Optional<TranslationGameSession> findRecent();
 }

@@ -2,6 +2,7 @@ package com.reallylastone.quiz.game.core.translation.service;
 
 import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
 import com.reallylastone.quiz.game.core.translation.model.ActiveTranslationGameSessionView;
+import com.reallylastone.quiz.game.core.translation.model.DoneTranslationSessionView;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerResponse;
 import com.reallylastone.quiz.util.GenericResponse;
@@ -20,4 +21,6 @@ public interface TranslationGameViewService {
     ResponseEntity<GenericResponse> stopGame();
 
     ResponseEntity<ActiveTranslationGameSessionView> findActive();
+
+    ResponseEntity<DoneTranslationSessionView> findRecent();
 }

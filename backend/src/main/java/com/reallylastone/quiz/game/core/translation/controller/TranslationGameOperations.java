@@ -2,6 +2,7 @@ package com.reallylastone.quiz.game.core.translation.controller;
 
 import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
 import com.reallylastone.quiz.game.core.translation.model.ActiveTranslationGameSessionView;
+import com.reallylastone.quiz.game.core.translation.model.DoneTranslationSessionView;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerResponse;
 import com.reallylastone.quiz.util.GenericResponse;
@@ -13,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,6 +53,11 @@ public interface TranslationGameOperations {
 
     @Operation(summary = "Fetches information about currently active translation session")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
-    @PostMapping(value = "/active")
+    @GetMapping(value = "/active")
     ResponseEntity<ActiveTranslationGameSessionView> findActive();
+
+    @Operation(summary = "Fetches information about most recent translation game")
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
+    @GetMapping(value = "/recent")
+    ResponseEntity<DoneTranslationSessionView> findRecent();
 }

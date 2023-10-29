@@ -31,33 +31,34 @@ import java.util.Map;
 public class GlobalExceptionHandler {
     private final Messages messages;
 
-    @ExceptionHandler({ValidationErrorsException.class})
+    @ExceptionHandler({ ValidationErrorsException.class })
     public ResponseEntity<ErrorMessage> handle(final ValidationErrorsException e, HttpServletRequest request) {
         List<InvalidInputDataErrors.FieldError> errors = InvalidInputDataErrors.from(e).getErrors();
         return unprocessableEntity(request, errors);
     }
 
-    @ExceptionHandler({StateValidationErrorsException.class})
+    @ExceptionHandler({ StateValidationErrorsException.class })
     public ResponseEntity<ErrorMessage> handle(final StateValidationErrorsException e, HttpServletRequest request) {
         return unprocessableEntity(request,
                 e.getErrors().stream().map(error -> messages.getMessage(error.getMessageKey(), null)).toList());
     }
 
-    @ExceptionHandler({AuthenticationException.class})
+    @ExceptionHandler({ AuthenticationException.class })
     public ResponseEntity<ErrorMessage> handle(final AuthenticationException e, HttpServletRequest request) {
         return unprocessableEntity(request, Collections.singletonList(e.getMessage()));
     }
-    @ExceptionHandler({MethodArgumentNotValidException.class})
+
+    @ExceptionHandler({ MethodArgumentNotValidException.class })
     public ResponseEntity<ErrorMessage> handle(final MethodArgumentNotValidException e, HttpServletRequest request) {
         return unprocessableEntity(request, Collections.singletonList(e.getParameter() + ":" + e.getBody()));
     }
 
-    @ExceptionHandler({IllegalArgumentException.class})
+    @ExceptionHandler({ IllegalArgumentException.class })
     public ResponseEntity<ErrorMessage> handle(final IllegalArgumentException e, HttpServletRequest request) {
         return unprocessableEntity(request, Collections.singletonList(e.getMessage()));
     }
 
-    @ExceptionHandler({Exception.class})
+    @ExceptionHandler({ Exception.class })
     public ResponseEntity<ErrorMessage> handle(final Exception e, HttpServletRequest request) {
         log.error("Unexpected error occurred: ", e);
         return internalServerError(request, List.of(e.getMessage()));

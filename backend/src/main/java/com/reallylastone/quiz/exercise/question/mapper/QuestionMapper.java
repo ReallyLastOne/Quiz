@@ -36,7 +36,8 @@ public interface QuestionMapper {
     }
 
     default List<Tag> mapToTags(List<String> value) {
-        if (value == null) return new ArrayList<>();
+        if (value == null)
+            return new ArrayList<>();
 
         return value.stream().map(s -> {
             Tag tag = new Tag();

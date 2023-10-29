@@ -23,4 +23,6 @@ public interface GameSessionService {
     void stopGame();
 
     <T extends GameSession> Optional<T> findActive(Class<T> gameSessionType);
+
+    <T extends GameSession> Optional<T> findRecent(Class<T> gameSessionType);
 }

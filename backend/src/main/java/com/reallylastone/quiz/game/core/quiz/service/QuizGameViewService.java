@@ -4,6 +4,7 @@ import com.reallylastone.quiz.exercise.question.model.QuestionAnswerRequest;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerResponse;
 import com.reallylastone.quiz.exercise.question.model.QuestionView;
 import com.reallylastone.quiz.game.core.quiz.model.ActiveQuizGameSessionView;
+import com.reallylastone.quiz.game.core.quiz.model.DoneQuizSessionView;
 import com.reallylastone.quiz.util.GenericResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
@@ -18,4 +19,6 @@ public interface QuizGameViewService {
     ResponseEntity<GenericResponse> stopGame();
 
     ResponseEntity<ActiveQuizGameSessionView> findActive();
+
+    ResponseEntity<DoneQuizSessionView> findRecent();
 }

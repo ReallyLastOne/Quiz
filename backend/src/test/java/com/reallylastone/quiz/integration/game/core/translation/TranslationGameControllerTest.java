@@ -284,4 +284,29 @@ class TranslationGameControllerTest extends AbstractIntegrationTest {
 
         translationUtils.findActive(accessToken).andExpectAll(status().is4xxClientError());
     }
+
+    @Test
+    void shouldNotFindRecent() throws Exception {
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password"))
+                .andReturn();
+        String accessToken = utils.extract(mvcResult, "accessToken");
+
+        translationUtils.findRecent(accessToken).andExpectAll(status().is4xxClientError());
+    }
+
+    @Test
+    void shouldFindRecent() throws Exception {
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password"))
+                .andReturn();
+        String accessToken = utils.extract(mvcResult, "accessToken");
+        translationUtils.populatePhrasesFor(userRepository.findAll().get(0).getId());
+
+        translationUtils.start(new Locale("en"), new Locale("pl"), 1, accessToken);
+        translationUtils.next(accessToken);
+
+        PhraseAnswerRequest request = new PhraseAnswerRequest("correct");
+        translationUtils.answer(request, accessToken);
+
+        translationUtils.findRecent(accessToken).andExpectAll(status().is2xxSuccessful());
+    }
 }

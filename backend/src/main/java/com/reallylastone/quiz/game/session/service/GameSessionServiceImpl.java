@@ -199,20 +199,32 @@ public class GameSessionServiceImpl implements GameSessionService {
     public <T extends GameSession> Optional<T> findActive(Class<T> gameSessionType) {
         Long id = UserService.getCurrentUser().getId();
 
-        return Optional.ofNullable(determineMethod(gameSessionType))
+        return Optional.ofNullable(findActiveMethod(gameSessionType))
                 .map(method -> (Optional<T>) Optional.ofNullable(method.apply(id))).orElseGet(() -> {
                     log.error("Unknown game session type");
                     return Optional.empty();
                 });
     }
 
-    private <T extends GameSession> LongFunction<? extends GameSession> determineMethod(Class<T> gameSessionType) {
+    private <T extends GameSession> LongFunction<? extends GameSession> findActiveMethod(Class<T> gameSessionType) {
         LongFunction<? extends GameSession> method = null;
 
         if (gameSessionType == QuizGameSession.class) {
             method = gameSessionRepository::findActiveQuizGameSession;
         } else if (gameSessionType == TranslationGameSession.class) {
             method = gameSessionRepository::findActiveTranslationGameSession;
+        }
+
+        return method;
+    }
+
+    private <T extends GameSession> LongFunction<? extends GameSession> findRecentMethod(Class<T> gameSessionType) {
+        LongFunction<? extends GameSession> method = null;
+
+        if (gameSessionType == QuizGameSession.class) {
+            method = gameSessionRepository::findMostRecentQuizGameSession;
+        } else if (gameSessionType == TranslationGameSession.class) {
+            method = gameSessionRepository::findMostRecentTranslationGameSession;
         }
 
         return method;
@@ -226,4 +238,16 @@ public class GameSessionServiceImpl implements GameSessionService {
             throw new ValidationErrorsException(errors);
         }
     }
+
+    @Override
+    public <T extends GameSession> Optional<T> findRecent(Class<T> gameSessionType) {
+        Long id = UserService.getCurrentUser().getId();
+
+        return Optional.ofNullable(findRecentMethod(gameSessionType))
+                .map(method -> (Optional<T>) Optional.ofNullable(method.apply(id))).orElseGet(() -> {
+                    log.error("Unknown game session type");
+                    return Optional.empty();
+                });
+    }
+
 }
