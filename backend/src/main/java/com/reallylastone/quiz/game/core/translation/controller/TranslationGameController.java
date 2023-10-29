@@ -2,6 +2,7 @@ package com.reallylastone.quiz.game.core.translation.controller;
 
 import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
 import com.reallylastone.quiz.game.core.translation.model.ActiveTranslationGameSessionView;
+import com.reallylastone.quiz.game.core.translation.model.DoneTranslationSessionView;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerResponse;
 import com.reallylastone.quiz.game.core.translation.service.TranslationGameViewService;
@@ -43,5 +44,10 @@ public class TranslationGameController implements TranslationGameOperations {
     @Override
     public ResponseEntity<ActiveTranslationGameSessionView> findActive() {
         return translationGameViewService.findActive();
+    }
+
+    @Override
+    public ResponseEntity<DoneTranslationSessionView> findRecent() {
+        return translationGameViewService.findRecent();
     }
 }

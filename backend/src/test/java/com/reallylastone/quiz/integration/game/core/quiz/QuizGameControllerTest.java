@@ -291,4 +291,31 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
 
         quizUtils.findActive(accessToken).andExpectAll(status().is4xxClientError());
     }
+
+    @Test
+    void shouldNotFindRecent() throws Exception {
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password"))
+                .andReturn();
+        String accessToken = utils.extract(mvcResult, "accessToken");
+
+        quizUtils.findRecent(accessToken).andExpectAll(status().is4xxClientError());
+    }
+
+    @Test
+    void shouldFindRecent() throws Exception {
+        quizUtils.populateQuestions();
+
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password"))
+                .andReturn();
+        String accessToken = utils.extract(mvcResult, "accessToken");
+
+        quizUtils.start(1, accessToken);
+        quizUtils.next(accessToken);
+
+        QuestionAnswerRequest request = new QuestionAnswerRequest("correct");
+        quizUtils.answer(request, accessToken);
+
+        quizUtils.findRecent(accessToken).andExpectAll(status().is2xxSuccessful());
+    }
+
 }

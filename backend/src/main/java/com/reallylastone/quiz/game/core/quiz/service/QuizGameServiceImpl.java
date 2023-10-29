@@ -42,4 +42,9 @@ public class QuizGameServiceImpl implements QuizGameService {
     public Optional<QuizGameSession> findActive() {
         return gameSessionService.findActive(QuizGameSession.class);
     }
+
+    @Override
+    public Optional<QuizGameSession> findRecent() {
+        return gameSessionService.findRecent(QuizGameSession.class);
+    }
 }

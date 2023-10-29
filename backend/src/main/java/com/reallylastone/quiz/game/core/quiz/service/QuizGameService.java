@@ -16,4 +16,6 @@ public interface QuizGameService {
     void stopGame();
 
     Optional<QuizGameSession> findActive();
+
+    Optional<QuizGameSession> findRecent();
 }

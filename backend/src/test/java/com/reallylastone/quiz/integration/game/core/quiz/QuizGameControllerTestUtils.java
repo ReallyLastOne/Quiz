@@ -14,6 +14,7 @@ import java.util.Arrays;
 
 import static com.reallylastone.quiz.integration.EndpointPaths.QuizGame.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @Component
@@ -48,7 +49,12 @@ public class QuizGameControllerTestUtils {
 
     public ResultActions findActive(String accessToken) throws Exception {
         return mockMvc.perform(
-                post(FIND_ACTIVE_GAME_PATH).with(csrf().asHeader()).header("Authorization", "Bearer " + accessToken));
+                get(FIND_ACTIVE_GAME_PATH).with(csrf().asHeader()).header("Authorization", "Bearer " + accessToken));
+    }
+
+    public ResultActions findRecent(String accessToken) throws Exception {
+        return mockMvc.perform(
+                get(FIND_RECENT_GAME_PATH).with(csrf().asHeader()).header("Authorization", "Bearer " + accessToken));
     }
 
     public void populateQuestions() {

@@ -46,4 +46,9 @@ public class TranslationGameServiceImpl implements TranslationGameService {
     public Optional<TranslationGameSession> findActive() {
         return gameSessionService.findActive(TranslationGameSession.class);
     }
+
+    @Override
+    public Optional<TranslationGameSession> findRecent() {
+        return gameSessionService.findRecent(TranslationGameSession.class);
+    }
 }

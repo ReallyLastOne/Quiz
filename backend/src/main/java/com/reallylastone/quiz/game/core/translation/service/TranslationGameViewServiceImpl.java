@@ -4,11 +4,13 @@ import com.reallylastone.quiz.exercise.core.ExerciseState;
 import com.reallylastone.quiz.exercise.phrase.mapper.PhraseMapper;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
 import com.reallylastone.quiz.game.core.translation.model.ActiveTranslationGameSessionView;
+import com.reallylastone.quiz.game.core.translation.model.DoneTranslationSessionView;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerResponse;
 import com.reallylastone.quiz.game.core.translation.model.TranslationGameSession;
 import com.reallylastone.quiz.user.model.UserEntity;
 import com.reallylastone.quiz.util.GenericResponse;
+import com.reallylastone.quiz.util.Messages;
 import com.reallylastone.quiz.util.validation.StateValidationErrorsException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ import static com.reallylastone.quiz.util.validation.StateValidationError.USER_I
 public class TranslationGameViewServiceImpl implements TranslationGameViewService {
     private final TranslationGameService translationGameService;
     private final PhraseMapper phraseMapper;
+    private final Messages messages;
 
     @Override
     public Long startGame(Locale sourceLanguage, Locale destinationLanguage, int phrases, HttpServletRequest request) {
@@ -61,6 +64,16 @@ public class TranslationGameViewServiceImpl implements TranslationGameViewServic
     public ResponseEntity<ActiveTranslationGameSessionView> findActive() {
         return translationGameService.findActive()
                 .map(session -> new ActiveTranslationGameSessionView(session, phraseMapper::mapToView))
-                .map(ResponseEntity::ok).orElseThrow(() -> new StateValidationErrorsException(Collections.singletonList(USER_INACTIVE_SESSION)));
+                .map(ResponseEntity::ok).orElseThrow(
+                        () -> new StateValidationErrorsException(Collections.singletonList(USER_INACTIVE_SESSION)));
+    }
+
+    @Override
+    public ResponseEntity<DoneTranslationSessionView> findRecent() {
+        return translationGameService.findRecent()
+                .map(session -> new DoneTranslationSessionView((int) session.countOf(ExerciseState.CORRECT),
+                        session.getFinishDate(), session.getPhrasesSize()))
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new IllegalArgumentException(messages.getMessage("user.session.none", null)));
     }
 }
