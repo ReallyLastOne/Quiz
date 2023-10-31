@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface GameSessionRepository extends JpaRepository<GameSession, Long> {
     @Query("SELECT COUNT(*) >= 1 FROM GameSession gs WHERE gs.user.id = :userId AND gs.state <> 2")
@@ -39,9 +41,9 @@ public interface GameSessionRepository extends JpaRepository<GameSession, Long> 
     @Query("SELECT gs FROM GameSession gs WHERE gs.user.id = :userId AND gs.state <> 2 AND TYPE(gs) = TranslationGameSession")
     TranslationGameSession findActiveTranslationGameSession(Long userId);
 
-    @Query("SELECT gs FROM GameSession gs WHERE gs.user.id = :userId AND gs.state = 2 AND TYPE(gs) = QuizGameSession ORDER BY gs.finishDate LIMIT 1")
-    QuizGameSession findMostRecentQuizGameSession(Long userId);
+    @Query("SELECT gs FROM GameSession gs WHERE gs.user.id = :userId AND gs.state = 2 AND TYPE(gs) = QuizGameSession ORDER BY gs.finishDate LIMIT :games")
+    List<QuizGameSession> findMostRecentQuizGameSessions(int games, Long userId);
 
-    @Query("SELECT gs FROM GameSession gs WHERE gs.user.id = :userId AND gs.state = 2 AND TYPE(gs) = TranslationGameSession ORDER BY gs.finishDate LIMIT 1")
-    TranslationGameSession findMostRecentTranslationGameSession(Long userId);
+    @Query("SELECT gs FROM GameSession gs WHERE gs.user.id = :userId AND gs.state = 2 AND TYPE(gs) = TranslationGameSession ORDER BY gs.finishDate LIMIT :games")
+    List<TranslationGameSession> findMostRecentTranslationGameSessions(int games, Long userId);
 }

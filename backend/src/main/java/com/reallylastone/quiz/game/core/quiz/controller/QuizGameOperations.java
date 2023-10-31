@@ -4,7 +4,7 @@ import com.reallylastone.quiz.exercise.question.model.QuestionAnswerRequest;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerResponse;
 import com.reallylastone.quiz.exercise.question.model.QuestionView;
 import com.reallylastone.quiz.game.core.quiz.model.ActiveQuizGameSessionView;
-import com.reallylastone.quiz.game.core.quiz.model.DoneQuizSessionView;
+import com.reallylastone.quiz.game.core.quiz.model.ListOfPlayedGamesView;
 import com.reallylastone.quiz.util.GenericResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -54,8 +54,8 @@ public interface QuizGameOperations {
     @GetMapping(value = "/active")
     ResponseEntity<ActiveQuizGameSessionView> findActive();
 
-    @Operation(summary = "Fetches information about most recent quiz game")
+    @Operation(summary = "Fetches information about most recent quiz games")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @GetMapping(value = "/recent")
-    ResponseEntity<DoneQuizSessionView> findRecent();
+    ResponseEntity<ListOfPlayedGamesView> findRecent(@RequestParam(defaultValue = "5") int games);
 }

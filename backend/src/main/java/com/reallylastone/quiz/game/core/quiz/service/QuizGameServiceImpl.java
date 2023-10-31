@@ -8,6 +8,7 @@ import com.reallylastone.quiz.game.session.service.GameSessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -44,7 +45,7 @@ public class QuizGameServiceImpl implements QuizGameService {
     }
 
     @Override
-    public Optional<QuizGameSession> findRecent() {
-        return gameSessionService.findRecent(QuizGameSession.class);
+    public List<QuizGameSession> findRecent(int games) {
+        return gameSessionService.findRecent(games, QuizGameSession.class);
     }
 }

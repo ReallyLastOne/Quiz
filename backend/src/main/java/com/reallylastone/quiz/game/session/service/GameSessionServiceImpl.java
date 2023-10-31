@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.LongFunction;
 
 import static com.reallylastone.quiz.exercise.core.ExerciseState.NO_ANSWER;
 
@@ -199,35 +198,13 @@ public class GameSessionServiceImpl implements GameSessionService {
     public <T extends GameSession> Optional<T> findActive(Class<T> gameSessionType) {
         Long id = UserService.getCurrentUser().getId();
 
-        return Optional.ofNullable(findActiveMethod(gameSessionType))
-                .map(method -> (Optional<T>) Optional.ofNullable(method.apply(id))).orElseGet(() -> {
-                    log.error("Unknown game session type");
-                    return Optional.empty();
-                });
-    }
-
-    private <T extends GameSession> LongFunction<? extends GameSession> findActiveMethod(Class<T> gameSessionType) {
-        LongFunction<? extends GameSession> method = null;
-
         if (gameSessionType == QuizGameSession.class) {
-            method = gameSessionRepository::findActiveQuizGameSession;
+            return (Optional<T>) Optional.ofNullable(gameSessionRepository.findActiveQuizGameSession(id));
         } else if (gameSessionType == TranslationGameSession.class) {
-            method = gameSessionRepository::findActiveTranslationGameSession;
+            return (Optional<T>) Optional.ofNullable(gameSessionRepository.findActiveTranslationGameSession(id));
         }
 
-        return method;
-    }
-
-    private <T extends GameSession> LongFunction<? extends GameSession> findRecentMethod(Class<T> gameSessionType) {
-        LongFunction<? extends GameSession> method = null;
-
-        if (gameSessionType == QuizGameSession.class) {
-            method = gameSessionRepository::findMostRecentQuizGameSession;
-        } else if (gameSessionType == TranslationGameSession.class) {
-            method = gameSessionRepository::findMostRecentTranslationGameSession;
-        }
-
-        return method;
+        return Optional.empty();
     }
 
     private void validate(GameSessionCreateRequest request) {
@@ -240,14 +217,16 @@ public class GameSessionServiceImpl implements GameSessionService {
     }
 
     @Override
-    public <T extends GameSession> Optional<T> findRecent(Class<T> gameSessionType) {
+    public <T extends GameSession> List<T> findRecent(int games, Class<T> gameSessionType) {
         Long id = UserService.getCurrentUser().getId();
 
-        return Optional.ofNullable(findRecentMethod(gameSessionType))
-                .map(method -> (Optional<T>) Optional.ofNullable(method.apply(id))).orElseGet(() -> {
-                    log.error("Unknown game session type");
-                    return Optional.empty();
-                });
+        if (gameSessionType == QuizGameSession.class) {
+            return (List<T>) gameSessionRepository.findMostRecentQuizGameSessions(games, id);
+        } else if (gameSessionType == TranslationGameSession.class) {
+            return (List<T>) gameSessionRepository.findMostRecentTranslationGameSessions(games, id);
+        }
+
+        return new ArrayList<>();
     }
 
 }

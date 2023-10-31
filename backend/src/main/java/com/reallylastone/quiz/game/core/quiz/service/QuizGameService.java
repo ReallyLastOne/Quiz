@@ -4,6 +4,7 @@ import com.reallylastone.quiz.exercise.question.model.Question;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerRequest;
 import com.reallylastone.quiz.game.core.quiz.model.QuizGameSession;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface QuizGameService {
@@ -17,5 +18,5 @@ public interface QuizGameService {
 
     Optional<QuizGameSession> findActive();
 
-    Optional<QuizGameSession> findRecent();
+    List<QuizGameSession> findRecent(int games);
 }

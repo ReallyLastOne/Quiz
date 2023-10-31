@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 
 import static com.reallylastone.quiz.exercise.core.ExerciseState.*;
 import static com.reallylastone.quiz.integration.EndpointPaths.TranslationGame.*;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -291,7 +292,8 @@ class TranslationGameControllerTest extends AbstractIntegrationTest {
                 .andReturn();
         String accessToken = utils.extract(mvcResult, "accessToken");
 
-        translationUtils.findRecent(accessToken).andExpectAll(status().is4xxClientError());
+        translationUtils.findRecent(accessToken).andExpectAll(status().is2xxSuccessful(),
+                jsonPath("$.games", hasSize(0)));
     }
 
     @Test
@@ -307,6 +309,7 @@ class TranslationGameControllerTest extends AbstractIntegrationTest {
         PhraseAnswerRequest request = new PhraseAnswerRequest("correct");
         translationUtils.answer(request, accessToken);
 
-        translationUtils.findRecent(accessToken).andExpectAll(status().is2xxSuccessful());
+        translationUtils.findRecent(accessToken).andExpectAll(status().is2xxSuccessful(),
+                jsonPath("$.games", hasSize(1)));
     }
 }

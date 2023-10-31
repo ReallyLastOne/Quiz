@@ -9,6 +9,7 @@ import com.reallylastone.quiz.user.model.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -48,7 +49,7 @@ public class TranslationGameServiceImpl implements TranslationGameService {
     }
 
     @Override
-    public Optional<TranslationGameSession> findRecent() {
-        return gameSessionService.findRecent(TranslationGameSession.class);
+    public List<TranslationGameSession> findRecent(int games) {
+        return gameSessionService.findRecent(games, TranslationGameSession.class);
     }
 }
