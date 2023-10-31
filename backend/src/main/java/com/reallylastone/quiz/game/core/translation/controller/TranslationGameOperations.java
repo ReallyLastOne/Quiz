@@ -2,7 +2,7 @@ package com.reallylastone.quiz.game.core.translation.controller;
 
 import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
 import com.reallylastone.quiz.game.core.translation.model.ActiveTranslationGameSessionView;
-import com.reallylastone.quiz.game.core.translation.model.DoneTranslationSessionView;
+import com.reallylastone.quiz.game.core.translation.model.ListOfPlayedGamesView;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerResponse;
 import com.reallylastone.quiz.util.GenericResponse;
@@ -56,8 +56,8 @@ public interface TranslationGameOperations {
     @GetMapping(value = "/active")
     ResponseEntity<ActiveTranslationGameSessionView> findActive();
 
-    @Operation(summary = "Fetches information about most recent translation game")
+    @Operation(summary = "Fetches information about most recent translation games")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @GetMapping(value = "/recent")
-    ResponseEntity<DoneTranslationSessionView> findRecent();
+    ResponseEntity<ListOfPlayedGamesView> findRecent(@RequestParam(required = false, defaultValue = "5") int games);
 }

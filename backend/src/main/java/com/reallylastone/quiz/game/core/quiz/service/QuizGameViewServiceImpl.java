@@ -7,6 +7,7 @@ import com.reallylastone.quiz.exercise.question.model.QuestionAnswerResponse;
 import com.reallylastone.quiz.exercise.question.model.QuestionView;
 import com.reallylastone.quiz.game.core.quiz.model.ActiveQuizGameSessionView;
 import com.reallylastone.quiz.game.core.quiz.model.DoneQuizSessionView;
+import com.reallylastone.quiz.game.core.quiz.model.ListOfPlayedGamesView;
 import com.reallylastone.quiz.game.core.quiz.model.QuizGameSession;
 import com.reallylastone.quiz.util.GenericResponse;
 import com.reallylastone.quiz.util.Messages;
@@ -65,11 +66,10 @@ public class QuizGameViewServiceImpl implements QuizGameViewService {
     }
 
     @Override
-    public ResponseEntity<DoneQuizSessionView> findRecent() {
-        return quizGameService.findRecent()
+    public ResponseEntity<ListOfPlayedGamesView> findRecent(int games) {
+        return ResponseEntity.ok(new ListOfPlayedGamesView(quizGameService.findRecent(games).stream()
                 .map(session -> new DoneQuizSessionView((int) session.countOf(ExerciseState.CORRECT),
                         session.getFinishDate(), session.getQuestionSize()))
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> new IllegalArgumentException(messages.getMessage("user.session.none", null)));
+                .toList()));
     }
 }

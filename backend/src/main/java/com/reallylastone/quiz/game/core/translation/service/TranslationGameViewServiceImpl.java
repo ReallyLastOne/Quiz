@@ -5,6 +5,7 @@ import com.reallylastone.quiz.exercise.phrase.mapper.PhraseMapper;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
 import com.reallylastone.quiz.game.core.translation.model.ActiveTranslationGameSessionView;
 import com.reallylastone.quiz.game.core.translation.model.DoneTranslationSessionView;
+import com.reallylastone.quiz.game.core.translation.model.ListOfPlayedGamesView;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
 import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerResponse;
 import com.reallylastone.quiz.game.core.translation.model.TranslationGameSession;
@@ -69,11 +70,10 @@ public class TranslationGameViewServiceImpl implements TranslationGameViewServic
     }
 
     @Override
-    public ResponseEntity<DoneTranslationSessionView> findRecent() {
-        return translationGameService.findRecent()
+    public ResponseEntity<ListOfPlayedGamesView> findRecent(int games) {
+        return ResponseEntity.ok(new ListOfPlayedGamesView(translationGameService.findRecent(games).stream()
                 .map(session -> new DoneTranslationSessionView((int) session.countOf(ExerciseState.CORRECT),
                         session.getFinishDate(), session.getPhrasesSize()))
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> new IllegalArgumentException(messages.getMessage("user.session.none", null)));
+                .toList()));
     }
 }

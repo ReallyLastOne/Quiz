@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 import static com.reallylastone.quiz.exercise.core.ExerciseState.*;
 import static com.reallylastone.quiz.integration.EndpointPaths.QuizGame.*;
 import static com.reallylastone.quiz.integration.EndpointPaths.TranslationGame.STOP_GAME_PATH;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -298,7 +299,7 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
                 .andReturn();
         String accessToken = utils.extract(mvcResult, "accessToken");
 
-        quizUtils.findRecent(accessToken).andExpectAll(status().is4xxClientError());
+        quizUtils.findRecent(accessToken).andExpectAll(status().is2xxSuccessful(), jsonPath("$.games", hasSize(0)));
     }
 
     @Test
@@ -315,7 +316,7 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
         QuestionAnswerRequest request = new QuestionAnswerRequest("correct");
         quizUtils.answer(request, accessToken);
 
-        quizUtils.findRecent(accessToken).andExpectAll(status().is2xxSuccessful());
+        quizUtils.findRecent(accessToken).andExpectAll(status().is2xxSuccessful(), jsonPath("$.games", hasSize(1)));
     }
 
 }

@@ -7,6 +7,7 @@ import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
 import com.reallylastone.quiz.game.session.model.GameSession;
 import com.reallylastone.quiz.game.session.model.GameSessionCreateRequest;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface GameSessionService {
@@ -24,5 +25,5 @@ public interface GameSessionService {
 
     <T extends GameSession> Optional<T> findActive(Class<T> gameSessionType);
 
-    <T extends GameSession> Optional<T> findRecent(Class<T> gameSessionType);
+    <T extends GameSession> List<T> findRecent(int games, Class<T> gameSessionType);
 }
