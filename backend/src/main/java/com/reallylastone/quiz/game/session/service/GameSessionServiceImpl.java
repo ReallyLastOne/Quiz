@@ -1,22 +1,22 @@
 package com.reallylastone.quiz.game.session.service;
 
-import com.reallylastone.quiz.exercise.core.Exercise;
-import com.reallylastone.quiz.exercise.core.ExerciseState;
+import com.reallylastone.quiz.exercise.Exercise;
+import com.reallylastone.quiz.exercise.ExerciseState;
 import com.reallylastone.quiz.exercise.phrase.model.Phrase;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
 import com.reallylastone.quiz.exercise.phrase.service.PhraseService;
 import com.reallylastone.quiz.exercise.question.model.Question;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerRequest;
 import com.reallylastone.quiz.exercise.question.service.QuestionService;
-import com.reallylastone.quiz.game.core.quiz.model.QuizGameSession;
-import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
-import com.reallylastone.quiz.game.core.translation.model.TranslationGameSession;
+import com.reallylastone.quiz.game.quiz.model.QuizGameSession;
 import com.reallylastone.quiz.game.session.model.GameSession;
 import com.reallylastone.quiz.game.session.model.GameSessionCreateRequest;
 import com.reallylastone.quiz.game.session.model.GameState;
 import com.reallylastone.quiz.game.session.repository.GameSessionRepository;
 import com.reallylastone.quiz.game.session.validation.GameSessionCreateRequestValidator;
 import com.reallylastone.quiz.game.session.validation.GameSessionStateValidator;
+import com.reallylastone.quiz.game.translation.model.PhraseAnswerRequest;
+import com.reallylastone.quiz.game.translation.model.TranslationGameSession;
 import com.reallylastone.quiz.user.model.UserEntity;
 import com.reallylastone.quiz.user.service.UserService;
 import com.reallylastone.quiz.util.validation.StateValidationError;
@@ -37,7 +37,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.reallylastone.quiz.exercise.core.ExerciseState.NO_ANSWER;
+import static com.reallylastone.quiz.exercise.ExerciseState.NO_ANSWER;
 
 @Service
 @RequiredArgsConstructor

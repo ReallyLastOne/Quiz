@@ -1,6 +1,6 @@
 package com.reallylastone.quiz.exercise.phrase.model;
 
-import com.reallylastone.quiz.exercise.core.Exercise;
+import com.reallylastone.quiz.exercise.Exercise;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;

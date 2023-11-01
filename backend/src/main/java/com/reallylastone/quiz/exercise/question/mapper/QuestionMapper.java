@@ -4,7 +4,7 @@ import com.reallylastone.quiz.exercise.question.model.Question;
 import com.reallylastone.quiz.exercise.question.model.QuestionAddResponse;
 import com.reallylastone.quiz.exercise.question.model.QuestionCreateRequest;
 import com.reallylastone.quiz.exercise.question.model.QuestionView;
-import com.reallylastone.quiz.exercise.question.model.Tag;
+import com.reallylastone.quiz.tag.model.Tag;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

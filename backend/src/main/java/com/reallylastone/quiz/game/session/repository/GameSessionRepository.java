@@ -1,8 +1,8 @@
 package com.reallylastone.quiz.game.session.repository;
 
-import com.reallylastone.quiz.game.core.quiz.model.QuizGameSession;
-import com.reallylastone.quiz.game.core.translation.model.TranslationGameSession;
+import com.reallylastone.quiz.game.quiz.model.QuizGameSession;
 import com.reallylastone.quiz.game.session.model.GameSession;
+import com.reallylastone.quiz.game.translation.model.TranslationGameSession;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

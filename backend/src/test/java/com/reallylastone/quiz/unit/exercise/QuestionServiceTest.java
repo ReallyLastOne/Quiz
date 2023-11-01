@@ -2,10 +2,10 @@ package com.reallylastone.quiz.unit.exercise;
 
 import com.reallylastone.quiz.exercise.question.model.Question;
 import com.reallylastone.quiz.exercise.question.repository.QuestionRepository;
-import com.reallylastone.quiz.exercise.question.repository.TagRepository;
 import com.reallylastone.quiz.exercise.question.service.QuestionService;
 import com.reallylastone.quiz.exercise.question.service.QuestionServiceImpl;
 import com.reallylastone.quiz.exercise.question.validation.QuestionValidator;
+import com.reallylastone.quiz.tag.repository.TagRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

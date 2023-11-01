@@ -2,12 +2,12 @@ package com.reallylastone.quiz.integration.exercise;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reallylastone.quiz.exercise.question.model.QuestionCreateRequest;
-import com.reallylastone.quiz.exercise.question.model.Tag;
 import com.reallylastone.quiz.exercise.question.repository.QuestionRepository;
-import com.reallylastone.quiz.exercise.question.repository.TagRepository;
 import com.reallylastone.quiz.integration.AbstractIntegrationTest;
 import com.reallylastone.quiz.integration.IntegrationTestUtils;
 import com.reallylastone.quiz.integration.auth.AuthenticationControllerTestUtils;
+import com.reallylastone.quiz.tag.model.Tag;
+import com.reallylastone.quiz.tag.repository.TagRepository;
 import com.reallylastone.quiz.user.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
