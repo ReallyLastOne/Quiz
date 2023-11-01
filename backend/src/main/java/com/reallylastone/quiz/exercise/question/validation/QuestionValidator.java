@@ -1,7 +1,7 @@
 package com.reallylastone.quiz.exercise.question.validation;
 
 import com.reallylastone.quiz.exercise.question.model.Question;
-import com.reallylastone.quiz.exercise.question.repository.TagRepository;
+import com.reallylastone.quiz.tag.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;

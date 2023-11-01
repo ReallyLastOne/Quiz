@@ -1,10 +1,10 @@
 package com.reallylastone.quiz.integration.game.core.translation;
 
 import com.reallylastone.quiz.auth.model.RegisterRequest;
-import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
-import com.reallylastone.quiz.game.core.translation.model.TranslationGameSession;
 import com.reallylastone.quiz.game.session.model.GameState;
 import com.reallylastone.quiz.game.session.repository.GameSessionRepository;
+import com.reallylastone.quiz.game.translation.model.PhraseAnswerRequest;
+import com.reallylastone.quiz.game.translation.model.TranslationGameSession;
 import com.reallylastone.quiz.integration.AbstractIntegrationTest;
 import com.reallylastone.quiz.integration.IntegrationTestUtils;
 import com.reallylastone.quiz.integration.auth.AuthenticationControllerTestUtils;
@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.Locale;
 import java.util.stream.Stream;
 
-import static com.reallylastone.quiz.exercise.core.ExerciseState.*;
+import static com.reallylastone.quiz.exercise.ExerciseState.*;
 import static com.reallylastone.quiz.integration.EndpointPaths.TranslationGame.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;

@@ -3,7 +3,7 @@ package com.reallylastone.quiz.integration.game.core.translation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reallylastone.quiz.exercise.phrase.model.Phrase;
 import com.reallylastone.quiz.exercise.phrase.repository.PhraseRepository;
-import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
+import com.reallylastone.quiz.game.translation.model.PhraseAnswerRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
