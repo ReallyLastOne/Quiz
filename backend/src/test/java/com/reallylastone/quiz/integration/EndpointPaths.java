@@ -37,4 +37,8 @@ public class EndpointPaths {
     public static class Question {
         public static final String BASE = "/api/v1/exercises/questions";
     }
+
+    public static class Tag {
+        public static final String BASE = "/api/v1/exercises/questions/tags";
+    }
 }
