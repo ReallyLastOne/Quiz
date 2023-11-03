@@ -8,6 +8,8 @@ import com.reallylastone.quiz.exercise.phrase.repository.PhraseRepository;
 import com.reallylastone.quiz.integration.AbstractIntegrationTest;
 import com.reallylastone.quiz.integration.IntegrationTestUtils;
 import com.reallylastone.quiz.integration.auth.AuthenticationControllerTestUtils;
+import com.reallylastone.quiz.user.model.Role;
+import com.reallylastone.quiz.user.model.UserEntity;
 import com.reallylastone.quiz.user.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -24,6 +26,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.*;
@@ -47,25 +50,26 @@ class PhraseControllerTest extends AbstractIntegrationTest {
     private PhraseControllerTestUtils phraseControllerTestUtils;
 
     private static Stream<PhraseCreateRequest> correctCreatePhraseRequests() {
-        return Stream.of(new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko"), null),
+        return Stream.of(new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko"), true),
                 new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko"), true),
                 new PhraseCreateRequest(
-                        Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko", Locale.GERMAN, "apfel"), false));
+                        Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko", Locale.GERMAN, "apfel"), true));
     }
 
     private static Stream<PhraseCreateRequest> wrongCreatePhraseRequests() {
-        return Stream.of(new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple"), null),
-                new PhraseCreateRequest(Map.of(), true), new PhraseCreateRequest(null, false));
+        return Stream.of(new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple"), true),
+                new PhraseCreateRequest(Map.of(), true), new PhraseCreateRequest(null, true), new PhraseCreateRequest(
+                        Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko", Locale.GERMAN, "apfel"), false));
     }
 
     private static Stream<Arguments> phrasesToMergeData() {
         return Stream.of(
                 Arguments.of((Object) new PhraseCreateRequest[] {
-                        new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple"), false),
-                        new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko"), false) }),
+                        new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple"), true),
+                        new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko"), true) }),
                 Arguments.of((Object) new PhraseCreateRequest[] {
-                        new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", Locale.GERMAN, "apfel"), false),
-                        new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko"), false) }));
+                        new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", Locale.GERMAN, "apfel"), true),
+                        new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", new Locale("pl"), "jabłko"), true) }));
     }
 
     private static Stream<PhraseControllerTestUtils.BatchPhraseCreateCase> createPhrasesData() {
@@ -111,6 +115,22 @@ class PhraseControllerTest extends AbstractIntegrationTest {
         phraseControllerTestUtils.createPhrase(requests[0], generalUtils.extract(mvcResult, "accessToken"));
 
         phraseControllerTestUtils.createPhrase(requests[1], generalUtils.extract(mvcResult, "accessToken"))
+                .andExpect(status().is2xxSuccessful());
+
+        Assertions.assertEquals(1, phraseRepository.findAll().size());
+    }
+
+    @Test
+    void shouldCreateGlobalPhrase() throws Exception {
+        MvcResult mvcResult = authenticationUtils.register().andReturn();
+
+        UserEntity user = userRepository.findAll().get(0);
+        user.setRoles(Set.of(Role.ADMIN));
+        userRepository.save(user);
+
+        phraseControllerTestUtils
+                .createPhrase(new PhraseCreateRequest(Map.of(Locale.ENGLISH, "apple", Locale.GERMAN, "apfel"), false),
+                        generalUtils.extract(mvcResult, "accessToken"))
                 .andExpect(status().is2xxSuccessful());
 
         Assertions.assertEquals(1, phraseRepository.findAll().size());

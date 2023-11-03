@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +31,7 @@ public interface PhraseOperations {
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "422", description = "If content is wrong or if there are translations that cannot be merge into another phrase", content = @Content) })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<PhraseView> createPhrase(@RequestBody PhraseCreateRequest createRequest);
+    ResponseEntity<PhraseView> createPhrase(@RequestBody @Valid PhraseCreateRequest createRequest);
 
     @Operation(summary = """
             Creates or merges all provided phrases in CSV file. CSV file must be encoded in UTF-8 format.

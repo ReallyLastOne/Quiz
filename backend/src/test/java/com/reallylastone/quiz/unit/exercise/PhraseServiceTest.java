@@ -6,6 +6,7 @@ import com.reallylastone.quiz.exercise.phrase.repository.PhraseRepository;
 import com.reallylastone.quiz.exercise.phrase.service.PhraseService;
 import com.reallylastone.quiz.exercise.phrase.service.PhraseServiceImpl;
 import com.reallylastone.quiz.exercise.phrase.validation.PhraseValidator;
+import com.reallylastone.quiz.util.Messages;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,14 +24,16 @@ class PhraseServiceTest {
     private PhraseRepository phraseRepository;
     private PhraseValidator phraseValidator;
     private PhraseMapper phraseMapper;
+    private Messages messages;
 
     @BeforeEach
     public void setUp() {
         phraseRepository = mock(PhraseRepository.class);
         phraseValidator = mock(PhraseValidator.class);
         phraseMapper = mock(PhraseMapper.class);
+        messages = mock(Messages.class);
 
-        phraseService = new PhraseServiceImpl(phraseRepository, phraseValidator, phraseMapper);
+        phraseService = new PhraseServiceImpl(phraseRepository, phraseValidator, phraseMapper, messages);
     }
 
     @Test
