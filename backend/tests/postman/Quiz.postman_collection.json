@@ -237,7 +237,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"correct\": {\n    \"eiusmod_ed\": {\n      \"Utd\": \"<string>\",\n      \"quis_981\": \"<string>\"\n    }\n  },\n  \"incorrect\": {\n    \"minim4\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
+              "body": "{\n  \"correct\": {\n    \"dolor_e\": {\n      \"aute_1b\": \"<string>\"\n    }\n  },\n  \"incorrect\": {\n    \"in78a\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
@@ -754,7 +754,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"correct\": \"<boolean>\"\n}",
+              "body": "{\n  \"correct\": \"<boolean>\",\n  \"phrasesLeft\": \"<integer>\",\n  \"l\": \"<long>\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
@@ -798,6 +798,174 @@
               "header": [],
               "cookie": [],
               "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "Fetches information about most recent translation games",
+          "request": {
+            "name": "Fetches information about most recent translation games",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "game",
+                "translation",
+                "recent"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "games",
+                  "value": "5"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "body": {},
+            "auth": null
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "game",
+                    "translation",
+                    "recent"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "games",
+                      "value": "5"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"games\": [\n    {\n      \"correctAnswers\": \"<integer>\",\n      \"finishDate\": \"<dateTime>\",\n      \"totalQuestions\": \"<integer>\"\n    },\n    {\n      \"correctAnswers\": \"<integer>\",\n      \"finishDate\": \"<dateTime>\",\n      \"totalQuestions\": \"<integer>\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "Fetches information about currently active translation session",
+          "request": {
+            "name": "Fetches information about currently active translation session",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "game",
+                "translation",
+                "active"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "body": {},
+            "auth": null
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "game",
+                    "translation",
+                    "active"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"correctAnswers\": \"<integer>\",\n  \"phrasesLeft\": \"<integer>\",\n  \"currentActive\": {\n    \"id\": \"<long>\",\n    \"translationMap\": {\n      \"eiusmodda\": \"<string>\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
             }
           ],
           "event": [],
@@ -1246,7 +1414,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"<long>\",\n  \"username\": \"<string>\",\n  \"roles\": [\n    \"ADMIN\",\n    \"ADMIN\"\n  ]\n}",
+              "body": "{\n  \"id\": \"<long>\",\n  \"username\": \"<string>\",\n  \"roles\": [\n    \"USER\",\n    \"ADMIN\"\n  ]\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             }
@@ -1584,7 +1752,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"id\": \"<long>\",\n  \"content\": \"<string>\",\n  \"answers\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "body": "{\n  \"content\": \"<string>\",\n  \"answers\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
@@ -1710,7 +1878,7 @@
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"correctAnswer\": \"<boolean>\"\n}",
+              "body": "{\n  \"correctAnswer\": \"<boolean>\",\n  \"questionsLeft\": \"<integer>\",\n  \"totalCorrect\": \"<long>\"\n}",
               "cookie": [],
               "_postman_previewlanguage": "json"
             },
@@ -1754,6 +1922,174 @@
               "header": [],
               "cookie": [],
               "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "Fetches information about most recent quiz games",
+          "request": {
+            "name": "Fetches information about most recent quiz games",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "game",
+                "quiz",
+                "recent"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "games",
+                  "value": "5"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "body": {},
+            "auth": null
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "game",
+                    "quiz",
+                    "recent"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "games",
+                      "value": "5"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"games\": [\n    {\n      \"correctAnswers\": \"<integer>\",\n      \"finishDate\": \"<dateTime>\",\n      \"totalQuestions\": \"<integer>\"\n    },\n    {\n      \"correctAnswers\": \"<integer>\",\n      \"finishDate\": \"<dateTime>\",\n      \"totalQuestions\": \"<integer>\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "name": "Fetches information about currently active quiz session",
+          "request": {
+            "name": "Fetches information about currently active quiz session",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "game",
+                "quiz",
+                "active"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "body": {},
+            "auth": null
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "game",
+                    "quiz",
+                    "active"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"correctAnswers\": \"<integer>\",\n  \"questionsLeft\": \"<integer>\",\n  \"currentActive\": {\n    \"content\": \"<string>\",\n    \"answers\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
             }
           ],
           "event": [],

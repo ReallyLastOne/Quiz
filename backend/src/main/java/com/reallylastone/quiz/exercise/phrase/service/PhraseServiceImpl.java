@@ -7,6 +7,7 @@ import com.reallylastone.quiz.exercise.phrase.model.PhraseCreateRequest;
 import com.reallylastone.quiz.exercise.phrase.repository.PhraseRepository;
 import com.reallylastone.quiz.exercise.phrase.validation.PhraseValidator;
 import com.reallylastone.quiz.user.service.UserService;
+import com.reallylastone.quiz.util.Messages;
 import com.reallylastone.quiz.util.validation.ValidationErrorsException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,6 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.Errors;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,6 +35,7 @@ public class PhraseServiceImpl implements PhraseService {
     private final PhraseRepository phraseRepository;
     private final PhraseValidator phraseValidator;
     private final PhraseMapper phraseMapper;
+    private final Messages messages;
 
     @Override
     public Optional<Phrase> findById(Long id) {
@@ -113,7 +114,7 @@ public class PhraseServiceImpl implements PhraseService {
     }
 
     private void validate(PhraseCreateRequest request) {
-        Errors errors = new BeanPropertyBindingResult(request, "PhraseCreateRequest");
+        BeanPropertyBindingResult errors = new BeanPropertyBindingResult(request, "PhraseCreateRequest");
         phraseValidator.validate(request, errors);
 
         if (errors.hasErrors()) {

@@ -8,6 +8,8 @@ import com.reallylastone.quiz.integration.IntegrationTestUtils;
 import com.reallylastone.quiz.integration.auth.AuthenticationControllerTestUtils;
 import com.reallylastone.quiz.tag.model.Tag;
 import com.reallylastone.quiz.tag.repository.TagRepository;
+import com.reallylastone.quiz.user.model.Role;
+import com.reallylastone.quiz.user.model.UserEntity;
 import com.reallylastone.quiz.user.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -21,6 +23,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -65,6 +68,10 @@ class QuestionControllerTest extends AbstractIntegrationTest {
     void shouldCreateQuestion(QuestionCreateRequest request) throws Exception {
         MvcResult mvcResult = authenticationUtils.register().andReturn();
 
+        UserEntity user = userRepository.findAll().get(0);
+        user.setRoles(Set.of(Role.ADMIN));
+        userRepository.save(user);
+
         questionControllerTestUtils.createQuestion(request, generalUtils.extract(mvcResult, "accessToken"))
                 .andExpect(status().is2xxSuccessful());
 
@@ -76,7 +83,23 @@ class QuestionControllerTest extends AbstractIntegrationTest {
     void shouldNotCreateQuestion(QuestionCreateRequest request) throws Exception {
         MvcResult mvcResult = authenticationUtils.register().andReturn();
 
+        UserEntity user = userRepository.findAll().get(0);
+        user.setRoles(Set.of(Role.ADMIN));
+        userRepository.save(user);
+
         questionControllerTestUtils.createQuestion(request, generalUtils.extract(mvcResult, "accessToken"))
+                .andExpect(status().is4xxClientError());
+
+        Assertions.assertEquals(0, questionRepository.findAll().size());
+    }
+
+    @Test
+    void shouldNotCreateQuestion() throws Exception {
+        MvcResult mvcResult = authenticationUtils.register().andReturn();
+
+        questionControllerTestUtils
+                .createQuestion(new QuestionCreateRequest(List.of("", ""), List.of(""), "question?", List.of()),
+                        generalUtils.extract(mvcResult, "accessToken"))
                 .andExpect(status().is4xxClientError());
 
         Assertions.assertEquals(0, questionRepository.findAll().size());
@@ -89,6 +112,10 @@ class QuestionControllerTest extends AbstractIntegrationTest {
 
         tagRepository.save(tag);
         MvcResult mvcResult = authenticationUtils.register().andReturn();
+
+        UserEntity user = userRepository.findAll().get(0);
+        user.setRoles(Set.of(Role.ADMIN));
+        userRepository.save(user);
 
         questionControllerTestUtils.createQuestion(
                 new QuestionCreateRequest(List.of("", ""), List.of("", ""), "question?", List.of("Linux")),
