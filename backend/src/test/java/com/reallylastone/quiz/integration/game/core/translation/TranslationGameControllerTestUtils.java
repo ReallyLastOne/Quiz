@@ -3,7 +3,7 @@ package com.reallylastone.quiz.integration.game.core.translation;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reallylastone.quiz.exercise.phrase.model.Phrase;
 import com.reallylastone.quiz.exercise.phrase.repository.PhraseRepository;
-import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
+import com.reallylastone.quiz.game.translation.model.PhraseAnswerRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -15,6 +15,7 @@ import java.util.Map;
 
 import static com.reallylastone.quiz.integration.EndpointPaths.TranslationGame.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @Component
@@ -52,7 +53,12 @@ public class TranslationGameControllerTestUtils {
 
     public ResultActions findActive(String accessToken) throws Exception {
         return mockMvc.perform(
-                post(FIND_ACTIVE_GAME_PATH).with(csrf().asHeader()).header("Authorization", "Bearer " + accessToken));
+                get(FIND_ACTIVE_GAME_PATH).with(csrf().asHeader()).header("Authorization", "Bearer " + accessToken));
+    }
+
+    public ResultActions findRecent(String accessToken) throws Exception {
+        return mockMvc.perform(
+                get(FIND_RECENT_GAME_PATH).with(csrf().asHeader()).header("Authorization", "Bearer " + accessToken));
     }
 
     public void populatePhrasesFor(Long ownerId) {

@@ -1,22 +1,22 @@
 package com.reallylastone.quiz.game.session.service;
 
-import com.reallylastone.quiz.exercise.core.Exercise;
-import com.reallylastone.quiz.exercise.core.ExerciseState;
+import com.reallylastone.quiz.exercise.Exercise;
+import com.reallylastone.quiz.exercise.ExerciseState;
 import com.reallylastone.quiz.exercise.phrase.model.Phrase;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
 import com.reallylastone.quiz.exercise.phrase.service.PhraseService;
 import com.reallylastone.quiz.exercise.question.model.Question;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerRequest;
 import com.reallylastone.quiz.exercise.question.service.QuestionService;
-import com.reallylastone.quiz.game.core.quiz.model.QuizGameSession;
-import com.reallylastone.quiz.game.core.translation.model.PhraseAnswerRequest;
-import com.reallylastone.quiz.game.core.translation.model.TranslationGameSession;
+import com.reallylastone.quiz.game.quiz.model.QuizGameSession;
 import com.reallylastone.quiz.game.session.model.GameSession;
 import com.reallylastone.quiz.game.session.model.GameSessionCreateRequest;
 import com.reallylastone.quiz.game.session.model.GameState;
 import com.reallylastone.quiz.game.session.repository.GameSessionRepository;
 import com.reallylastone.quiz.game.session.validation.GameSessionCreateRequestValidator;
 import com.reallylastone.quiz.game.session.validation.GameSessionStateValidator;
+import com.reallylastone.quiz.game.translation.model.PhraseAnswerRequest;
+import com.reallylastone.quiz.game.translation.model.TranslationGameSession;
 import com.reallylastone.quiz.user.model.UserEntity;
 import com.reallylastone.quiz.user.service.UserService;
 import com.reallylastone.quiz.util.validation.StateValidationError;
@@ -36,9 +36,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.LongFunction;
 
-import static com.reallylastone.quiz.exercise.core.ExerciseState.NO_ANSWER;
+import static com.reallylastone.quiz.exercise.ExerciseState.NO_ANSWER;
 
 @Service
 @RequiredArgsConstructor
@@ -199,23 +198,13 @@ public class GameSessionServiceImpl implements GameSessionService {
     public <T extends GameSession> Optional<T> findActive(Class<T> gameSessionType) {
         Long id = UserService.getCurrentUser().getId();
 
-        return Optional.ofNullable(determineMethod(gameSessionType))
-                .map(method -> (Optional<T>) Optional.ofNullable(method.apply(id))).orElseGet(() -> {
-                    log.error("Unknown game session type");
-                    return Optional.empty();
-                });
-    }
-
-    private <T extends GameSession> LongFunction<? extends GameSession> determineMethod(Class<T> gameSessionType) {
-        LongFunction<? extends GameSession> method = null;
-
         if (gameSessionType == QuizGameSession.class) {
-            method = gameSessionRepository::findActiveQuizGameSession;
+            return (Optional<T>) Optional.ofNullable(gameSessionRepository.findActiveQuizGameSession(id));
         } else if (gameSessionType == TranslationGameSession.class) {
-            method = gameSessionRepository::findActiveTranslationGameSession;
+            return (Optional<T>) Optional.ofNullable(gameSessionRepository.findActiveTranslationGameSession(id));
         }
 
-        return method;
+        return Optional.empty();
     }
 
     private void validate(GameSessionCreateRequest request) {
@@ -226,4 +215,18 @@ public class GameSessionServiceImpl implements GameSessionService {
             throw new ValidationErrorsException(errors);
         }
     }
+
+    @Override
+    public <T extends GameSession> List<T> findRecent(int games, Class<T> gameSessionType) {
+        Long id = UserService.getCurrentUser().getId();
+
+        if (gameSessionType == QuizGameSession.class) {
+            return (List<T>) gameSessionRepository.findMostRecentQuizGameSessions(games, id);
+        } else if (gameSessionType == TranslationGameSession.class) {
+            return (List<T>) gameSessionRepository.findMostRecentTranslationGameSessions(games, id);
+        }
+
+        return new ArrayList<>();
+    }
+
 }

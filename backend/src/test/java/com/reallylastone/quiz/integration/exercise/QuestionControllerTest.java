@@ -2,12 +2,16 @@ package com.reallylastone.quiz.integration.exercise;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reallylastone.quiz.exercise.question.model.QuestionCreateRequest;
-import com.reallylastone.quiz.exercise.question.model.Tag;
 import com.reallylastone.quiz.exercise.question.repository.QuestionRepository;
-import com.reallylastone.quiz.exercise.question.repository.TagRepository;
 import com.reallylastone.quiz.integration.AbstractIntegrationTest;
+import com.reallylastone.quiz.integration.EndpointPaths;
 import com.reallylastone.quiz.integration.IntegrationTestUtils;
 import com.reallylastone.quiz.integration.auth.AuthenticationControllerTestUtils;
+import com.reallylastone.quiz.tag.model.Tag;
+import com.reallylastone.quiz.tag.model.TagCreateRequest;
+import com.reallylastone.quiz.tag.repository.TagRepository;
+import com.reallylastone.quiz.user.model.Role;
+import com.reallylastone.quiz.user.model.UserEntity;
 import com.reallylastone.quiz.user.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,13 +20,17 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc(print = MockMvcPrint.NONE)
@@ -65,6 +73,10 @@ class QuestionControllerTest extends AbstractIntegrationTest {
     void shouldCreateQuestion(QuestionCreateRequest request) throws Exception {
         MvcResult mvcResult = authenticationUtils.register().andReturn();
 
+        UserEntity user = userRepository.findAll().get(0);
+        user.setRoles(Set.of(Role.ADMIN));
+        userRepository.save(user);
+
         questionControllerTestUtils.createQuestion(request, generalUtils.extract(mvcResult, "accessToken"))
                 .andExpect(status().is2xxSuccessful());
 
@@ -76,7 +88,23 @@ class QuestionControllerTest extends AbstractIntegrationTest {
     void shouldNotCreateQuestion(QuestionCreateRequest request) throws Exception {
         MvcResult mvcResult = authenticationUtils.register().andReturn();
 
+        UserEntity user = userRepository.findAll().get(0);
+        user.setRoles(Set.of(Role.ADMIN));
+        userRepository.save(user);
+
         questionControllerTestUtils.createQuestion(request, generalUtils.extract(mvcResult, "accessToken"))
+                .andExpect(status().is4xxClientError());
+
+        Assertions.assertEquals(0, questionRepository.findAll().size());
+    }
+
+    @Test
+    void shouldNotCreateQuestion() throws Exception {
+        MvcResult mvcResult = authenticationUtils.register().andReturn();
+
+        questionControllerTestUtils
+                .createQuestion(new QuestionCreateRequest(List.of("", ""), List.of(""), "question?", List.of()),
+                        generalUtils.extract(mvcResult, "accessToken"))
                 .andExpect(status().is4xxClientError());
 
         Assertions.assertEquals(0, questionRepository.findAll().size());
@@ -90,9 +118,55 @@ class QuestionControllerTest extends AbstractIntegrationTest {
         tagRepository.save(tag);
         MvcResult mvcResult = authenticationUtils.register().andReturn();
 
+        UserEntity user = userRepository.findAll().get(0);
+        user.setRoles(Set.of(Role.ADMIN));
+        userRepository.save(user);
+
         questionControllerTestUtils.createQuestion(
                 new QuestionCreateRequest(List.of("", ""), List.of("", ""), "question?", List.of("Linux")),
                 generalUtils.extract(mvcResult, "accessToken")).andExpect(status().is2xxSuccessful());
         Assertions.assertEquals(1, questionRepository.findAll().size());
     }
+
+    @Test
+    void shouldCreateTag() throws Exception {
+        MvcResult mvcResult = authenticationUtils.register().andReturn();
+
+        UserEntity user = userRepository.findAll().get(0);
+        user.setRoles(Set.of(Role.ADMIN));
+        userRepository.save(user);
+
+        mockMvc.perform(post(EndpointPaths.Tag.BASE).with(csrf().asHeader())
+                .content(mapper.writeValueAsString(new TagCreateRequest("name", "description")))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + generalUtils.extract(mvcResult, "accessToken")))
+                .andExpect(status().is2xxSuccessful());
+    }
+
+    @Test
+    void shouldNotCreateTagBecauseNoAdmin() throws Exception {
+        MvcResult mvcResult = authenticationUtils.register().andReturn();
+
+        mockMvc.perform(post(EndpointPaths.Tag.BASE).with(csrf().asHeader())
+                .content(mapper.writeValueAsString(new TagCreateRequest("name", "description")))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + generalUtils.extract(mvcResult, "accessToken")))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    void shouldNotCreateTagBecauseWrongData() throws Exception {
+        MvcResult mvcResult = authenticationUtils.register().andReturn();
+
+        UserEntity user = userRepository.findAll().get(0);
+        user.setRoles(Set.of(Role.ADMIN));
+        userRepository.save(user);
+
+        mockMvc.perform(post(EndpointPaths.Tag.BASE).with(csrf().asHeader())
+                .content(mapper.writeValueAsString(new TagCreateRequest("", "")))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + generalUtils.extract(mvcResult, "accessToken")))
+                .andExpect(status().is4xxClientError());
+    }
+
 }

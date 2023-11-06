@@ -1,10 +1,10 @@
 package com.reallylastone.quiz.exercise.question.service;
 
 import com.reallylastone.quiz.exercise.question.model.Question;
-import com.reallylastone.quiz.exercise.question.model.Tag;
 import com.reallylastone.quiz.exercise.question.repository.QuestionRepository;
-import com.reallylastone.quiz.exercise.question.repository.TagRepository;
 import com.reallylastone.quiz.exercise.question.validation.QuestionValidator;
+import com.reallylastone.quiz.tag.model.Tag;
+import com.reallylastone.quiz.tag.repository.TagRepository;
 import com.reallylastone.quiz.util.validation.ValidationErrorsException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -24,7 +24,10 @@ import java.util.function.Consumer;
 @Transactional
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public abstract class AbstractIntegrationTest {
-    static int hostPort = 58494;
+    // docker may block ports due to some reasons (as in this case), so by command 'netsh interface ipv4 show
+    // excludedportrange protocol=tcp'
+    // we can check and verify if the host port will be available
+    static int hostPort = 60001;
     static int containerExposedPort = 5432;
     static Consumer<CreateContainerCmd> cmd = e -> e
             .withPortBindings(new PortBinding(Ports.Binding.bindPort(hostPort), new ExposedPort(containerExposedPort)));

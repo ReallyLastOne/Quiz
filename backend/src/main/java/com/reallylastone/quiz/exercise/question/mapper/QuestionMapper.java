@@ -1,14 +1,15 @@
 package com.reallylastone.quiz.exercise.question.mapper;
 
-import com.reallylastone.quiz.exercise.question.model.QuestionAddResponse;
 import com.reallylastone.quiz.exercise.question.model.Question;
+import com.reallylastone.quiz.exercise.question.model.QuestionAddResponse;
 import com.reallylastone.quiz.exercise.question.model.QuestionCreateRequest;
 import com.reallylastone.quiz.exercise.question.model.QuestionView;
-import com.reallylastone.quiz.exercise.question.model.Tag;
+import com.reallylastone.quiz.tag.model.Tag;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -35,6 +36,9 @@ public interface QuestionMapper {
     }
 
     default List<Tag> mapToTags(List<String> value) {
+        if (value == null)
+            return new ArrayList<>();
+
         return value.stream().map(s -> {
             Tag tag = new Tag();
             tag.setName(s);

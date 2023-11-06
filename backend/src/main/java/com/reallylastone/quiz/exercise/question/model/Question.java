@@ -1,6 +1,7 @@
 package com.reallylastone.quiz.exercise.question.model;
 
-import com.reallylastone.quiz.exercise.core.Exercise;
+import com.reallylastone.quiz.exercise.Exercise;
+import com.reallylastone.quiz.tag.model.Tag;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;

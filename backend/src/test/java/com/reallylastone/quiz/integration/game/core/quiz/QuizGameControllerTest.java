@@ -2,7 +2,7 @@ package com.reallylastone.quiz.integration.game.core.quiz;
 
 import com.reallylastone.quiz.auth.model.RegisterRequest;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerRequest;
-import com.reallylastone.quiz.game.core.quiz.model.QuizGameSession;
+import com.reallylastone.quiz.game.quiz.model.QuizGameSession;
 import com.reallylastone.quiz.game.session.model.GameState;
 import com.reallylastone.quiz.game.session.repository.GameSessionRepository;
 import com.reallylastone.quiz.integration.AbstractIntegrationTest;
@@ -21,9 +21,10 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.stream.Stream;
 
-import static com.reallylastone.quiz.exercise.core.ExerciseState.*;
+import static com.reallylastone.quiz.exercise.ExerciseState.*;
 import static com.reallylastone.quiz.integration.EndpointPaths.QuizGame.*;
 import static com.reallylastone.quiz.integration.EndpointPaths.TranslationGame.STOP_GAME_PATH;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -291,4 +292,31 @@ class QuizGameControllerTest extends AbstractIntegrationTest {
 
         quizUtils.findActive(accessToken).andExpectAll(status().is4xxClientError());
     }
+
+    @Test
+    void shouldNotFindRecent() throws Exception {
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password"))
+                .andReturn();
+        String accessToken = utils.extract(mvcResult, "accessToken");
+
+        quizUtils.findRecent(accessToken).andExpectAll(status().is2xxSuccessful(), jsonPath("$.games", hasSize(0)));
+    }
+
+    @Test
+    void shouldFindRecent() throws Exception {
+        quizUtils.populateQuestions();
+
+        MvcResult mvcResult = authUtils.register(new RegisterRequest("nickname", "mail@mail.com", "password"))
+                .andReturn();
+        String accessToken = utils.extract(mvcResult, "accessToken");
+
+        quizUtils.start(1, accessToken);
+        quizUtils.next(accessToken);
+
+        QuestionAnswerRequest request = new QuestionAnswerRequest("correct");
+        quizUtils.answer(request, accessToken);
+
+        quizUtils.findRecent(accessToken).andExpectAll(status().is2xxSuccessful(), jsonPath("$.games", hasSize(1)));
+    }
+
 }

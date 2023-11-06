@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -34,7 +35,7 @@ public class UserEntity implements UserDetails {
     private String nickname;
     private String email;
     private String password;
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     @OneToMany(fetch = FetchType.EAGER)
     private List<GameSession> gameSessions = new ArrayList<>();

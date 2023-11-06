@@ -1,10 +1,10 @@
 package com.reallylastone.quiz.game.session.validation;
 
-import com.reallylastone.quiz.game.core.quiz.model.QuizGameSession;
-import com.reallylastone.quiz.game.core.translation.model.TranslationGameSession;
+import com.reallylastone.quiz.game.quiz.model.QuizGameSession;
 import com.reallylastone.quiz.game.session.model.GameSession;
 import com.reallylastone.quiz.game.session.model.GameSessionCreateRequest;
 import com.reallylastone.quiz.game.session.repository.GameSessionRepository;
+import com.reallylastone.quiz.game.translation.model.TranslationGameSession;
 import com.reallylastone.quiz.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;

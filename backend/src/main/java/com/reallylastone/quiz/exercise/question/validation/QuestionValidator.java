@@ -1,7 +1,9 @@
 package com.reallylastone.quiz.exercise.question.validation;
 
 import com.reallylastone.quiz.exercise.question.model.Question;
-import com.reallylastone.quiz.exercise.question.repository.TagRepository;
+import com.reallylastone.quiz.tag.repository.TagRepository;
+import com.reallylastone.quiz.user.model.Role;
+import com.reallylastone.quiz.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
@@ -25,6 +27,11 @@ public class QuestionValidator implements Validator {
 
         if (validatorAdapter != null) {
             validatorAdapter.validate(question, errors);
+        }
+
+        if (!UserService.getCurrentUser().getRoles().contains(Role.ADMIN)) {
+            // TODO: resolve key and value from messages.properties - now it doesn't work as expected
+            errors.reject("question.global.permission", "Only users with ADMIN role can create global questions");
         }
 
         if (question.getTags() != null) {
