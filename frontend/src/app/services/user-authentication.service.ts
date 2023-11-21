@@ -43,24 +43,24 @@ export class UserAuthenticationService {
     return this._http.post(environment.apiUrl + '/auth/refresh', null);
   }
 
-  private setSession(authResult) {
+  private setSession(authResult): void {
     const expiresAt = moment().add(authResult.expiresIn, 'second');
     this.saveAccessToken(authResult.accessToken);
     this.saveExpirationTokenTime(JSON.stringify(expiresAt.valueOf()));
     this.saveRefreshToken(authResult.refreshToken);
   }
 
-  public saveRefreshToken(token: string) {
+  public saveRefreshToken(token: string): void {
     window.sessionStorage.removeItem('auth-refreshtoken');
     window.sessionStorage.setItem('auth-refreshtoken', token);
   }
 
-  public saveAccessToken(token: string) {
+  public saveAccessToken(token: string): void {
     localStorage.removeItem('accessToken');
     localStorage.setItem('accessToken', token);
   }
 
-  public saveExpirationTokenTime(token: string) {
+  public saveExpirationTokenTime(token: string): void {
     localStorage.removeItem('expires_at');
     localStorage.setItem('expires_at', token);
   }
@@ -73,27 +73,21 @@ export class UserAuthenticationService {
     return localStorage.getItem('accessToken');
   }
 
-  logout() {
+  logout(): void {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('expires_at');
     this._router.navigate(['/login']);
   }
 
-  public isLoggedIn() {
+  public isLoggedIn(): boolean {
     return this.getAccessToken() != null;
   }
 
-  isLoggedOut() {
+  isLoggedOut(): boolean {
     return !this.isLoggedIn();
   }
 
-  getExpiration() {
-    const expiration = localStorage.getItem('expires_at');
-    const expiresAt = JSON.parse(expiration);
-    return moment(expiresAt);
-  }
-
-  getCsrfToken() {
+  getCsrfToken(): string {
     return this._cookieService.get('XSRF-TOKEN');
   }
 }
