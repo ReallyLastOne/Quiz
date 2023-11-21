@@ -1,0 +1,45 @@
+<form
+  class="translation-form"
+  autocomplete="off"
+  novalidate
+  [formGroup]="translationGroup"
+>
+  <div class="translation-select-language">
+    <mat-form-field>
+      <mat-label>Choose first language</mat-label>
+      <mat-select formControlName="firstLanguage">
+        <mat-option value="en">en</mat-option>
+        <mat-option value="pl">pl</mat-option>
+        <mat-option value="de">de</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Choose second language</mat-label>
+      <mat-select formControlName="secondLanguage">
+        <mat-option value="en">en</mat-option>
+        <mat-option value="pl">pl</mat-option>
+        <mat-option value="de">de</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="translation-words">
+    <mat-form-field>
+      <mat-label>First word</mat-label>
+      <input matInput formControlName="translationLanguage" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Second word</mat-label>
+      <input matInput formControlName="translationWord" />
+    </mat-form-field>
+  </div>
+  <mat-error *ngIf="error">{{ error }}</mat-error>
+  <button
+    class="translation-save-btn"
+    mat-raised-button
+    type="submit"
+    (click)="OnSave()"
+  >
+    Stwórz parę
+  </button>
+</form>

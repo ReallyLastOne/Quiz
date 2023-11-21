@@ -39,6 +39,14 @@ const routes: Routes = [
       import('./phrase/phrase.module').then((m) => m.PhraseModule),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'translation',
+    loadChildren: () =>
+      import('./translation/translation.module').then(
+        (m) => m.TranslationModule
+      ),
+    canActivate: [AuthGuard],
+  },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home' },
 ];

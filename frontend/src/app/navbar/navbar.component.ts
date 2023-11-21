@@ -29,6 +29,10 @@ export class NavbarComponent implements OnInit {
     this._router.navigate([`/phrase`]);
   }
 
+  translationClick(): void {
+    this._router.navigate([`/translation`]);
+  }
+
   expandMenuClick(): void {
     this.isActive = !this.isActive;
   }

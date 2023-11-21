@@ -8,6 +8,7 @@ import {
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AppService } from '../services/app.service';
+import { TranslationService } from '../services/translation.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -18,11 +19,16 @@ export class HomeComponent implements OnInit {
   private _destroyRef = inject(DestroyRef);
   constructor(
     private readonly _router: Router,
-    private readonly _appService: AppService
+    private readonly _appService: AppService,
+    private readonly _translationService: TranslationService
   ) {}
 
   ngOnInit(): void {
     this._appService
+      .stopGame()
+      .pipe(takeUntilDestroyed(this._destroyRef))
+      .subscribe();
+    this._translationService
       .stopGame()
       .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe();

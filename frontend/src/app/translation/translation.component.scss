@@ -1,0 +1,25 @@
+.translation-form {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.translation-select-language{
+    margin: 20px;
+    mat-form-field {
+        margin: 0 20px;
+        width: 240px;
+    }
+}
+
+.translation-words{
+    mat-form-field{
+        margin: 0 20px;
+        width: 240px;
+    }
+}
+
+.translation-save-btn{
+    margin-top:10px
+}
