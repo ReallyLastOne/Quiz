@@ -2,6 +2,7 @@ package com.reallylastone.quiz.game.quiz.service;
 
 import com.reallylastone.quiz.exercise.question.model.Question;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerRequest;
+import com.reallylastone.quiz.game.quiz.model.HighscoreQuizEntry;
 import com.reallylastone.quiz.game.quiz.model.QuizGameSession;
 import com.reallylastone.quiz.game.session.model.GameSessionCreateRequest;
 import com.reallylastone.quiz.game.session.service.GameSessionService;
@@ -47,5 +48,10 @@ public class QuizGameServiceImpl implements QuizGameService {
     @Override
     public List<QuizGameSession> findRecent(int games) {
         return gameSessionService.findRecent(games, QuizGameSession.class);
+    }
+
+    @Override
+    public List<HighscoreQuizEntry> getHighscore() {
+        return (List<HighscoreQuizEntry>) gameSessionService.getHighscore(QuizGameSession.class);
     }
 }

@@ -3,6 +3,7 @@ package com.reallylastone.quiz.game.translation.service;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
 import com.reallylastone.quiz.game.session.model.GameSessionCreateRequest;
 import com.reallylastone.quiz.game.session.service.GameSessionService;
+import com.reallylastone.quiz.game.translation.model.HighscoreTranslationEntry;
 import com.reallylastone.quiz.game.translation.model.PhraseAnswerRequest;
 import com.reallylastone.quiz.game.translation.model.TranslationGameSession;
 import com.reallylastone.quiz.user.model.UserEntity;
@@ -51,5 +52,10 @@ public class TranslationGameServiceImpl implements TranslationGameService {
     @Override
     public List<TranslationGameSession> findRecent(int games) {
         return gameSessionService.findRecent(games, TranslationGameSession.class);
+    }
+
+    @Override
+    public List<HighscoreTranslationEntry> getHighsore() {
+        return (List<HighscoreTranslationEntry>) gameSessionService.getHighscore(TranslationGameSession.class);
     }
 }

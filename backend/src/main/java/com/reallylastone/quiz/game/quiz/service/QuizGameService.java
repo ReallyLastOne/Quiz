@@ -2,6 +2,7 @@ package com.reallylastone.quiz.game.quiz.service;
 
 import com.reallylastone.quiz.exercise.question.model.Question;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerRequest;
+import com.reallylastone.quiz.game.quiz.model.HighscoreQuizEntry;
 import com.reallylastone.quiz.game.quiz.model.QuizGameSession;
 
 import java.util.List;
@@ -19,4 +20,6 @@ public interface QuizGameService {
     Optional<QuizGameSession> findActive();
 
     List<QuizGameSession> findRecent(int games);
+
+    List<HighscoreQuizEntry> getHighscore();
 }

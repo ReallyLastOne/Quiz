@@ -1,0 +1,61 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="ReallyLastOne (generated)" id="1691315207875-1">
+        <sql>
+            CREATE MATERIALIZED VIEW quiz_highscore_view AS
+            select
+            ue.id as id,
+            ue.nickname,
+            count(distinct(qgs.id)) as session_count,
+            count(qgsq.question_id) as question_count,
+            SUM(case
+            when qgsq.status = 1 then 1
+            else 0
+            end) as correct_answers
+            from
+            quiz_game_session qgs
+            inner join quiz_game_session_questions qgsq on
+            qgs.id = qgsq.game_session
+            inner join user_entity ue on
+            ue.id = qgs.user_id
+            where
+            qgs.state = 2
+            group by
+            ue.id
+            order by
+            correct_answers desc
+            limit 10
+            WITH DATA;
+        </sql>
+    </changeSet>
+    <changeSet author="ReallyLastOne (generated)" id="1691315207876-1">
+        <sql>
+            CREATE MATERIALIZED VIEW translation_highscore_view AS
+            select
+            ue.id as id,
+            ue.nickname,
+            count(distinct(tgs.id)) as session_count,
+            count(tgsp.phrase_id) as phrase_count,
+            SUM(case
+            when tgsp.status = 1 then 1
+            else 0
+            end) as correct_phrases
+            from
+            translation_game_session tgs
+            inner join translation_game_session_phrases tgsp on
+            tgs.id = tgsp.game_session
+            inner join user_entity ue on
+            ue.id = tgs.user_id
+            where
+            tgs.state = 2
+            group by
+            ue.id
+            order by
+            correct_phrases desc
+            limit 10
+            WITH DATA;
+        </sql>
+    </changeSet>
+</databaseChangeLog>

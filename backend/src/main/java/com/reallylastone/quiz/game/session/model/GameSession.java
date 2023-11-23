@@ -37,6 +37,7 @@ public abstract class GameSession {
     private UserEntity user;
 
     public void finish() {
+        finishDate = LocalDateTime.now();
         state = GameState.COMPLETED;
     }
 }

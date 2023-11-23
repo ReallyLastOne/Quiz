@@ -4,6 +4,7 @@ import com.reallylastone.quiz.exercise.question.model.QuestionAnswerRequest;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerResponse;
 import com.reallylastone.quiz.exercise.question.model.QuestionView;
 import com.reallylastone.quiz.game.quiz.model.ActiveQuizGameSessionView;
+import com.reallylastone.quiz.game.quiz.model.HighscoreQuizEntry;
 import com.reallylastone.quiz.game.quiz.model.ListOfPlayedGamesView;
 import com.reallylastone.quiz.game.quiz.service.QuizGameViewService;
 import com.reallylastone.quiz.util.GenericResponse;
@@ -13,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -49,5 +52,11 @@ public class QuizGameController implements QuizGameOperations {
     @Override
     public ResponseEntity<ListOfPlayedGamesView> findRecent(@RequestParam(defaultValue = "5") int games) {
         return quizGameViewService.findRecent(games);
+    }
+
+    @Override
+    public ResponseEntity<List<HighscoreQuizEntry>> getHighscore() {
+        // TODO tests
+        return quizGameViewService.getHighscore();
     }
 }

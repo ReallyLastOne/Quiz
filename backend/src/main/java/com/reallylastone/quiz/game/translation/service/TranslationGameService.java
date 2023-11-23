@@ -1,6 +1,7 @@
 package com.reallylastone.quiz.game.translation.service;
 
 import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
+import com.reallylastone.quiz.game.translation.model.HighscoreTranslationEntry;
 import com.reallylastone.quiz.game.translation.model.PhraseAnswerRequest;
 import com.reallylastone.quiz.game.translation.model.TranslationGameSession;
 import com.reallylastone.quiz.user.model.UserEntity;
@@ -21,4 +22,6 @@ public interface TranslationGameService {
     Optional<TranslationGameSession> findActive();
 
     List<TranslationGameSession> findRecent(int games);
+
+    List<HighscoreTranslationEntry> getHighsore();
 }
