@@ -9,6 +9,7 @@ import com.reallylastone.quiz.exercise.question.model.Question;
 import com.reallylastone.quiz.exercise.question.model.QuestionAnswerRequest;
 import com.reallylastone.quiz.exercise.question.service.QuestionService;
 import com.reallylastone.quiz.game.quiz.model.QuizGameSession;
+import com.reallylastone.quiz.game.quiz.repository.HighscoreQuizEntryRepository;
 import com.reallylastone.quiz.game.session.model.GameSession;
 import com.reallylastone.quiz.game.session.model.GameSessionCreateRequest;
 import com.reallylastone.quiz.game.session.model.GameState;
@@ -17,6 +18,7 @@ import com.reallylastone.quiz.game.session.validation.GameSessionCreateRequestVa
 import com.reallylastone.quiz.game.session.validation.GameSessionStateValidator;
 import com.reallylastone.quiz.game.translation.model.PhraseAnswerRequest;
 import com.reallylastone.quiz.game.translation.model.TranslationGameSession;
+import com.reallylastone.quiz.game.translation.repository.HighscoreTranslationEntryRepository;
 import com.reallylastone.quiz.user.model.UserEntity;
 import com.reallylastone.quiz.user.service.UserService;
 import com.reallylastone.quiz.util.validation.StateValidationError;
@@ -50,6 +52,8 @@ public class GameSessionServiceImpl implements GameSessionService {
     private final GameSessionStateValidator gameSessionStateValidator;
     private final QuestionService questionService;
     private final PhraseService phraseService;
+    private final HighscoreQuizEntryRepository highscoreQuizEntryRepository;
+    private final HighscoreTranslationEntryRepository highscoreTranslationEntryRepository;
 
     @Override
     public Long createSession(GameSessionCreateRequest request) {
@@ -229,4 +233,15 @@ public class GameSessionServiceImpl implements GameSessionService {
         return new ArrayList<>();
     }
 
+    @Override
+    public List<?> getHighscore(Class<? extends GameSession> gameSessionType) {
+
+        if (gameSessionType == QuizGameSession.class) {
+            return highscoreQuizEntryRepository.findAll();
+        } else if (gameSessionType == TranslationGameSession.class) {
+            return highscoreTranslationEntryRepository.findAll();
+        }
+
+        return new ArrayList<>();
+    }
 }

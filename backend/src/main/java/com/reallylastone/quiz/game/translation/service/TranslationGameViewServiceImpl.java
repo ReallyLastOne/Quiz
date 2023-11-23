@@ -5,6 +5,7 @@ import com.reallylastone.quiz.exercise.phrase.mapper.PhraseMapper;
 import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
 import com.reallylastone.quiz.game.translation.model.ActiveTranslationGameSessionView;
 import com.reallylastone.quiz.game.translation.model.DoneTranslationSessionView;
+import com.reallylastone.quiz.game.translation.model.HighscoreTranslationEntry;
 import com.reallylastone.quiz.game.translation.model.ListOfPlayedGamesView;
 import com.reallylastone.quiz.game.translation.model.PhraseAnswerRequest;
 import com.reallylastone.quiz.game.translation.model.PhraseAnswerResponse;
@@ -20,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -75,5 +77,10 @@ public class TranslationGameViewServiceImpl implements TranslationGameViewServic
                 .map(session -> new DoneTranslationSessionView((int) session.countOf(ExerciseState.CORRECT),
                         session.getFinishDate(), session.getPhrasesSize()))
                 .toList()));
+    }
+
+    @Override
+    public ResponseEntity<List<HighscoreTranslationEntry>> getHighscore() {
+        return ResponseEntity.ok(translationGameService.getHighsore());
     }
 }

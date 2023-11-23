@@ -2,6 +2,7 @@ package com.reallylastone.quiz.game.translation.controller;
 
 import com.reallylastone.quiz.exercise.phrase.model.PhraseToTranslate;
 import com.reallylastone.quiz.game.translation.model.ActiveTranslationGameSessionView;
+import com.reallylastone.quiz.game.translation.model.HighscoreTranslationEntry;
 import com.reallylastone.quiz.game.translation.model.ListOfPlayedGamesView;
 import com.reallylastone.quiz.game.translation.model.PhraseAnswerRequest;
 import com.reallylastone.quiz.game.translation.model.PhraseAnswerResponse;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 import java.util.Locale;
 
 @Tag(description = "Provides operations to entirely handle a translation game", name = "Translation Game Controller")
@@ -60,4 +62,9 @@ public interface TranslationGameOperations {
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     @GetMapping(value = "/recent")
     ResponseEntity<ListOfPlayedGamesView> findRecent(@RequestParam(required = false, defaultValue = "5") int games);
+
+    @Operation(summary = "Get information about top user statistics in translation game")
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
+    @GetMapping(value = "/highscore")
+    ResponseEntity<List<HighscoreTranslationEntry>> getHighscore();
 }

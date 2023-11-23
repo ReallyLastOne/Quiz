@@ -26,4 +26,6 @@ public interface GameSessionService {
     <T extends GameSession> Optional<T> findActive(Class<T> gameSessionType);
 
     <T extends GameSession> List<T> findRecent(int games, Class<T> gameSessionType);
+
+    List<?> getHighscore(Class<? extends GameSession> gameSession);
 }

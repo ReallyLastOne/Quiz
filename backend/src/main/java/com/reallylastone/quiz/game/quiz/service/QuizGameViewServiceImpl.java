@@ -7,6 +7,7 @@ import com.reallylastone.quiz.exercise.question.model.QuestionAnswerResponse;
 import com.reallylastone.quiz.exercise.question.model.QuestionView;
 import com.reallylastone.quiz.game.quiz.model.ActiveQuizGameSessionView;
 import com.reallylastone.quiz.game.quiz.model.DoneQuizSessionView;
+import com.reallylastone.quiz.game.quiz.model.HighscoreQuizEntry;
 import com.reallylastone.quiz.game.quiz.model.ListOfPlayedGamesView;
 import com.reallylastone.quiz.game.quiz.model.QuizGameSession;
 import com.reallylastone.quiz.util.GenericResponse;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -71,5 +73,10 @@ public class QuizGameViewServiceImpl implements QuizGameViewService {
                 .map(session -> new DoneQuizSessionView((int) session.countOf(ExerciseState.CORRECT),
                         session.getFinishDate(), session.getQuestionSize()))
                 .toList()));
+    }
+
+    @Override
+    public ResponseEntity<List<HighscoreQuizEntry>> getHighscore() {
+        return ResponseEntity.ok(quizGameService.getHighscore());
     }
 }
