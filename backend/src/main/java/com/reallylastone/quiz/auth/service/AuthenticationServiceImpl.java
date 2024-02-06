@@ -48,7 +48,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = refreshTokenService.createToken(user.getId());
 
-        kafkaProducerService.send("user-topic", String.valueOf(user.getId()), new UserInformation(user));
+        kafkaProducerService.send(new UserInformation(user));
 
         return new AuthenticationServiceResponse(jwtToken, refreshToken, "bearer");
     }

@@ -4,6 +4,7 @@ import com.reallylastone.quiz.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -19,6 +20,7 @@ import java.util.Locale;
 @Configuration
 @RequiredArgsConstructor
 @EnableScheduling
+@EnableAsync
 public class ApplicationConfig {
 
     private final UserService userService;

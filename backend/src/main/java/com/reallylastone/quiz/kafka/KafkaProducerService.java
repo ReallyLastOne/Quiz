@@ -4,6 +4,7 @@ import com.reallylastone.quiz.auth.model.UserInformation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,8 +14,12 @@ public class KafkaProducerService {
 
     private final KafkaTemplate<String, UserInformation> kafkaTemplate;
 
-    public void send(String topicName, String key, UserInformation value) {
-        var future = kafkaTemplate.send(topicName, key, value);
+    @Async
+    public void send(UserInformation user) {
+        log.info("Sending user to Kafka topic: %s...".formatted(user));
+        final String topicName = "user-topic";
+        final String id = user.id().toString();
+        var future = kafkaTemplate.send(topicName, id, user);
 
         future.whenComplete((sendResult, exception) -> {
             if (exception != null) {
@@ -22,7 +27,6 @@ public class KafkaProducerService {
             } else {
                 future.complete(sendResult);
             }
-            log.info("User send to Kafka topic: %s".formatted(value));
         });
     }
 }
